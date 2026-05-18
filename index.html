@@ -6,6 +6,22 @@
   <title>Canadian Mortgage Calculator — Rivlosys</title>
   <meta name="description" content="Free Canadian mortgage calculator. Monthly payments, CMHC insurance, stress test, land transfer tax, amortization schedule and more. All provinces supported." />
 
+  <!-- Canonical — tells Google the one true URL -->
+  <link rel="canonical" href="https://ca-mortgage-calc.netlify.app/" />
+
+  <!-- Open Graph — controls link preview on Reddit, iMessage, WhatsApp etc. -->
+  <meta property="og:title" content="Canadian Mortgage Calculator — Rivlosys" />
+  <meta property="og:description" content="Free Canadian mortgage calculator. Payments, CMHC/Sagen insurance, stress test, land transfer tax, all provinces." />
+  <meta property="og:url" content="https://ca-mortgage-calc.netlify.app/" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Canadian Mortgage Calculator — Rivlosys" />
+  <meta name="twitter:description" content="Free Canadian mortgage calculator. Payments, CMHC/Sagen insurance, stress test, land transfer tax, all provinces." />
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#1b76df" />
+
   <!-- Performance: pre-negotiate connections to Google Font servers -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -46,6 +62,7 @@
     <h1>🏠 Canadian Mortgage Calculator</h1>
     <p>Monthly payments · CMHC · Stress test · Land transfer tax · All provinces</p>
   </div>
+  <div class="trust-strip">🔒 No data stored &nbsp;·&nbsp; 🇨🇦 Canadian rules &nbsp;·&nbsp; ✅ Free forever</div>
 
   <!-- ── CORE CALCULATOR ── -->
   <div class="card">
@@ -332,8 +349,9 @@
   </div>
 
   <footer class="site-footer">
-    Made by <a href="https://rivlosys.github.io" target="_blank">Rivlosys</a> · For informational purposes only · Always consult a mortgage professional
+    Made by <a href="https://ca-mortgage-calc.netlify.app" target="_blank">Rivlosys</a> · For informational purposes only · Always consult a mortgage professional
   </footer>
+  <div class="safe-note">All calculations are estimates only. Results do not constitute financial advice.</div>
 
 </div><!-- /page-wrap -->
 
