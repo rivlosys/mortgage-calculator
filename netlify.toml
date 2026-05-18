@@ -1,0 +1,47 @@
+# ── Netlify Configuration — Rivlosys Mortgage Calculator ──────────────────────
+
+[build]
+  # No build step needed — pure static HTML/CSS/JS
+  publish = "."
+
+# ── Security & Performance Headers ────────────────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Prevent clickjacking
+    X-Frame-Options = "DENY"
+    # Block MIME-type sniffing
+    X-Content-Type-Options = "nosniff"
+    # Basic XSS protection for older browsers
+    X-XSS-Protection = "1; mode=block"
+    # Only send referrer on same origin
+    Referrer-Policy = "same-origin"
+
+# ── Cache static assets aggressively ──────────────────────────────────────────
+[[headers]]
+  for = "/style.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/index.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/modules/advanced.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# ── HTML: never cache (so users always get latest version) ────────────────────
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# ── Redirect www → non-www (uncomment if you add a custom domain) ─────────────
+# [[redirects]]
+#   from = "https://www.rivlosys.ca/*"
+#   to   = "https://rivlosys.ca/:splat"
+#   status = 301
+#   force  = true
