@@ -103,7 +103,7 @@ function validateInputs() {
   }
 
   if (!valid && error) {
-    error.textContent = "Enter purchase price, down payment, and interest rate to calculate";
+    error.textContent = "Please fill purchase price, down payment, and interest rate";
   }
   return valid;
 }
@@ -114,6 +114,14 @@ document.getElementById("calculateBtn").addEventListener("click", calculate);
 
 function calculate() {
   if (!validateInputs()) return;
+
+  const resultsSection = document.getElementById("resultsSection");
+  const initialState = document.getElementById("initialState");
+  if (initialState) initialState.style.display = "none";
+  if (resultsSection) {
+    resultsSection.style.display = "block";
+    setTimeout(() => resultsSection.classList.add("show"), 10);
+  }
 
   const purchasePriceRaw = document.getElementById("purchasePrice").value || "";
   const downPaymentRaw = document.getElementById("downPayment").value || "";
@@ -232,13 +240,6 @@ formatInput(document.getElementById("interestRate"));
 
 // ── Render Results ────────────────────────────────────────
 function renderResults(d) {
-
-  const resultsSection = document.getElementById("resultsSection");
-  const initialState = document.getElementById("initialState");
-  if (initialState) initialState.style.display = "none";
-
-  resultsSection.style.display = "block";
-  setTimeout(() => resultsSection.classList.add("show"), 10);
 
   document.getElementById("paymentAmount").textContent = fmtC(d.payment);
   document.getElementById("paymentLabel").textContent = d.frequency.replace("_", " ").toUpperCase() + " PAYMENT";
