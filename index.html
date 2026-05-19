@@ -21,11 +21,13 @@
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#1b76df" />
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <!-- Performance: pre-negotiate connections to Google Font servers -->
+  <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/png" href="favicon.png" />
@@ -35,25 +37,30 @@
 
   <!-- Umami Analytics: privacy-first, no cookies, free -->
   <script defer src="https://cloud.umami.is/script.js" data-website-id="8e17ec5e-e75b-40f3-bbd3-844f1e17c686"></script>
+
+  <!-- Chart.js for amortization chart -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+
+<div class="trust-strip">
+  ✅ No login · ✅ No data stored · 🇨🇦 Built for Canadian mortgages
+</div>
 
 <div class="page-wrap">
 
   <!-- Header -->
   <header class="site-header">
     <div class="brand">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-        <rect width="28" height="28" rx="7" fill="#1b76df"/>
-        <path d="M6 20L10 12L14 16L18 10L22 20" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-      </svg>
+      <img src="logo.png" class="brand-logo" alt="Rivlosys logo" />
       <div>
         <div class="brand-name">Rivlosys</div>
-        <div class="brand-tag">Canadian Tools</div>
+        <div class="brand-tag">Canadian mortgage tools</div>
       </div>
     </div>
     <div class="header-actions">
-      <button class="theme-btn" id="themeBtn">🌙 Dark</button>
+      <button class="theme-btn" id="themeBtn">🌙</button>
+      <button class="theme-btn" id="resetBtn">🔄 Reset</button>
     </div>
   </header>
 
@@ -62,7 +69,9 @@
     <h1>🏠 Canadian Mortgage Calculator</h1>
     <p>Monthly payments · CMHC · Stress test · Land transfer tax · All provinces</p>
   </div>
-  <div class="trust-strip">🔒 No data stored &nbsp;·&nbsp; 🇨🇦 Canadian rules &nbsp;·&nbsp; ✅ Free forever</div>
+  <div class="trust-strip">
+    ✅ No login · ✅ No data stored · 🇨🇦 Built for Canada
+  </div>
 
   <!-- ── CORE CALCULATOR ── -->
   <div class="card">
@@ -72,14 +81,14 @@
         <label>Purchase Price</label>
         <div class="input-wrap">
           <span class="input-prefix">$</span>
-          <input type="number" id="purchasePrice" class="has-prefix" placeholder="500,000" min="0" />
+          <input type="text" id="purchasePrice" class="has-prefix" placeholder="500,000" />
         </div>
       </div>
       <div class="field">
         <label>Down Payment
           <div class="tooltip-wrap">
             <span class="tooltip-icon">?</span>
-            <div class="tooltip-box">Minimum 5% for homes under $500K. 10% on the portion between $500K–$1M. 20% required for homes over $1.5M (insured mortgage cap raised Dec 2024).</div>
+            <div class="tooltip-box">Minimum 5% for homes under $500K. 10% on the portion between $500K–$1M. 20% required for homes over $1.5M (insured mortgage cap applies to higher-value homes).</div>
           </div>
         </label>
         <div class="dp-toggle">
@@ -88,7 +97,7 @@
         </div>
         <div class="input-wrap">
           <span class="input-prefix" id="dpPrefix">$</span>
-          <input type="number" id="downPayment" class="has-prefix" placeholder="100,000" min="0" />
+          <input type="text" id="downPayment" class="has-prefix" placeholder="100,000" />
         </div>
         <div id="dpPercDisplay" style="font-size:11px;color:var(--muted);margin-top:3px;"></div>
       </div>
@@ -99,7 +108,7 @@
         <label>Interest Rate
           <div class="tooltip-wrap">
             <span class="tooltip-icon">?</span>
-            <div class="tooltip-box">Annual interest rate offered by your lender. Note: Your qualification will be judged against the higher Stress Test rate (contract rate + 2%, or 5.25%, whichever is greater).</div>
+            <div class="tooltip-box">Annual interest rate offered by your lender. Your qualification will be judged against the higher Stress Test rate.</div>
           </div>
         </label>
         <div class="input-wrap">
@@ -117,13 +126,12 @@
           <option value="25" selected>25 years</option>
           <option value="30">30 years</option>
         </select>
-        <div id="amort30Warning" style="display:none;font-size:11px;color:var(--orange);margin-top:3px;">⚠️ 30-year amortization on insured mortgages is only available to first-time buyers or new builds.</div>
       </div>
       <div class="field">
-        <label>Payment Frequency
+        <label>Payment Type
           <div class="tooltip-wrap">
             <span class="tooltip-icon">?</span>
-            <div class="tooltip-box">Accelerated payments divide your monthly payment by 2 (bi-weekly) or 4 (weekly), resulting in the equivalent of one extra monthly payment per year — reducing your principal faster.</div>
+            <div class="tooltip-box">Accelerated payments divide your monthly payment by 2 or 4, reducing your principal faster.</div>
           </div>
         </label>
         <select id="payFrequency">
@@ -166,36 +174,21 @@
 
     <div class="grid-3" style="margin-bottom:14px;">
       <div class="field">
-        <label>Annual Property Tax
-          <div class="tooltip-wrap">
-            <span class="tooltip-icon">?</span>
-            <div class="tooltip-box">Typically 0.5%–1.2% of home value depending on municipality. Used in GDS/TDS ratio calculations.</div>
-          </div>
-        </label>
+        <label>Annual Property Tax</label>
         <div class="input-wrap">
           <span class="input-prefix">$</span>
           <input type="number" id="propertyTax" class="has-prefix" placeholder="5,000" min="0" />
         </div>
       </div>
       <div class="field">
-        <label>Monthly Heating
-          <div class="tooltip-wrap">
-            <span class="tooltip-icon">?</span>
-            <div class="tooltip-box">Lenders typically use $50–$150/month. Required for GDS ratio calculation.</div>
-          </div>
-        </label>
+        <label>Monthly Heating</label>
         <div class="input-wrap">
           <span class="input-prefix">$</span>
           <input type="number" id="heatingCost" class="has-prefix" placeholder="150" min="0" />
         </div>
       </div>
       <div class="field">
-        <label>Monthly Condo Fees
-          <div class="tooltip-wrap">
-            <span class="tooltip-icon">?</span>
-            <div class="tooltip-box">Lenders count 50% of condo fees toward your GDS ratio. Leave blank if not applicable.</div>
-          </div>
-        </label>
+        <label>Monthly Condo Fees</label>
         <div class="input-wrap">
           <span class="input-prefix">$</span>
           <input type="number" id="condoFees" class="has-prefix" placeholder="0" min="0" />
@@ -208,7 +201,7 @@
         <label>New Build?
           <div class="tooltip-wrap">
             <span class="tooltip-icon">?</span>
-            <div class="tooltip-box">Newly constructed homes qualify for 30-year insured amortization even if you are not a first-time buyer.</div>
+            <div class="tooltip-box">Newly constructed homes qualify for 30-year insured amortization.</div>
           </div>
         </label>
         <select id="newBuild">
@@ -216,10 +209,21 @@
           <option value="yes">Yes — New Construction</option>
         </select>
       </div>
+      <div class="field">
+        <label>Extra Payment (Monthly)</label>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="text" id="extraPayment" class="has-prefix" placeholder="0" />
+        </div>
+      </div>
     </div>
 
     <div id="coreError" class="error-msg"></div>
     <button class="primary-btn" id="calculateBtn">Calculate Mortgage</button>
+  </div>
+
+  <div id="initialState" class="empty-state">
+    Enter your numbers to see your mortgage breakdown
   </div>
 
   <!-- ── RESULTS ── -->
@@ -227,7 +231,7 @@
 
     <!-- Payment hero -->
     <div class="result-hero fade-up">
-      <div class="payment-label" id="paymentLabel">Monthly Payment</div>
+      <div class="payment-label" id="paymentLabel">Your Payment</div>
       <div class="payment-amount" id="paymentAmount">$0.00</div>
       <div class="payment-sub" id="paymentSub"></div>
     </div>
@@ -235,11 +239,11 @@
     <!-- Key metrics -->
     <div class="result-grid fade-up">
       <div class="result-tile">
-        <div class="tile-label">Mortgage Amount</div>
+        <div class="tile-label">Loan</div>
         <div class="tile-value blue" id="mortgageAmount">—</div>
       </div>
       <div class="result-tile">
-        <div class="tile-label">Total Interest</div>
+        <div class="tile-label">Interest Cost</div>
         <div class="tile-value red" id="totalInterest">—</div>
       </div>
       <div class="result-tile">
@@ -251,7 +255,7 @@
         <div class="tile-value" id="downPct">—</div>
       </div>
       <div class="result-tile">
-        <div class="tile-label">Default Insurance (CMHC/Sagen)</div>
+        <div class="tile-label">Insurance Cost</div>
         <div class="tile-value orange" id="cmhcAmount">—</div>
       </div>
       <div class="result-tile">
@@ -260,33 +264,26 @@
       </div>
     </div>
 
-    <!-- Cost breakdown -->
+    <!-- Financial Insights -->
     <div class="card fade-up">
-      <div class="card-title"><span class="icon">💰</span> Full Cost Breakdown</div>
+      <div class="card-title"><span class="icon">💰</span> Financial Insights</div>
       <div id="breakdownRows"></div>
     </div>
 
-    <!-- Stress Test -->
+    <!-- Chart -->
     <div class="card fade-up">
-      <div class="card-title">
-        <span class="icon">🧪</span> Stress Test
-        <div class="tooltip-wrap">
-          <span class="tooltip-icon">?</span>
-          <div class="tooltip-box">Canadian banks require you to qualify at your contract rate + 2% OR 5.25%, whichever is higher.</div>
-        </div>
+      <div class="card-title"><span class="icon">📈</span> Amortization Chart</div>
+      <div class="chart-summary">📊 <b>Visualizing Your Journey:</b> This chart shows how your payments shift from paying interest to building equity over time.</div>
+      <div id="chartWrap">
+        <canvas id="mortgageChart"></canvas>
       </div>
-      <div id="stressTestBox"></div>
+      <p style="font-size:11px;color:var(--muted);margin-top:8px;">💡 Tip: The green balance line shows your debt shrinking as you build home equity.</p>
     </div>
 
-    <!-- Closing Costs -->
+    <!-- Advanced Tools Section -->
     <div class="card fade-up">
-      <div class="card-title"><span class="icon">📋</span> Estimated Closing Costs</div>
-      <div id="closingCosts"></div>
-    </div>
-
-    <!-- Advanced Modules -->
-    <div class="card fade-up">
-      <div class="card-title"><span class="icon">⚙️</span> Advanced Tools</div>
+      <div class="card-title"><span class="icon">⚙️</span> Personalize Your Plan</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Deep-dive into specific scenarios using our modular calculators below.</p>
       <div class="module-tabs">
         <button class="module-tab active" data-tab="affordability">💼 Affordability</button>
         <button class="module-tab" data-tab="prepayment">💳 Prepayment</button>
@@ -296,36 +293,35 @@
         <button class="module-tab" data-tab="amortschedule">📅 Schedule</button>
       </div>
 
-      <!-- Affordability -->
       <div class="module-section active" id="tab-affordability"></div>
-      <!-- Prepayment -->
       <div class="module-section" id="tab-prepayment"></div>
-      <!-- Rate Compare -->
       <div class="module-section" id="tab-ratecompare"></div>
-      <!-- Rent vs Buy -->
       <div class="module-section" id="tab-rentvsbuy"></div>
-      <!-- Renewal -->
       <div class="module-section" id="tab-renewal"></div>
-      <!-- Amort Schedule -->
       <div class="module-section" id="tab-amortschedule"></div>
     </div>
 
-    <!-- Chart -->
-    <div class="card fade-up">
-      <div class="card-title"><span class="icon">📈</span> Amortization Chart</div>
-      <div id="chartWrap">
-        <canvas id="mortgageChart"></canvas>
+    <!-- Technical Details Section -->
+    <div class="grid-2">
+      <div class="card fade-up">
+        <div class="card-title"><span class="icon">🧪</span> Stress Test</div>
+        <div id="stressTestBox"></div>
+      </div>
+      <div class="card fade-up">
+        <div class="card-title"><span class="icon">📋</span> Closing Costs</div>
+        <div id="closingCosts"></div>
       </div>
     </div>
 
     <!-- Actions -->
     <div class="card fade-up">
-      <div class="card-title"><span class="icon">↗️</span> Export & Share</div>
+      <div class="card-title"><span class="icon">↗️</span> Quick Actions</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">Save your calculation, share it with others, or export the data for your records.</p>
       <div class="action-row">
-        <button class="action-btn" id="copyBtn">📋 Copy Summary</button>
-        <button class="action-btn" id="shareBtn">🔗 Share Link</button>
-        <button class="action-btn" id="printBtn">🖨 Print / PDF</button>
-        <button class="action-btn" id="csvBtn">⬇ CSV</button>
+        <button class="action-btn" id="copyBtn">📋 Copy to Message</button>
+        <button class="action-btn" id="shareBtn">🔗 Generate Share Link</button>
+        <button class="action-btn" id="printBtn">🖨 Print / PDF Report</button>
+        <button class="action-btn" id="csvBtn">⬇ Excel / CSV Data</button>
       </div>
       <div class="share-url-box" id="shareUrlBox">
         <input type="text" id="shareUrlInput" readonly />
@@ -335,6 +331,10 @@
   </div><!-- /resultsSection -->
 
   <!-- Support -->
+  <div class="card" style="text-align:center; padding:12px; font-size:12px; color:var(--subtext); margin-bottom:16px;">
+    🔒 <b>Privacy First:</b> All calculations happen in your browser. No data is sent to our servers.
+  </div>
+
   <div class="support-card">
     <a href="https://www.buymeacoffee.com/rivlosys" target="_blank" class="bmc-btn">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -349,9 +349,22 @@
   </div>
 
   <footer class="site-footer">
-    Made by <a href="https://ca-mortgage-calc.netlify.app" target="_blank">Rivlosys</a> · For informational purposes only · Always consult a mortgage professional
+    <div style="margin-bottom:12px; font-weight:600;">Rivlosys — Canadian Mortgage Tools</div>
+    <div style="font-size:11px; color:var(--muted);">
+      © Rivlosys · Canadian mortgage tools · Private & secure
+    </div>
   </footer>
   <div class="safe-note">All calculations are estimates only. Results do not constitute financial advice.</div>
+
+  <!-- SEO / Content Section -->
+  <div class="card" style="margin-top:40px; font-size:14px; line-height:1.6; color:var(--text-dim);">
+    <h2>How it works</h2>
+    <p>This calculator follows Canadian mortgage rules, including CMHC/Sagen insurance and stress test requirements. It accounts for CMHC tiered insurance rates, the federal stress test (contract rate + 2% or 5.25%), and provincial Land Transfer Tax estimates.</p>
+    <ul>
+      <li><b>Insured Mortgages:</b> Required if down payment is less than 20%.</li>
+      <li><b>Amortization:</b> Maximum 25 years for insured mortgages, up to 30 years for uninsured (20%+ down) or specific new-build scenarios.</li>
+    </ul>
+  </div>
 
 </div><!-- /page-wrap -->
 
