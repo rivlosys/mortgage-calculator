@@ -403,8 +403,7 @@ function renderChart(d) {
 
       balance -= principal;
 
-      yearlyInterest += interest;
-      yearlyPrincipal += principal;
+      yearlyInterest += interest; yearlyPrincipal += principal;
     }
 
     principalData.push(Math.max(0, yearlyPrincipal));
@@ -652,7 +651,10 @@ document.getElementById("resetBtn").addEventListener("click", () => {
   ];
   ids.forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.innerHTML = "";
+    if (el) {
+      if (id === "paymentAmount") el.textContent = "—";
+      else el.innerHTML = "";
+    }
   });
 
   // 5. Destroy chart
@@ -688,6 +690,29 @@ if (saved && purchasePriceInput && purchasePriceInput.value === "") {
     document.getElementById("payFrequency").value = params.get("freq") || "monthly";
     calculate();
   }
+}
+
+// ── Rating Logic ──────────────────────────────────────────
+const goodBtn = document.getElementById("rateGood");
+const badBtn = document.getElementById("rateBad");
+const ratingResponse = document.getElementById("ratingResponse");
+
+if (goodBtn && badBtn) {
+  goodBtn.addEventListener("click", () => {
+    ratingResponse.textContent = "✅ Glad it helped!";
+    goodBtn.disabled = true;
+    badBtn.disabled = true;
+  });
+
+  badBtn.addEventListener("click", () => {
+    ratingResponse.innerHTML = `
+      🙏 Thanks — tell me what could improve:
+      <br>
+      <a href="mailto:helpinbx@gmail.com">helpinbx@gmail.com</a>
+    `;
+    goodBtn.disabled = true;
+    badBtn.disabled = true;
+  });
 }
 
 // Only calculate when user clicks button

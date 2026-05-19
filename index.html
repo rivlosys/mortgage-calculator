@@ -266,6 +266,7 @@
     <!-- Chart -->
     <div class="card fade-up">
       <div class="card-title"><span class="icon">📈</span> Amortization Chart</div>
+      <h3 style="font-size:15px; margin-bottom: 8px;">Where your money goes over time</h3>
       <div class="chart-summary">📊 <b>Visualizing Your Journey:</b> This chart shows how your payments shift from paying interest to building equity over time.</div>
       <div id="chartWrap">
         <canvas id="mortgageChart"></canvas>
@@ -276,6 +277,7 @@
     <!-- Advanced Tools Section -->
     <div class="card fade-up">
       <div class="card-title"><span class="icon">⚙️</span> Personalize Your Plan</div>
+      <h3 style="font-size:14px;margin-bottom:6px;">Explore scenarios:</h3>
       <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Deep-dive into specific scenarios using our modular calculators below.</p>
       <div class="module-tabs">
         <button class="module-tab active" data-tab="affordability">💼 Affordability</button>
@@ -306,26 +308,44 @@
       </div>
     </div>
 
-    <!-- Actions -->
-    <div class="card fade-up">
-      <div class="card-title"><span class="icon">↗️</span> Quick Actions</div>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">Save your calculation, share it with others, or export the data for your records.</p>
-      <div class="action-row">
-        <button class="action-btn" id="copyBtn">📋 Copy to Message</button>
-        <button class="action-btn" id="shareBtn">🔗 Generate Share Link</button>
-        <button class="action-btn" id="printBtn">🖨 Print / PDF Report</button>
-        <button class="action-btn" id="csvBtn">⬇ Excel / CSV Data</button>
-      </div>
-      <div class="share-url-box" id="shareUrlBox">
-        <input type="text" id="shareUrlInput" readonly />
-      </div>
+  <!-- Actions -->
+  <div class="card fade-up">
+    <div class="card-title"><span class="icon">↗️</span> Quick Actions</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">Save your calculation, share it with others, or export the data for your records.</p>
+    <div class="action-row">
+      <button class="action-btn" id="copyBtn">📋 Copy to Message</button>
+      <button class="action-btn" id="shareBtn">🔗 Generate Share Link</button>
+      <button class="action-btn" id="printBtn">🖨 Print / PDF Report</button>
+      <button class="action-btn" id="csvBtn">⬇ Excel / CSV Data</button>
     </div>
+    <div class="share-url-box" id="shareUrlBox">
+      <input type="text" id="shareUrlInput" readonly />
+    </div>
+  </div>
 
-  </div><!-- /resultsSection -->
+</div><!-- /resultsSection -->
+
+<!-- Rating -->
+<div class="rating-box">
+  ⭐ Did this help you understand your mortgage better?
+  <div class="rating-buttons">
+    <button id="rateGood">👍 Yes</button>
+    <button id="rateBad">👎 Not really</button>
+  </div>
+  <div id="ratingResponse" class="rating-response"></div>
+</div>
 
   <!-- Support -->
   <div class="card" style="text-align:center; padding:12px; font-size:12px; color:var(--subtext); margin-bottom:16px;">
     🔒 <b>Privacy First:</b> All calculations happen in your browser. No data is sent to our servers.
+  </div>
+
+  <div class="feedback-box">
+    💬 I built this to make mortgages easier to understand.
+    <br><br>
+    📧 Feedback / ideas: <b>helpinbx@gmail.com</b>
+    <br>
+    ⭐ Every message helps improve this tool for other Canadians
   </div>
 
   <div class="support-card">
