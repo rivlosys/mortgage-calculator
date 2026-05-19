@@ -37,15 +37,8 @@
 
   <!-- Umami Analytics: privacy-first, no cookies, free -->
   <script defer src="https://cloud.umami.is/script.js" data-website-id="8e17ec5e-e75b-40f3-bbd3-844f1e17c686"></script>
-
-  <!-- Chart.js for amortization chart -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-
-<div class="trust-strip">
-  ✅ No login · ✅ No data stored · 🇨🇦 Built for Canadian mortgages
-</div>
 
 <div class="page-wrap">
 
@@ -227,7 +220,7 @@
   </div>
 
   <!-- ── RESULTS ── -->
-  <div id="resultsSection">
+  <div id="resultsSection" style="display:none;">
 
     <!-- Payment hero -->
     <div class="result-hero fade-up">
@@ -368,6 +361,7 @@
 
 </div><!-- /page-wrap -->
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="modules/advanced.js"></script>
 <script src="index.js"></script>
 </body>
