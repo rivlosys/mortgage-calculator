@@ -23,15 +23,34 @@ themeBtn.addEventListener("click", () => {
 });
 
 
-// ── Down Payment Toggle (FIXED) ───────────────────────────
+// ── Down Payment Toggle (UPGRADED) ───────────────────────────
 let dpMode = "dollar";
 
 function setDpMode(mode) {
+  const input = document.getElementById("downPayment");
+  const prefix = document.getElementById("dpPrefix");
+  const priceInput = document.getElementById("purchasePrice").value || "0";
+  const price = parseFloat(priceInput.replace(/,/g, ""));
+
+  let value = parseFloat((input.value || "0").replace(/,/g, ""));
+
+  // Limit protection
+  if (mode === "percent" && value > 100) value = 100;
+
+  // Convert value when switching
+  if (mode === "percent" && dpMode === "dollar" && price > 0) {
+    value = (value / price) * 100;
+    input.value = value.toFixed(1);
+  }
+
+  if (mode === "dollar" && dpMode === "percent" && price > 0) {
+    value = (price * value) / 100;
+    input.value = Math.round(value).toLocaleString();
+  }
+
   dpMode = mode;
 
-  const prefix = document.getElementById("dpPrefix");
-  const input = document.getElementById("downPayment");
-
+  // Update UI
   if (mode === "percent") {
     prefix.textContent = "%";
     input.placeholder = "20";
@@ -40,11 +59,8 @@ function setDpMode(mode) {
     input.placeholder = "100,000";
   }
 
-  document.getElementById("dpDollarBtn")
-    .classList.toggle("active", mode === "dollar");
-
-  document.getElementById("dpPercentBtn")
-    .classList.toggle("active", mode === "percent");
+  document.getElementById("dpDollarBtn").classList.toggle("active", mode === "dollar");
+  document.getElementById("dpPercentBtn").classList.toggle("active", mode === "percent");
 
   updateDpDisplay();
 }
@@ -54,23 +70,31 @@ document.getElementById("dpPercentBtn").addEventListener("click", () => setDpMod
 setDpMode("dollar");
 
 
-// ── DP Display ────────────────────────────────────────────
+// ── DP Display (UPGRADED) ────────────────────────────────────
 function updateDpDisplay() {
-  const priceInput = document.getElementById("purchasePrice").value || "";
-  const dpInput = document.getElementById("downPayment").value || "";
-  const price = parseFloat(priceInput.replace(/,/g, "")) || 0;
-  const dp = parseFloat(dpInput.replace(/,/g, "")) || 0;
+  const priceRaw = document.getElementById("purchasePrice").value || "0";
+  const dpRaw = document.getElementById("downPayment").value || "0";
+  const price = parseFloat(priceRaw.replace(/,/g, ""));
+  const dp = parseFloat(dpRaw.replace(/,/g, ""));
   const el = document.getElementById("dpPercDisplay");
+  const input = document.getElementById("downPayment");
 
-  if (!price || !dp) {
+  if (!price || isNaN(dp)) {
     el.textContent = "";
     return;
   }
 
+  // Auto-reset unrealistic percent values
+  if (dpMode === "percent" && dp > 100) {
+    input.value = "100";
+  }
+
   if (dpMode === "dollar") {
-    el.textContent = `= ${((dp / price) * 100).toFixed(1)}%`;
+    const percent = (dp / price) * 100;
+    el.textContent = `= ${percent.toFixed(1)}% of home price`;
   } else {
-    el.textContent = `= ${fmtC(price * dp / 100)}`;
+    const amount = (price * dp) / 100;
+    el.textContent = `= ${Math.round(amount).toLocaleString()} down payment`;
   }
 }
 
@@ -210,32 +234,48 @@ function calculate() {
 }
 
 
-// ── Input Formatting ──────────────────────────────────────
-function formatInput(el) {
+// ── Input Formatting (UPGRADED) ──────────────────────────────
+function formatCurrencyInput(el) {
   if (!el) return;
+
+  el.addEventListener("input", () => {
+    let raw = el.value.replace(/[^\d.]/g, "");
+    // Prevent multiple dots
+    const parts = raw.split(".");
+    if (parts.length > 2) raw = parts[0] + "." + parts[1];
+    el.value = raw;
+    
+    // Auto-clear error when user types
+    el.classList.remove("input-error");
+    const error = document.getElementById("coreError");
+    if (error) error.textContent = "";
+  });
+
   el.addEventListener("blur", () => {
-    let v = el.value.replace(/[^\d.]/g, "");
-    if (!isNaN(v) && v !== "") {
-      el.value = Number(v).toLocaleString();
+    let val = el.value.replace(/,/g, "");
+    if (!isNaN(val) && val !== "") {
+      el.value = Number(val).toLocaleString();
     }
   });
 
   el.addEventListener("focus", () => {
     el.value = el.value.replace(/,/g, "");
   });
+}
 
-  // clear error on typing
-  el.addEventListener("input", () => {
-    el.classList.remove("input-error");
+formatCurrencyInput(document.getElementById("purchasePrice"));
+formatCurrencyInput(document.getElementById("downPayment"));
+formatCurrencyInput(document.getElementById("extraPayment"));
+
+// Standard formatting for interest rate
+const rateEl = document.getElementById("interestRate");
+if (rateEl) {
+  rateEl.addEventListener("input", () => {
+    rateEl.classList.remove("input-error");
     const error = document.getElementById("coreError");
     if (error) error.textContent = "";
   });
 }
-
-formatInput(document.getElementById("purchasePrice"));
-formatInput(document.getElementById("downPayment"));
-formatInput(document.getElementById("extraPayment"));
-formatInput(document.getElementById("interestRate"));
 
 
 // ── Render Results ────────────────────────────────────────
