@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mortgage Payment Calculator Canada — Calculate Your Monthly Payments</title>
+  <meta name="description" content="Estimate your monthly mortgage payments in Canada, including principal, interest, property taxes, and CMHC insurance. Get a clear breakdown of your costs." />
+  <link rel="canonical" href="https://ca-mortgage-calc.netlify.app/mortgage-payment-calculator.html" />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="8e17ec5e-e75b-40f3-bbd3-844f1e17c686"></script>
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="site-header">
+      <div class="brand" onclick="window.location.href='/'" style="cursor:pointer">
+        <img src="logo.png" class="brand-logo" alt="Rivlosys logo" />
+        <div>
+          <div class="brand-name">Rivlosys</div>
+          <div class="brand-tag">Mortgage Payment Tool</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="hero">
+      <h1>💰 Canadian Mortgage Payment Calculator</h1>
+      <p>Quickly estimate your monthly mortgage payments, including CMHC insurance and property taxes.</p>
+    </div>
+
+    <div class="card">
+      <h2>Understanding Your Mortgage Payments</h2>
+      <p>Your mortgage payment is more than just principal and interest. It often includes property taxes, heating costs, and sometimes condo fees, which lenders consider in your total debt service ratio.</p>
+      <button class="primary-btn" onclick="window.location.href='/'">Open Mortgage Payment Calculator</button>
+    </div>
+
+    <!-- Load the main app logic but tell it to open the main tab -->
+    <script>
+      if (window.location.pathname.includes('mortgage-payment-calculator')) {
+        window.location.replace('/'); // Redirect to the main page, which defaults to the payment calculator
+      }
+    </script>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="modules/advanced.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Income Needed for a $500,000 Mortgage in Canada</title>
+  <meta name="description" content="Find out the estimated annual household income required to qualify for a $500,000 mortgage in Canada, considering stress test rules and other expenses." />
+  <link rel="canonical" href="https://ca-mortgage-calc.netlify.app/income-needed-for-500k-mortgage.html" />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="8e17ec5e-e75b-40f3-bbd3-844f1e17c686"></script>
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="site-header">
+      <div class="brand" onclick="window.location.href='/'" style="cursor:pointer">
+        <img src="logo.png" class="brand-logo" alt="Rivlosys logo" />
+        <div>
+          <div class="brand-name">Rivlosys</div>
+          <div class="brand-tag">Income Needed Tool</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="hero">
+      <h1>💵 Income Needed for a $500,000 Mortgage</h1>
+      <p>Estimate the annual household income required to qualify for a $500,000 mortgage in Canada.</p>
+    </div>
+
+    <div class="card">
+      <h2>How Much Income Do You Need?</h2>
+      <p>Lenders assess your income against your debts and the stress test rate. This page helps you understand the income thresholds for a significant mortgage amount.</p>
+      <button class="primary-btn" onclick="window.location.href='/?tab=affordability'">Open Affordability Calculator</button>
+    </div>
+
+    <!-- Load the main app logic and direct to the affordability tab -->
+    <script>
+      if (window.location.pathname.includes('income-needed-for-500k-mortgage')) {
+        window.location.replace('/?tab=affordability');
+      }
+    </script>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="modules/advanced.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

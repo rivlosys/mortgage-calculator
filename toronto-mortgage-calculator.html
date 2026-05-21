@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toronto Mortgage Calculator — Payments, LTT & Affordability</title>
+  <meta name="description" content="Calculate your mortgage payments, land transfer tax, and affordability for homes in Toronto, Ontario. Get city-specific estimates." />
+  <link rel="canonical" href="https://ca-mortgage-calc.netlify.app/toronto-mortgage-calculator.html" />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="8e17ec5e-e75b-40f3-bbd3-844f1e17c686"></script>
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="site-header">
+      <div class="brand" onclick="window.location.href='/'" style="cursor:pointer">
+        <img src="logo.png" class="brand-logo" alt="Rivlosys logo" />
+        <div>
+          <div class="brand-name">Rivlosys</div>
+          <div class="brand-tag">Toronto Mortgage Tool</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="hero">
+      <h1>🏙️ Toronto Mortgage Calculator</h1>
+      <p>Estimate your mortgage payments, land transfer tax, and affordability for buying a home in Toronto, Ontario.</p>
+    </div>
+
+    <div class="card">
+      <h2>Buying a Home in Toronto?</h2>
+      <p>Toronto's unique housing market comes with specific considerations like the Municipal Land Transfer Tax (MLTT). Our calculator helps you factor in these city-specific costs.</p>
+      <button class="primary-btn" onclick="window.location.href='/?province=ON&propertyTax=6000'">Open Toronto Mortgage Calculator</button>
+    </div>
+
+    <!-- Load the main app logic and pre-fill for Toronto -->
+    <script>
+      if (window.location.pathname.includes('toronto-mortgage-calculator')) {
+        // Pre-fill province and an estimated property tax for Toronto
+        window.location.replace('/?province=ON&propertyTax=6000');
+      }
+    </script>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="modules/advanced.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

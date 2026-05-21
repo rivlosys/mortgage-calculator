@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mortgage Affordability Calculator Canada — How much can I afford?</title>
+  <meta name="description" content="Calculate your maximum mortgage affordability based on your household income, debts, and the Canadian stress test rules (GDS/TDS ratios)." />
+  <link rel="canonical" href="https://ca-mortgage-calc.netlify.app/affordability-calculator.html" />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="8e17ec5e-e75b-40f3-bbd3-844f1e17c686"></script>
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="site-header">
+      <div class="brand" onclick="window.location.href='/'" style="cursor:pointer">
+        <img src="logo.png" class="brand-logo" alt="Rivlosys logo" />
+        <div>
+          <div class="brand-name">Rivlosys</div>
+          <div class="brand-tag">Mortgage Affordability Tool</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="hero">
+      <h1>💼 Canadian Mortgage Affordability Calculator</h1>
+      <p>Find out exactly how much home you can afford based on your income, debts, and the latest 2024 stress test rates.</p>
+    </div>
+
+    <div class="card">
+      <h2>How Affordability is Calculated in Canada</h2>
+      <p>Lenders use two primary ratios: <b>GDS (Gross Debt Service)</b> which should be under 39%, and <b>TDS (Total Debt Service)</b> which should be under 44%.</p>
+      <button class="primary-btn" onclick="window.location.href='/?tab=affordability'">Open Affordability Tool</button>
+    </div>
+
+    <!-- Load the main app logic but tell it to open the affordability tab -->
+    <script>
+      if (window.location.pathname.includes('affordability')) {
+        window.location.replace('/?tab=affordability');
+      }
+    </script>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="modules/advanced.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
