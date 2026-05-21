@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Montreal Mortgage Calculator — Welcome Tax & Monthly Payments (2026)</title>
+  <meta name="description" content="Estimate your mortgage costs in Montreal, Quebec. Includes estimates for the 'Welcome Tax' (Land Transfer Tax) and local property taxes." />
+  <link rel="canonical" href="https://mortgage.usecos.app/tools/montreal-mortgage-calculator.html" />
+  <link rel="stylesheet" href="../style.css" />
+  <meta name="google-site-verification" content="zyUtsY8FCC6ZT__42zRbLUeZsHwuc7UxLgiF5rNwD3w" />
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="8e17ec5e-e75b-40f3-bbd3-844f1e17c686"></script>
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="site-header">
+      <div class="brand" onclick="window.location.href='/'" style="cursor:pointer">
+        <img src="../logo.png" class="brand-logo" alt="Rivlosys logo" />
+        <div>
+          <div class="brand-name">Rivlosys</div>
+          <div class="brand-tag">Montreal Mortgage Tool</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="hero">
+      <h1>⚜️ Montreal Mortgage Calculator</h1>
+      <p>Navigate the Montreal real estate market with tools for Quebec-specific taxes and local homeownership costs.</p>
+    </div>
+
+    <div class="card">
+      <h2>Calculateur d'hypothèque Montréal</h2>
+      <p>In Montreal, the Land Transfer Tax (Welcome Tax) is tiered based on the home's value. Our tool pre-fills Quebec (QC) and accounts for common property tax levels in the Montreal area.</p>
+      <button class="primary-btn" onclick="window.location.href='/?province=QC&propertyTax=4500'">Open Montreal Mortgage Calculator</button>
+    </div>
+
+    <script>
+      if (window.location.pathname.includes('montreal-mortgage-calculator')) {
+        window.location.replace('/?province=QC&propertyTax=4500');
+      }
+    </script>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../modules/advanced.js"></script>
+  <script src="../index.js"></script>
+</body>
+</html>

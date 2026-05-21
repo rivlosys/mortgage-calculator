@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mortgage Payment Calculator Canada — Calculate Your Monthly Payments</title>
+  <meta name="description" content="Estimate your monthly mortgage payments in Canada, including principal, interest, property taxes, and CMHC insurance. Get a clear breakdown of your costs." />
+  <link rel="canonical" href="https://mortgage.usecos.app/mortgage-payment-calculator.html" />
+  <link rel="stylesheet" href="style.css" />
+  <meta name="google-site-verification" content="zyUtsY8FCC6ZT__42zRbLUeZsHwuc7UxLgiF5rNwD3w" />
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="8e17ec5e-e75b-40f3-bbd3-844f1e17c686"></script>
+
+  <!-- FinancialProduct Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FinancialProduct",
+    "name": "Mortgage Payment Calculator",
+    "description": "Calculate monthly mortgage payments in Canada for 2026 including CMHC and taxes.",
+    "provider": {
+      "@type": "Organization",
+      "name": "Rivlosys Mortgage Tools"
+    }
+  }
+  </script>
+
+  <!-- FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [{
+      "@type": "Question",
+      "name": "How is mortgage payment calculated in Canada?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Canadian mortgages use semi-annual compounding. The formula is M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1 ], where P is principal, i is monthly interest, and n is total months."
+      }
+    }]
+  }
+  </script>
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="site-header">
+      <div class="brand" onclick="window.location.href='/'" style="cursor:pointer">
+        <img src="logo.png" class="brand-logo" alt="Rivlosys logo" />
+        <div>
+          <div class="brand-name">Rivlosys</div>
+          <div class="brand-tag">Mortgage Payment Tool</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="hero">
+      <h1>💰 Canadian Mortgage Payment Calculator (2026)</h1>
+      <p>Quickly estimate your monthly mortgage payments with the latest 2026 interest rates and CMHC premiums.</p>
+    </div>
+
+    <div class="card">
+      <h2>Calculating Your 2026 Payments</h2>
+      <p>With interest rates stabilizing in 2026, it is vital to know your monthly costs. Your payment consists of Principal and Interest (P&I), but lenders also look at your Property Taxes and Heating (PITH) for qualification.</p>
+      <button class="primary-btn" onclick="window.location.href='/'">Open Mortgage Payment Calculator</button>
+    </div>
+
+    <div class="card">
+      <h3>The Canadian Mortgage Formula</h3>
+      <p>Unlike the US, Canadian fixed-rate mortgages are compounded semi-annually by law. Our calculator handles this complexity automatically to ensure bank-grade accuracy for your 5-year fixed or variable terms.</p>
+    </div>
+
+    <!-- SEO Cluster: Internal Linking -->
+    <div class="card related-tools">
+      <h3>Explore More Mortgage Tools</h3>
+      <ul style="list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px;">
+        <li><a href="/tools/affordability-calculator.html" style="color:var(--blue);">🏠 Affordability Tool</a></li>
+        <li><a href="/tools/stress-test-calculator.html" style="color:var(--blue);">🧪 Stress Test Calc</a></li>
+        <li><a href="/tools/amortization-calculator.html" style="color:var(--blue);">📅 Amortization Schedule</a></li>
+        <li><a href="/tools/rent-vs-buy-calculator.html" style="color:var(--blue);">🏘️ Rent vs Buy</a></li>
+        <li><a href="/tools/extra-payment-calculator.html" style="color:var(--blue);">💸 Prepayment Savings</a></li>
+        <li><a href="/tools/income-needed-for-500k-mortgage.html" style="color:var(--blue);">💵 Income Required</a></li>
+      </ul>
+    </div>
+
+    <div class="card" style="font-size: 13px; color: var(--subtext);">
+      <p>Our 2026 Canadian mortgage calculator uses the latest CMHC tiered insurance rates and current OSFI stress test regulations to ensure your estimates are accurate.</p>
+    </div>
+
+    <!-- Load the main app logic but tell it to open the main tab -->
+    <script>
+      if (window.location.pathname.includes('mortgage-payment-calculator')) {
+        window.location.replace('/'); // Redirect to the main page, which defaults to the payment calculator
+      }
+    </script>
+  </div>
+  <script src="modules/advanced.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

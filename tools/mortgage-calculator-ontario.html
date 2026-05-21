@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ontario Mortgage Calculator — Payments, Land Transfer Tax & Rules</title>
+  <meta name="description" content="Calculate mortgage payments in Ontario. Includes ON Land Transfer Tax (LTT) estimates, first-time buyer rebates, and 2026 interest rates." />
+  <link rel="canonical" href="https://mortgage.usecos.app/tools/mortgage-calculator-ontario.html" />
+  <link rel="stylesheet" href="../style.css" />
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="8e17ec5e-e75b-40f3-bbd3-844f1e17c686"></script>
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="site-header">
+      <div class="brand" onclick="window.location.href='/'" style="cursor:pointer">
+        <img src="../logo.png" class="brand-logo" alt="Rivlosys logo" />
+        <div><div class="brand-name">Rivlosys</div><div class="brand-tag">Ontario Edition</div></div>
+      </div>
+    </header>
+    <div class="hero">
+      <h1>省 Ontario Mortgage Calculator</h1>
+      <p>Analyze your home purchase costs specifically for the Ontario market.</p>
+    </div>
+    <div class="card">
+      <h2>Buying Property in Ontario?</h2>
+      <p>Ontario has a tiered Land Transfer Tax and offers a rebate of up to $4,000 for first-time homebuyers. Our calculator pre-fills these provincial rules for you.</p>
+      <button class="primary-btn" onclick="window.location.href='/?province=ON'">Open Ontario Mortgage Tool</button>
+    </div>
+    <div class="card">
+      <h3>Ontario Specific Costs</h3>
+      <p>Outside of Toronto, you only pay the Provincial LTT. However, property taxes vary wildly between municipalities like Ottawa, London, and Windsor.</p>
+    </div>
+    <script>
+      if (window.location.pathname.includes('mortgage-calculator-ontario')) {
+        window.location.replace('/?province=ON');
+      }
+    </script>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../modules/advanced.js"></script>
+  <script src="../index.js"></script>
+</body>
+</html>
