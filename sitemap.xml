@@ -41,27 +41,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://mortgage.usecos.app/tools/extra-payment-calculator.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://mortgage.usecos.app/tools/mortgage-renewal-calculator.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://mortgage.usecos.app/tools/vancouver-mortgage-calculator.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://mortgage.usecos.app/tools/ottawa-mortgage-calculator.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://mortgage.usecos.app/tools/montreal-mortgage-calculator.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -77,11 +57,6 @@
   </url>
   <url>
     <loc>https://mortgage.usecos.app/tools/toronto-mortgage-calculator.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://mortgage.usecos.app/tools/vancouver-mortgage-calculator.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -112,6 +87,16 @@
   </url>
   <url>
     <loc>https://mortgage.usecos.app/tools/income-needed-for-500k-mortgage.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mortgage.usecos.app/tools/income-needed-for-700k-house.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mortgage.usecos.app/tools/stress-test-calculator.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
