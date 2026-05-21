@@ -205,14 +205,16 @@ els.downPayment.addEventListener("input", updateDpDisplay);
 // ── Validation Helper ────────────────────────────────────
 function validateInputs() {
   let valid = true;
-  [els.purchasePrice, els.downPayment, els.interestRate].forEach(el => el.classList.remove("input-error"));
+    [els.purchasePrice, els.downPayment, els.interestRate].forEach(el => el?.classList.remove("input-error"));
   if (els.coreError) els.coreError.textContent = "";
 
   // Clear all errors first
-  Object.values(els).forEach(el => el?.classList?.remove("input-error"));
+    Object.values(els).forEach(el => {
+      if (el && el.classList) el.classList.remove("input-error");
+    });
 
   const check = (el, name) => {
-    if (!el || el.offsetParent === null) return; // Ignore hidden fields
+      if (!el || el.offsetParent === null) return; 
     const val = el.value.replace(/,/g,"");
     if (val === "" || isNaN(val)) {
       el.classList.add("input-error");
@@ -224,7 +226,7 @@ function validateInputs() {
   check(els.interestRate, "interest rate");
   check(els.amortization, "amortization");
   if (mode === "refinance") check(els.currentRate, "current rate");
-  if (mode === "purchase") check(els.downPayment, "down payment");
+  if (mode === "purchase") check(els.downPayment, "down payment amount");
   check(els.purchasePrice, "purchase price");
 
   return valid;
@@ -232,7 +234,7 @@ function validateInputs() {
 
 /**
  * CMHC Insurance Logic (2026 Rules)
- * Cap: Homes > $1M cannot have insured mortgages.
+ * Cap: Homes >= $1.5M cannot have insured mortgages.
  */
 function calculateInsurance(price, mortgageAmount, downPct) {
   if (price >= 1500000 || downPct >= 20) return 0;
@@ -258,16 +260,16 @@ function setMode(m) {
 
   triggerCalc();
 }
-els.modePurchaseBtn?.addEventListener("click", () => setMode("purchase"));
-els.modeRefiBtn?.addEventListener("click", () => setMode("refinance"));
+if (els.modePurchaseBtn) els.modePurchaseBtn.addEventListener("click", () => setMode("purchase"));
+if (els.modeRefiBtn) els.modeRefiBtn.addEventListener("click", () => setMode("refinance"));
 
 // ── Calculate ─────────────────────────────────────────────
-els.calculateBtn.addEventListener("click", calculate);
+if (els.calculateBtn) els.calculateBtn.addEventListener("click", calculate);
 
 async function calculate() {
   if (!validateInputs()) return;
 
-  const originalBtnText = els.calculateBtn.textContent;
+  const originalBtnText = els.calculateBtn?.textContent || "Calculate";
   
   try {
     // Visual Feedback
@@ -292,16 +294,22 @@ async function calculate() {
   const extraPayment = parseFloat(extraPaymentRaw.replace(/,/g, "")) || 0;
   
   let mortgageAmount;
+  let data_cmhc = 0;
   let downPayment = 0;
 
   if (mode === "purchase") {
     downPayment = dpMode === "dollar" ? dpRaw : purchasePrice * dpRaw / 100;
-    mortgageAmount = purchasePrice - downPayment;
+    const mortgageBase = purchasePrice - downPayment;
+    const downPct = (downPayment / purchasePrice) * 100;
+    const cmhc = calculateInsurance(purchasePrice, mortgageBase, downPct);
+    mortgageAmount = mortgageBase + cmhc;
+    data_cmhc = cmhc;
   } else {
     mortgageAmount = purchasePrice; // Purchase Price field is used for 'Balance'
+    data_cmhc = 0;
   }
 
-  const downPct = (downPayment / purchasePrice) * 100;
+  const downPct = (downPayment / purchasePrice) * 100 || 0;
   const r = rate / 100 / 12;
   const nOriginal = amortYears * 12;
 
@@ -371,7 +379,7 @@ async function calculate() {
     negativeAmort,
     frequency: freq,
     totalInterest,
-    cmhc: calculateInsurance(purchasePrice, mortgageAmount, downPct)
+    cmhc: data_cmhc
   };
 
   // ── Dynamic SEO & UX Multipliers ──
@@ -498,8 +506,10 @@ function renderResults(d) {
 
   // Conversion Boost under payment
   if (els.paymentHeroMeta) {
-    const intPercent = Math.round((d.totalInterest / d.purchasePrice) * 100);
-    els.paymentHeroMeta.innerHTML = `⚠️ Over ${d.amortYears} years, you pay <b>${fmtC(d.totalInterest)}</b> in interest (${intPercent}% of home price).`;
+    const divisor = d.purchasePrice || d.mortgageAmount || 1;
+    const intPercent = Math.round((d.totalInterest / divisor) * 100);
+    const contextLabel = mode === "purchase" ? "home price" : "loan balance";
+    els.paymentHeroMeta.innerHTML = `⚠️ Over ${d.amortYears} years, you pay <b>${fmtC(d.totalInterest)}</b> in interest (${intPercent}% of ${contextLabel}).`;
   }
 
   // ── SMART INSIGHTS ──
@@ -552,7 +562,7 @@ function renderResults(d) {
     if (d.downPct < 20) {
       insightsHTML += `<div class="tip">💰 <b>Insurance Saving:</b> Add 5% more down to save approx. ${fmtC(d.mortgageAmount * 0.005)} in insurance fees.</div>`;
     }
-    if (d.purchasePrice >= 1500000 && d.downPct < 20) {
+    if (mode === "purchase" && d.purchasePrice >= 1500000 && d.downPct < 20) {
       insightsHTML += `<div class="tip" style="color:var(--red)">🚨 <b>Hard Rule:</b> Homes over $1.5M require 20% down. Insured mortgages are not allowed.</div>`;
     }
     els.breakdownRows.innerHTML = insightsHTML + ctaHTML;
@@ -806,7 +816,7 @@ function buildShareURL() {
 
 
 // ── Share Button ──────────────────────────────────────────
-els.shareBtn.addEventListener("click", async () => {
+if (els.shareBtn) els.shareBtn.addEventListener("click", async () => {
   const url = buildShareURL();
   document.getElementById("shareUrlInput").value = url;
   await navigator.clipboard.writeText(url);
@@ -819,7 +829,7 @@ els.shareBtn.addEventListener("click", async () => {
 
 
 // ── Copy Summary ──────────────────────────────────────────
-els.copyBtn.addEventListener("click", async () => {
+if (els.copyBtn) els.copyBtn.addEventListener("click", async () => {
   const d = window._mortgageData;
   if (!d) return;
 
@@ -840,13 +850,13 @@ Check your breakdown: ${buildShareURL()}`;
 });
 
 // ── Print Button ──────────────────────────────────────────
-els.printBtn.addEventListener("click", () => {
+if (els.printBtn) els.printBtn.addEventListener("click", () => {
   window.print();
 });
 
 
 // ── CSV Export ────────────────────────────────────────────
-els.csvBtn.addEventListener("click", () => {
+if (els.csvBtn) els.csvBtn.addEventListener("click", () => {
   const d = window._mortgageData;
   if (!d) return;
 
@@ -870,7 +880,7 @@ els.csvBtn.addEventListener("click", () => {
 
 
 // ── Reset Logic ──────────────────────────────────────────
-els.resetBtn.addEventListener("click", () => {
+if (els.resetBtn) els.resetBtn.addEventListener("click", () => {
   document.querySelectorAll("input").forEach(input => {
     input.value = "";
     input.classList.remove("input-error");
