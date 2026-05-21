@@ -9,6 +9,29 @@
   <link rel="stylesheet" href="../style.css" />
   <meta name="google-site-verification" content="zyUtsY8FCC6ZT__42zRbLUeZsHwuc7UxLgiF5rNwD3w" />
   <script defer src="https://cloud.umami.is/script.js" data-website-id="8e17ec5e-e75b-40f3-bbd3-844f1e17c686"></script>
+
+  <!-- FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [{
+      "@type": "Question",
+      "name": "What is the mortgage stress test rate for 2026?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The stress test qualifying rate is the higher of your contract rate plus 2%, or the OSFI minimum floor rate, which is currently 5.25%."
+      }
+    }, {
+      "@type": "Question",
+      "name": "Who needs to pass the mortgage stress test?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Anyone applying for a mortgage with a federally regulated lender in Canada must pass the stress test, even if they have a down payment of more than 20%."
+      }
+    }]
+  }
+  </script>
 </head>
 <body>
   <div class="page-wrap">
@@ -31,6 +54,19 @@
       <h2>What is the Mortgage Stress Test?</h2>
       <p>The stress test ensures you can still afford your mortgage payments if interest rates rise. Lenders qualify you at a higher rate (contract rate + 2% or 5.25%, whichever is greater).</p>
       <a href="/?tab=affordability" class="primary-btn">Open Stress Test Calculator</a>
+    </div>
+
+    <!-- Authority & Trust Section -->
+    <div class="card trust-layer" style="border-top: 4px solid var(--green);">
+      <h3>🛡️ Why Trust This Calculator?</h3>
+      <div style="font-size: 13px; color: var(--subtext);">
+        <ul style="list-style: none; padding: 0; display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 0;">
+          <li>✅ <b>Canadian Mortgage Formulas:</b> Uses law-mandated semi-annual compounding.</li>
+          <li>✅ <b>Stress Test Integration:</b> Automatically applies 2026 B-20 qualification rules.</li>
+          <li>✅ <b>Privacy First:</b> All calculations happen locally in your browser.</li>
+          <li>✅ <b>No Signup Required:</b> Instant results without collecting personal info.</li>
+        </ul>
+      </div>
     </div>
 
     <!-- Load the main app logic and direct to the affordability tab (which shows stress test) -->
