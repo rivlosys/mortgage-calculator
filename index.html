@@ -85,6 +85,22 @@
           "@type": "Answer",
           "text": "Lenders qualify you at a rate that is the higher of your contract rate plus 2%, or the OSFI floor rate, which is currently 5.25%."
         }
+      },
+      {
+        "@type": "Question",
+        "name": "Are my financial details stored on your servers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Rivlosys Mortgage Tools performs all calculations locally in your web browser. Your private financial data never leaves your device."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this calculator updated for 2026 Canadian mortgage rules?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Our engine is updated for 2026 regulations, including the $1.5 million insured mortgage cap and the latest CMHC premium tiers."
+        }
       }
     ]
   },
@@ -111,9 +127,9 @@
   <header class="site-header">
     <div class="brand">
       <img src="logo.png" class="brand-logo" alt="Rivlosys logo" />
-      <div>
-        <div class="brand-name">Rivlosys</div>
-        <div class="brand-tag">Canadian mortgage tools</div>
+      <div class="brand-name-container">
+        <div class="brand-name">Rivlosys Mortgage Tools</div>
+        <div class="brand-tag">Independent & Secure</div>
       </div>
     </div>
     <div class="header-actions">
@@ -128,7 +144,7 @@
     <p>Monthly payments · CMHC · Stress test · Land transfer tax · All provinces</p>
   </div>
   <div class="trust-strip">
-    🇨🇦 Built for Canada · ✅ Updated for 2026 Regulations · 🔒 No data stored · ⭐ Used by 15,000+ Canadians
+    🇨🇦 Built for Canadian homebuyers · ✅ Updated for 2026 Regulations · 🔒 Private browser-based calculations · ⭐ Trusted mortgage planning tools
   </div>
 
   <!-- ── MODE TOGGLE ── -->
@@ -514,7 +530,7 @@
       <p>Compare today's lowest rates from 30+ Canadian lenders.</p>
       <a href="https://www.ratehub.ca/" target="_blank" class="primary-btn" style="display:inline-block; width:auto; margin-top:10px; padding: 12px 30px;">Check Best Rates &rarr;</a>
     </div>
-    <div style="margin-bottom:12px; font-weight:600;">Rivlosys — Canadian Mortgage Tools</div>
+    <div style="margin-bottom:12px; font-weight:600;">Rivlosys Mortgage Tools — Canadian Home Financing</div>
     <div style="font-size:11px; color:var(--muted);">
       © Rivlosys · Canadian mortgage tools · Private & secure
     </div>
@@ -522,28 +538,52 @@
   </footer>
   <div class="safe-note">All calculations are estimates only. Results do not constitute financial advice.</div>
 
-  <!-- SEO / Content Section -->
-  <div class="card" style="margin-top:40px; font-size:14px; line-height:1.6; color:var(--text-dim);">
-    <h2 style="margin-bottom:15px; color:var(--text);">🇨🇦 Expert Guide: Navigating Canadian Mortgages in 2026</h2>
-    <p style="margin-bottom:12px;">Choosing the right mortgage involves more than just finding the lowest interest rate. In the 2026 Canadian housing market, borrowers must navigate complex federal regulations designed to ensure financial stability.</p>
-    
-    <h3 style="font-size:16px; margin:20px 0 10px; color:var(--blue);">The 2026 Mortgage Stress Test (B-20)</h3>
-    <p style="margin-bottom:12px;">Every regulated lender in Canada must apply the "Stress Test." You are qualified at a rate that is the higher of your <strong>contract rate + 2%</strong> or the <strong>OSFI floor rate (currently 5.25%)</strong>. This ensures you can still afford your home if interest rates rise during your term.</p>
-
-    <h3 style="font-size:16px; margin:20px 0 10px; color:var(--blue);">CMHC Insurance and Down Payment Rules</h3>
-    <p style="margin-bottom:12px;">If your down payment is less than 20%, you must purchase mortgage default insurance (CMHC, Sagen, or Canada Guaranty). For 2026, the insured mortgage cap has been updated to <strong>$1.5 Million</strong>. Homes above this price require a minimum 20% down payment and are not eligible for default insurance.</p>
-
-    <div style="background:var(--surface2); padding:15px; border-radius:8px; margin:15px 0; border-left: 4px solid var(--blue);">
-      <h4 style="margin-bottom:8px;">Understanding GDS and TDS Ratios</h4>
-      <p style="font-size:13px;">Lenders use two primary ratios to determine affordability:</p>
-      <ul style="margin-left:20px; font-size:13px;">
-        <li><strong>GDS (Gross Debt Service):</strong> Housing costs (PITH) should not exceed 39% of gross income.</li>
-        <li><strong>TDS (Total Debt Service):</strong> Total debt obligations (including car loans and credit cards) should not exceed 44% of gross income.</li>
+  <!-- Authority & Trust Section -->
+  <div class="card trust-layer" style="border-top: 4px solid var(--green); margin-top: 20px;">
+    <h3 style="margin-bottom:12px;">🛡️ Why Trust This Calculator?</h3>
+    <div class="grid-2" style="gap: 15px; font-size: 13px;">
+      <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px;">
+        <li>✅ <b>Canadian Mortgage Formulas:</b> Uses semi-annual compounding as mandated by law.</li>
+        <li>✅ <b>Stress Test Integration:</b> Automatically applies B-20 qualification rules.</li>
+        <li>✅ <b>2026 Regulation Updates:</b> CMHC logic updated for the $1.5M insured cap.</li>
+      </ul>
+      <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px;">
+        <li>✅ <b>Privacy First:</b> All calculations happen locally in your browser.</li>
+        <li>✅ <b>No Signup Required:</b> Access all features without providing personal info.</li>
+        <li>✅ <b>Verified Logic:</b> Algorithms checked against OSFI and Bank of Canada data.</li>
       </ul>
     </div>
+  </div>
 
-    <h3 style="font-size:16px; margin:20px 0 10px; color:var(--blue);">Bi-Weekly vs. Monthly Payments</h3>
-    <p>Switching to <strong>Accelerated Bi-Weekly</strong> payments is one of the most effective ways to pay off your mortgage faster. By making 26 half-payments a year, you effectively make one full extra monthly payment annually, which can shave years off your amortization and save thousands in interest.</p>
+  <!-- SEO / Content Section -->
+  <div class="card" style="margin-top:40px; font-size:14px; line-height:1.6; color:var(--text-dim);">
+    <details>
+      <summary style="cursor:pointer; font-weight:700; font-size:16px; color:var(--text); list-style:none; display:flex; justify-content:space-between; align-items:center;">
+        <span>🇨🇦 Expert Guide: Navigating Canadian Mortgages in 2026</span>
+        <span style="font-size:11px; color:var(--blue);">Show Details ▼</span>
+      </summary>
+      <div style="margin-top:15px;">
+        <p style="margin-bottom:12px;">Choosing the right mortgage involves more than just finding the lowest interest rate. In the 2026 Canadian housing market, borrowers must navigate complex federal regulations designed to ensure financial stability.</p>
+        
+        <h3 style="font-size:16px; margin:20px 0 10px; color:var(--blue);">The 2026 Mortgage Stress Test (B-20)</h3>
+        <p style="margin-bottom:12px;">Every regulated lender in Canada must apply the "Stress Test." You are qualified at a rate that is the higher of your <strong>contract rate + 2%</strong> or the <strong>OSFI floor rate (currently 5.25%)</strong>. This ensures you can still afford your home if interest rates rise during your term.</p>
+
+        <h3 style="font-size:16px; margin:20px 0 10px; color:var(--blue);">CMHC Insurance and Down Payment Rules</h3>
+        <p style="margin-bottom:12px;">If your down payment is less than 20%, you must purchase mortgage default insurance (CMHC, Sagen, or Canada Guaranty). For 2026, the insured mortgage cap has been updated to <strong>$1.5 Million</strong>. Homes above this price require a minimum 20% down payment and are not eligible for default insurance.</p>
+
+        <div style="background:var(--surface2); padding:15px; border-radius:8px; margin:15px 0; border-left: 4px solid var(--blue);">
+          <h4 style="margin-bottom:8px;">Understanding GDS and TDS Ratios</h4>
+          <p style="font-size:13px;">Lenders use two primary ratios to determine affordability:</p>
+          <ul style="margin-left:20px; font-size:13px;">
+            <li><strong>GDS (Gross Debt Service):</strong> Housing costs (PITH) should not exceed 39% of gross income.</li>
+            <li><strong>TDS (Total Debt Service):</strong> Total debt obligations (including car loans and credit cards) should not exceed 44% of gross income.</li>
+          </ul>
+        </div>
+
+        <h3 style="font-size:16px; margin:20px 0 10px; color:var(--blue);">Bi-Weekly vs. Monthly Payments</h3>
+        <p>Switching to <strong>Accelerated Bi-Weekly</strong> payments is one of the most effective ways to pay off your mortgage faster. By making 26 half-payments a year, you effectively make one full extra monthly payment annually, which can shave years off your amortization and save thousands in interest.</p>
+      </div>
+    </details>
   </div>
 
 </div><!-- /page-wrap -->
