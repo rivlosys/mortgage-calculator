@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ── Element Cache ─────────────────────────────────────────
+  // ── Element Cache (Consolidated) ──────────────────────────
   const els = {
     purchasePrice: document.getElementById("purchasePrice"),
     downPayment: document.getElementById("downPayment"),
@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
     payFrequency: document.getElementById("payFrequency"),
     extraPayment: document.getElementById("extraPayment"),
     currentRate: document.getElementById("currentRate"),
-    refiCosts: document.getElementById("refiCosts"),
     province: document.getElementById("province"),
     propertyTax: document.getElementById("propertyTax"),
     heatingCost: document.getElementById("heatingCost"),
@@ -49,6 +48,10 @@ document.addEventListener("DOMContentLoaded", () => {
     qualifyBadge: document.getElementById("qualifyBadge"),
     themeNudge: document.getElementById("themeNudge"),
     shockBarArea: document.getElementById("shockBarArea"),
+    moduleTabs: document.querySelectorAll(".module-tab"),
+    moduleSections: document.querySelectorAll(".module-section"),
+    pageWrap: document.querySelector(".page-wrap"),
+    offersSection: document.querySelector('.site-footer .card'),
     steps: [
       document.getElementById("step1"),
       document.getElementById("step2"),
@@ -57,6 +60,26 @@ document.addEventListener("DOMContentLoaded", () => {
     ],
     stepProgressText: document.getElementById("stepProgressText")
   };
+
+  // ── Configuration & Constants ──────────────────────────────
+  const CONFIG = {
+    CLOSING_COST_RATE: 0.015,
+    MAX_AMORT_MONTHS: 600,
+    STRESS_TEST_FLOOR: 5.25,
+    GDS_LIMIT: 0.39,
+    TDS_LIMIT: 0.44,
+    AVG_BUYER_DP: 18,
+    REFI_PENALTY_EST: 3000
+  };
+
+  // ── Utility Functions ─────────────────────────────────────
+  const toNumber = (val) => {
+    if (typeof val === 'number' && !isNaN(val)) return val;
+    if (!val) return 0;
+    return parseFloat(String(val).replace(/[^\d.-]/g, "")) || 0;
+  };
+
+  const track = (event, data) => window.umami?.track(event, data);
 
   // ── Analytics & Funnel State ──────────────────────────────
   let hasStartedTyping = false;
@@ -68,12 +91,15 @@ document.addEventListener("DOMContentLoaded", () => {
   let modulesLoaded = false;
 
   function loadScript(src) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       if (document.querySelector(`script[src="${src}"]`)) return resolve();
       const script = document.createElement("script");
       script.src = src;
       script.onload = resolve;
-      script.onerror = reject;
+      script.onerror = (e) => {
+        console.warn("Optional script failed to load:", src, e);
+        resolve(); // Never reject — a missing module must not kill the chart
+      };
       document.body.appendChild(script);
     });
   }
@@ -87,18 +113,13 @@ document.addEventListener("DOMContentLoaded", () => {
         chartLoaded = true;
         resolve();
       };
+        script.onerror = (e) => {
+          console.error("Failed to load Chart.js:", e);
+          resolve(); // Resolve anyway to not block the main app, but chart won't work
+        };
       document.body.appendChild(script);
     });
   }
-
-  const CONFIG = {
-    CLOSING_COST_RATE: 0.015,
-    MAX_AMORT_MONTHS: 600,
-    STRESS_TEST_FLOOR: 5.25,
-    GDS_LIMIT: 0.39,
-    TDS_LIMIT: 0.44,
-    AVG_BUYER_DP: 18
-  };
 
   // ── High-Performance Formatter ────────────────────────────
   const fmtC = (n) => new Intl.NumberFormat('en-CA', { 
@@ -140,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Analytics for step progression
-    if (targetStep > 1) window.umami?.track(`funnel_step_${targetStep}`);
+    if (targetStep > 1) track(`funnel_step_${targetStep}`);
   }
 
 
@@ -166,16 +187,15 @@ els.themeBtn?.addEventListener("click", () => {
 let dpMode = "dollar";
 
 function setDpMode(mode) {
-  const priceInput = els.purchasePrice.value || "0";
-  const price = parseFloat(priceInput.replace(/,/g, ""));
+  const price = toNumber(els.purchasePrice.value);
 
   // Analytics: Track when user starts interacting
   if (!hasStartedTyping) {
     hasStartedTyping = true;
-    window.umami?.track('funnel_input_start');
+    track('funnel_input_start');
   }
 
-  let value = parseFloat((els.downPayment.value || "0").replace(/,/g, ""));
+  let value = toNumber(els.downPayment.value);
 
   // Limit protection
   if (mode === "percent" && value > 100) value = 100;
@@ -215,10 +235,8 @@ setDpMode("dollar");
 
 // ── DP Display (UPGRADED) ────────────────────────────────────
 function updateDpDisplay() {
-  const priceRaw = els.purchasePrice.value || "0";
-  const dpRaw = els.downPayment.value || "0";
-  const price = parseFloat(priceRaw.replace(/,/g, ""));
-  const dp = parseFloat(dpRaw.replace(/,/g, ""));
+  const price = toNumber(els.purchasePrice.value);
+  const dp = toNumber(els.downPayment.value);
 
   if (!price || isNaN(dp)) {
     els.dpPercDisplay.textContent = "";
@@ -256,8 +274,8 @@ function validateInputs(isScenario = false) { // Added isScenario flag
 
   const check = (el, name) => {
       if (!el || el.offsetParent === null) return; 
-    const val = el.value.replace(/,/g,"");
-    if (val === "" || isNaN(val)) {
+    const val = toNumber(el.value);
+    if (el.value === "" || isNaN(val)) {
       el.classList.add("input-error");
       if (els.coreError) els.coreError.textContent = `Please check the highlighted fields.`;
       valid = false;
@@ -266,7 +284,7 @@ function validateInputs(isScenario = false) { // Added isScenario flag
 
   check(els.purchasePrice, "purchase price");
   // Specific validation for interestRate: must be a positive number
-  const interestRateValue = parseFloat(els.interestRate.value);
+  const interestRateValue = toNumber(els.interestRate.value);
   if (isNaN(interestRateValue) || interestRateValue <= 0) {
     els.interestRate.classList.add("input-error");
     if (els.coreError) els.coreError.textContent = `Interest rate must be a positive number.`;
@@ -299,7 +317,7 @@ function calculateInsurance(price, mortgageAmount, downPct) {
 /** ── Mode Switch Logic ── **/
 function setMode(m) {
   mode = m;
-  document.querySelector(".page-wrap").setAttribute("data-mode", m);
+  els.pageWrap?.setAttribute("data-mode", m);
   els.modePurchaseBtn.classList.toggle("active", m === "purchase");
   els.modeRefiBtn.classList.toggle("active", m === "refinance");
 
@@ -314,52 +332,30 @@ function setMode(m) {
 if (els.modePurchaseBtn) els.modePurchaseBtn.addEventListener("click", () => setMode("purchase"));
 if (els.modeRefiBtn) els.modeRefiBtn.addEventListener("click", () => setMode("refinance"));
 
-// ── Calculate ─────────────────────────────────────────────
-if (els.calculateBtn) els.calculateBtn.addEventListener("click", calculate);
+// ── Core Math Engine (Pure Function) ───────────────────────
+function calculateMortgage(params) {
+  const { 
+    mode, purchasePrice, dpRaw, dpMode, rate, amortYears, extraPayment, freq, currentRate 
+  } = params;
 
-async function calculate() {
-  if (!validateInputs()) return;
-
-  const originalBtnText = els.calculateBtn?.textContent || "Calculate";
-  
-  try {
-    // Visual Feedback
-    els.calculateBtn.textContent = "Calculating...";
-    els.calculateBtn.disabled = true;
-
-  if (els.resultsSection) {
-    els.resultsSection.style.display = "block";
-    setTimeout(() => els.resultsSection.classList.add("show"), 10);
-  }
-
-  const purchasePriceRaw = els.purchasePrice.value || "";
-  const downPaymentRaw = els.downPayment.value || "";
-  
-  const extraPaymentRaw = els.extraPayment ? els.extraPayment.value : "0";
-
-  const purchasePrice = parseFloat(purchasePriceRaw.replace(/,/g, ""));
-  const dpRaw = parseFloat(downPaymentRaw.replace(/,/g, ""));
-  const rate = parseFloat(els.interestRate.value);
-  const amortYears = parseInt(els.amortization.value);
-  const extraPayment = parseFloat(extraPaymentRaw.replace(/,/g, "")) || 0;
-  
   let mortgageAmount;
   let data_cmhc = 0;
   let downPayment = 0;
+  let downPct = 0;
 
   if (mode === "purchase") {
     downPayment = dpMode === "dollar" ? dpRaw : purchasePrice * dpRaw / 100;
     const mortgageBase = purchasePrice - downPayment;
-    const downPct = (downPayment / purchasePrice) * 100;
+    downPct = (downPayment / purchasePrice) * 100;
     const cmhc = calculateInsurance(purchasePrice, mortgageBase, downPct);
     mortgageAmount = mortgageBase + cmhc;
     data_cmhc = cmhc;
   } else {
-    mortgageAmount = purchasePrice; // Purchase Price field is used for 'Balance'
+    mortgageAmount = purchasePrice;
     data_cmhc = 0;
+    downPct = 0;
   }
 
-  const downPct = (downPayment / purchasePrice) * 100 || 0;
   // Canadian Semi-Annual Compounding Formula
   const r = Math.pow(Math.pow(1 + (rate / 100) / 2, 2), 1 / 12) - 1;
   const nOriginal = amortYears * 12;
@@ -369,28 +365,36 @@ async function calculate() {
       ? mortgageAmount * r / (1 - Math.pow(1 + r, -nOriginal))
       : mortgageAmount / nOriginal;
 
-  const freq = els.payFrequency.value;
+  // Normalize frequency for calculation
+  const paymentFreq = freq || "monthly";
 
   let payment = monthlyBasePayment;
-  if (freq === "biweekly") payment = monthlyBasePayment * 12 / 26;
-  if (freq === "weekly") payment = monthlyBasePayment * 12 / 52;
-  if (freq === "biweekly_acc") payment = monthlyBasePayment / 2;
-  if (freq === "weekly_acc") payment = monthlyBasePayment / 4;
+  if (paymentFreq === "biweekly") payment = monthlyBasePayment * 12 / 26;
+  if (paymentFreq === "weekly") payment = monthlyBasePayment * 12 / 52;
+  if (paymentFreq === "biweekly_acc") payment = monthlyBasePayment / 2;
+  if (paymentFreq === "weekly_acc") payment = monthlyBasePayment / 4;
 
   let paymentWithExtra = payment;
-  if (freq === "monthly") paymentWithExtra += extraPayment;
-  if (freq === "biweekly" || freq === "biweekly_acc") paymentWithExtra += (extraPayment * 12 / 26);
-  if (freq === "weekly" || freq === "weekly_acc") paymentWithExtra += (extraPayment * 12 / 52);
+  if (paymentFreq === "monthly") paymentWithExtra += extraPayment;
+  if (paymentFreq === "biweekly" || paymentFreq === "biweekly_acc") paymentWithExtra += (extraPayment * 12 / 26);
+  if (paymentFreq === "weekly" || paymentFreq === "weekly_acc") paymentWithExtra += (extraPayment * 12 / 52);
 
   let remainingBalance = mortgageAmount;
   let monthsToPayoff = 0;
-  let simMonthlyPayment = monthlyBasePayment + extraPayment;
-  
+
+  // Normalize the simulation payment to a monthly equivalent based on frequency
+  let simMonthlyPayment = paymentWithExtra;
+  if (paymentFreq.includes("biweekly")) {
+    simMonthlyPayment = (paymentWithExtra * 26 / 12);
+  } else if (paymentFreq.includes("weekly")) {
+    simMonthlyPayment = (paymentWithExtra * 52 / 12);
+  }
+
   // ── Bulletproof Negative Amortization Check ──
-  const monthlyEquiv = freq === "monthly" ? paymentWithExtra : (paymentWithExtra * (freq.includes("biweekly") ? 26 : 52) / 12);
+  const monthlyEquiv = paymentFreq === "monthly" ? paymentWithExtra : (paymentWithExtra * (paymentFreq.includes("biweekly") ? 26 : 52) / 12);
   let negativeAmort = monthlyEquiv <= (mortgageAmount * r);
 
-  if (!negativeAmort && (monthlyBasePayment + extraPayment) > (mortgageAmount * r)) {
+  if (!negativeAmort && simMonthlyPayment > (mortgageAmount * r)) {
     while (remainingBalance > 0 && monthsToPayoff < CONFIG.MAX_AMORT_MONTHS) {
       let interestPart = remainingBalance * r;
       let principalPart = simMonthlyPayment - interestPart;
@@ -407,15 +411,14 @@ async function calculate() {
   // Refinance Intelligence
   let refiData = null;
   if (mode === "refinance") {
-    const oldRate = parseFloat(els.currentRate.value) || 0;
+    const oldRate = toNumber(currentRate);
     const rOld = oldRate / 100 / 12;
     const oldPmt = rOld > 0 ? mortgageAmount * rOld / (1 - Math.pow(1 + rOld, -nOriginal)) : mortgageAmount / nOriginal;
     const monthlySavings = oldPmt - monthlyBasePayment;
-    const refiCosts = 3000; // Average penalty/legal estimate
-    refiData = { oldPmt, monthlySavings, totalSavings: monthlySavings * nOriginal, breakEven: monthlySavings > 0 ? refiCosts / monthlySavings : 0 };
+    refiData = { oldPmt, monthlySavings, totalSavings: monthlySavings * nOriginal, breakEven: monthlySavings > 0 ? CONFIG.REFI_PENALTY_EST / monthlySavings : 0 };
   }
 
-  const data = {
+  return {
     purchasePrice,
     downPayment,
     downPct,
@@ -427,62 +430,116 @@ async function calculate() {
     payment: paymentWithExtra,
     monthlyBase: monthlyBasePayment,
     negativeAmort,
-    frequency: freq,
+    frequency: paymentFreq,
     totalInterest,
     cmhc: data_cmhc
   };
+}
 
-  // ── Dynamic SEO & UX Multipliers ──
-  const priceLabel = fmtC(purchasePrice).replace(".00", "");
-  document.title = `Mortgage Payment ${fmtC(paymentWithExtra)}/mo on ${priceLabel} Home in Canada`;
-  if (els.mainH1 && purchasePrice > 0) {
-    els.mainH1.textContent = mode === "purchase"
-      ? `Buying a ${priceLabel} Home: Mortgage Breakdown`
-      : `Refinance Analysis: ${priceLabel} Balance`;
-  }
+// ── Calculate Orchestrator ────────────────────────────────
+if (els.calculateBtn) els.calculateBtn.addEventListener("click", triggerCalc);
 
-  if (!hasPerformedCalc) {
-    hasPerformedCalc = true;
-    window.umami?.track('funnel_first_calc');
-  }
-
-  window._mortgageData = data;
-  localStorage.setItem("savedMortgage", JSON.stringify(data));
+async function calculate() {
+  if (!validateInputs()) return;
+  const originalBtnText = els.calculateBtn?.textContent || "Calculate";
   
-  // Persistence Clarity
-  if (els.saveIndicator) {
-    els.saveIndicator.style.opacity = "1";
-    setTimeout(() => { els.saveIndicator.style.opacity = "0"; }, 2000);
-  }
+  try {
+    els.calculateBtn.textContent = "Calculating...";
+    els.calculateBtn.disabled = true;
 
-  await Promise.all([
-    loadChartLib(),
-    loadScript("modules/advanced.js")
-  ]);
+    if (els.resultsSection) {
+      els.resultsSection.style.display = "block";
+      setTimeout(() => els.resultsSection.classList.add("show"), 10);
+    }
 
-  renderResults(data);
+    const results = calculateMortgage({
+      mode,
+      purchasePrice: toNumber(els.purchasePrice.value),
+      dpRaw: toNumber(els.downPayment.value),
+      dpMode,
+      rate: toNumber(els.interestRate.value),
+      amortYears: parseInt(els.amortization.value),
+      extraPayment: toNumber(els.extraPayment?.value),
+      freq: els.payFrequency.value,
+      currentRate: els.currentRate?.value
+    });
 
-  // Move to Step 2: Analysis
-  updateStepper(2);
-  // Smooth scroll to results for better UX flow
-  els.resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // ── Dynamic SEO & UX Multipliers ──
+    const priceLabel = fmtC(results.purchasePrice).replace(".00", "");
+    document.title = `${fmtC(results.payment)} payment — ${priceLabel} home (Canada)`;
+    
+    if (els.mainH1 && results.purchasePrice > 0) {
+      els.mainH1.textContent = mode === "purchase"
+        ? `Buying a ${priceLabel} Home: Mortgage Breakdown`
+        : `Refinance Analysis: ${priceLabel} Balance`;
+    }
+
+    // 1. Render Core UI immediately
+    renderCoreResults(results);
+    updateStepper(2);
+    els.resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    if (!hasPerformedCalc) {
+      hasPerformedCalc = true;
+      track('funnel_first_calc');
+    }
+
+    window._mortgageData = results;
+    
+    updateURLState();
+
+    // 2a. Load Chart.js first — independently so advanced.js can never block it
+    await loadChartLib();
+    if (typeof Chart !== "undefined") {
+      renderChart(results);
+    } else {
+      const retryChart = setInterval(() => {
+        if (typeof Chart !== "undefined") {
+          renderChart(results);
+          clearInterval(retryChart);
+        }
+      }, 200);
+      setTimeout(() => clearInterval(retryChart), 5000);
+    }
+
+    // 2b. Load advanced modules separately — a missing file never affects the chart
+    await loadScript("modules/advanced.js");
+
+    // 3. Render advanced details (works even if advanced.js failed to load)
+    renderAdvancedDetails(results);
+
+    const activeTabElement = document.querySelector(".module-tab.active");
+    if (activeTabElement && window.AdvancedModules) {
+      const activeModuleName = activeTabElement.dataset.tab;
+      renderSpecificAdvancedModule(activeModuleName, results);
+    }
 
   } catch (err) {
     console.error("Calculation failed:", err);
-    els.calculateBtn.textContent = originalBtnText;
-    els.calculateBtn.disabled = false;
   } finally {
     els.calculateBtn.textContent = originalBtnText;
     els.calculateBtn.disabled = false;
   }
 }
 
+function updateURLState() {
+  try {
+    const url = buildShareURL();
+    window.history.replaceState(null, "", url);
+    if (els.saveIndicator) {
+      els.saveIndicator.style.opacity = "1";
+      setTimeout(() => { els.saveIndicator.style.opacity = "0"; }, 2000);
+    }
+  } catch(e) {
+    // Silently ignore when running as a local file (file:// origin restriction)
+  }
+}
 
 // ── Input Formatting (UPGRADED) ──────────────────────────────
 function formatCurrencyInput(el) {
   if (!el) return;
   el.addEventListener("input", () => {
-    let raw = el.value.replace(/[^\d.]/g, "");
+    let raw = el.value.replace(/[^\d.]/g, ""); 
     // Prevent multiple dots
     const parts = raw.split(".");
     if (parts.length > 2) raw = parts[0] + "." + parts[1];
@@ -492,8 +549,8 @@ function formatCurrencyInput(el) {
     if (els.coreError) els.coreError.textContent = "";
   });
   el.addEventListener("blur", () => {
-    let val = el.value.replace(/,/g, "");
-    if (!isNaN(val) && val !== "") el.value = Number(val).toLocaleString();
+    let val = toNumber(el.value);
+    if (!isNaN(val) && val > 0) el.value = Number(val).toLocaleString();
   });
   el.addEventListener("focus", () => el.value = el.value.replace(/,/g, ""));
 }
@@ -507,7 +564,7 @@ formatCurrencyInput(els.extraPayment);
   if (el) el.addEventListener("input", () => {
     if (!hasStartedTyping) {
       hasStartedTyping = true;
-      window.umami?.track('funnel_input_start');
+      track('funnel_input_start');
     }
     triggerCalc();
   });
@@ -526,35 +583,48 @@ if (els.interestRate) {
 }
 
 
-// ── Render Results ────────────────────────────────────────
-function renderResults(d) {
+// ── Template Functions ────────────────────────────────────
+function renderShockBarHTML(d) {
+  const totalWithInterest = d.mortgageAmount + d.totalInterest;
+  const equityPct = (d.mortgageAmount / totalWithInterest) * 100;
+  const interestPct = (d.totalInterest / totalWithInterest) * 100;
+  return `
+    <div class="shock-bar-label">
+      <span>🏠 Home Equity: <b>${fmtC(d.mortgageAmount)}</b></span>
+      <span>${equityPct.toFixed(0)}%</span>
+    </div>
+    <div class="shock-bar-track">
+      <div class="shock-bar-fill fill-equity" style="width: ${equityPct}%"></div>
+    </div>
+    <div class="shock-bar-label">
+      <span>🏦 You pay the bank (Interest): <b>${fmtC(d.totalInterest)}</b></span>
+      <span>${interestPct.toFixed(0)}%</span>
+    </div>
+    <div class="shock-bar-track">
+      <div class="shock-bar-fill fill-interest" style="width: ${interestPct}%"></div>
+    </div>
+  `;
+}
+
+// ── Core Render (Non-blocking) ────────────────────────────
+function renderCoreResults(d) {
+  if (!els.resultsSection) return;
+  els.resultsSection.style.display = "block";
+  els.resultsSection.classList.add("show");
+
   els.paymentAmount.textContent = fmtC(d.payment);
   els.paymentLabel.textContent = d.frequency.replace("_", " ").toUpperCase() + " PAYMENT";
 
-  // ── Interest Shock Visual ──
-  if (els.shockBarArea) {
-    const totalWithInterest = d.mortgageAmount + d.totalInterest;
-    const equityPct = (d.mortgageAmount / totalWithInterest) * 100;
-    const interestPct = (d.totalInterest / totalWithInterest) * 100;
-    
-    els.shockBarArea.innerHTML = `
-      <div class="shock-bar-label">
-        <span>🏠 Home Equity: <b>${fmtC(d.mortgageAmount)}</b></span>
-        <span>${equityPct.toFixed(0)}%</span>
-      </div>
-      <div class="shock-bar-track">
-        <div class="shock-bar-fill fill-equity" style="width: ${equityPct}%"></div>
-      </div>
-      <div class="shock-bar-label">
-        <span>🏦 You pay the bank (Interest): <b>${fmtC(d.totalInterest)}</b></span>
-        <span>${interestPct.toFixed(0)}%</span>
-      </div>
-      <div class="shock-bar-track">
-        <div class="shock-bar-fill fill-interest" style="width: ${interestPct}%"></div>
-      </div>
-    `;
-  }
+  if (els.shockBarArea) els.shockBarArea.innerHTML = renderShockBarHTML(d);
+  
+  els.mortgageAmount.textContent = fmtC(d.mortgageAmount);
+  els.totalInterest.textContent = fmtC(d.totalInterest);
+}
 
+// ── Render Advanced Details (After modules loaded) ────────────────────────
+function renderAdvancedDetails(d) {
+  // Note: renderCoreResults(d) is called immediately in calculate()
+  // This function handles the rest of the UI updates after modules are loaded.
   // ── Qualification Badge (Dashbord Style) ──
   if (els.qualifyBadge) {
     const stressRate = Math.max(d.rate + 2, CONFIG.STRESS_TEST_FLOOR);
@@ -577,8 +647,8 @@ function renderResults(d) {
   const ctaText = mode === "purchase" ? "→ Check Today’s Lowest Rates" : "→ Find Lowest Refinance Rate";
   
   const ctaHTML = `
-    <div class="card cta-block-premium" style="border:3px solid ${isHighRate ? 'var(--red)' : 'var(--blue)'}; background:var(--blue-light); cursor:pointer; margin-top:15px; text-align:center; padding: 25px;" 
-         onclick="window.umami?.track('click_ratehub_insight'); window.open('https://www.ratehub.ca', '_blank')">
+    <div class="card cta-block-premium" style="border:3px solid ${isHighRate ? 'var(--red)' : 'var(--blue)'}; background:var(--blue-light); cursor:pointer; margin-top:15px; text-align:center; padding: 25px;"
+         onclick="track('click_ratehub_insight'); window.open('https://www.ratehub.ca', '_blank')">
       <h3 style="font-size: 18px; margin-bottom: 8px;">🚀 Lock in a Lower Rate Now</h3>
       <p style="font-weight: 600; margin-bottom: 12px; font-size: 14px;">See real offers from 30+ lenders in 60 seconds</p>
       <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; margin-bottom: 15px; font-size: 12px; font-weight: 500;">
@@ -706,19 +776,19 @@ function renderResults(d) {
 
   // payoff date
   const payoff = new Date();
-  payoff.setMonth(payoff.getMonth() + (d.amortYears * 12));
+  payoff.setMonth(payoff.getMonth() + Math.round(d.finalAmortYears * 12));
 
   els.payoffDate.textContent = (d.finalAmortYears < d.amortYears) 
     ? `Paid off in ${Math.floor(d.finalAmortYears)} yrs (${Math.round(d.finalAmortYears * 12)} months)`
     : payoff.toLocaleDateString();
 
-  els.mortgageAmount.textContent = fmtC(d.mortgageAmount);
-  els.totalInterest.textContent = fmtC(d.totalInterest);
-
   // Stress Test
   const stressRate = Math.max(d.rate + 2, CONFIG.STRESS_TEST_FLOOR);
-  const stressPayment = d.mortgageAmount * (stressRate/100/12) /
-    (1 - Math.pow(1 + stressRate/100/12, -d.amortYears*12));
+  const rStress = Math.pow(Math.pow(1 + (stressRate / 100) / 2, 2), 1 / 12) - 1;
+  const nStress = d.amortYears * 12;
+  const stressPayment = rStress > 0 
+    ? d.mortgageAmount * rStress / (1 - Math.pow(1 + rStress, -nStress))
+    : d.mortgageAmount / nStress;
 
   els.stressTestBox.innerHTML = `
     <div class="tip">
@@ -738,38 +808,43 @@ function renderResults(d) {
   `;
 
   // Render Advanced Modules
-  if (window.AdvancedModules) {
-    const moduleData = {
-      rate: d.rate,
-      amortYears: d.amortYears,
-      mortgageAmount: d.mortgageAmount,
-      monthlyPayment: (d.payment * (d.frequency === "monthly" ? 1 : d.frequency.includes("biweekly") ? 26/12 : 52/12)),
-      totalInterest: d.totalInterest,
-      purchasePrice: d.purchasePrice,
-      downPct: d.downPct,
-      downPayment: d.downPayment,
-      closingCosts: closing,
-      propertyTax: parseFloat((els.propertyTax.value || "").replace(/,/g, "")) || 0,
-      heatingCost: parseFloat((els.heatingCost.value || "").replace(/,/g, "")) || 0,
-      condoFees: parseFloat((els.condoFees.value || "").replace(/,/g, "")) || 0
-    };
+  // This is now handled directly in the calculate() function after modules are loaded.
+}
 
-    window.AdvancedModules.renderAffordability(moduleData);
-    window.AdvancedModules.renderPrepayment(moduleData);
-    window.AdvancedModules.renderRateCompare(moduleData);
-    window.AdvancedModules.renderRentVsBuy(moduleData);
-    window.AdvancedModules.renderRenewal(moduleData);
-    window.AdvancedModules.renderAmortSchedule(moduleData);
-  } else {
-    console.warn("Advanced modules not loaded");
+// ── Render Specific Advanced Module ────────────────────────
+function renderSpecificAdvancedModule(moduleName, data) {
+  const methodName = "render" + moduleName.charAt(0).toUpperCase() + moduleName.slice(1);
+
+  if (!window.AdvancedModules || typeof window.AdvancedModules[methodName] !== 'function') {
+    console.warn("Advanced module failed to load", {
+      module: methodName,
+      hasData: !!window._mortgageData,
+      hasModules: !!window.AdvancedModules
+    });
+    return;
   }
-
-  renderChart(d);
+  const closing = data.purchasePrice * CONFIG.CLOSING_COST_RATE;
+  const moduleData = {
+    rate: data.rate,
+    amortYears: data.amortYears,
+    mortgageAmount: data.mortgageAmount,
+    monthlyPayment: (data.payment * (data.frequency === "monthly" ? 1 : data.frequency.includes("biweekly") ? 26/12 : 52/12)),
+    totalInterest: data.totalInterest,
+    purchasePrice: data.purchasePrice,
+    downPct: data.downPct,
+    downPayment: data.downPayment,
+    closingCosts: closing,
+    propertyTax: toNumber(els.propertyTax.value),
+    heatingCost: toNumber(els.heatingCost.value),
+    condoFees: toNumber(els.condoFees.value)
+  };
+  if (window.AdvancedModules && window.AdvancedModules[methodName]) {
+    window.AdvancedModules[methodName](moduleData);
+  }
 }
 
 // ── Render Chart ──────────────────────────────────────────
 function renderChart(d) {
-
   const canvas = document.getElementById("mortgageChart");
   if (!canvas) return;
 
@@ -780,7 +855,12 @@ function renderChart(d) {
   }
 
   if (typeof Chart === "undefined") {
-    console.warn("Chart.js not loaded");
+    console.warn("Chart.js not loaded yet. Retrying in background...");
+    return;
+  }
+
+  if (d.mortgageAmount <= 0) {
+    console.warn("Mortgage amount is zero or negative, skipping chart rendering.");
     return;
   }
 
@@ -826,6 +906,7 @@ function renderChart(d) {
   }
 
   window._mortgageChart = new Chart(ctx, {
+    type: 'bar',
     data: {
       labels: labels,
 
@@ -952,7 +1033,7 @@ function buildShareURL() {
   url.searchParams.set("rate", d.rate);
   url.searchParams.set("amort", d.amortYears);
   url.searchParams.set("freq", d.frequency);
-  url.searchParams.set("extra", els.extraPayment.value.replace(/,/g, ""));
+  url.searchParams.set("extra", toNumber(els.extraPayment?.value));
   url.searchParams.set("prov", els.province.value);
   url.searchParams.set("tax", els.propertyTax.value);
 
@@ -964,8 +1045,13 @@ function buildShareURL() {
 if (els.shareBtn) els.shareBtn.addEventListener("click", async () => {
   const url = buildShareURL();
   document.getElementById("shareUrlInput").value = url;
-  await navigator.clipboard.writeText(url);
-  
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    await navigator.clipboard.writeText(url);
+  } else {
+    // Safari / Private mode fallback
+    prompt("Copy your mortgage plan link:", url);
+  }
+
   const btn = document.getElementById("shareBtn");
   const originalText = btn.textContent;
   btn.textContent = "✅ Copied!";
@@ -987,7 +1073,11 @@ if (els.copyBtn) els.copyBtn.addEventListener("click", async () => {
 💥 Can you beat this or afford more? 
 Check your breakdown: ${buildShareURL()}`;
 
-  await navigator.clipboard.writeText(text);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    await navigator.clipboard.writeText(text);
+  } else {
+    prompt("Copy summary:", text);
+  }
   const btn = document.getElementById("copyBtn");
   const originalText = btn.textContent;
   btn.textContent = "✅ Copied!";
@@ -1024,8 +1114,7 @@ if (els.csvBtn) els.csvBtn.addEventListener("click", () => {
 });
 
 // ── Offer Visibility Observer (Step 4) ────────────────────
-const offersSection = document.querySelector('.site-footer .card');
-if (offersSection) {
+if (els.offersSection) {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting && hasPerformedCalc) {
@@ -1033,7 +1122,7 @@ if (offersSection) {
       }
     });
   }, { threshold: 0.5 });
-  observer.observe(offersSection);
+  observer.observe(els.offersSection);
 }
 
 // ── Reset Logic ──────────────────────────────────────────
@@ -1044,9 +1133,14 @@ if (els.resetBtn) els.resetBtn.addEventListener("click", () => {
   });
   if (els.amortization) els.amortization.value = "25";
   if (els.payFrequency) els.payFrequency.value = "monthly";
+  
   localStorage.removeItem("savedMortgage");
+  window._mortgageData = null;
+  
   els.resultsSection.style.display = "none";
   els.resultsSection.classList.remove("show");
+  els.moduleSections.forEach(s => s.innerHTML = "");
+  
   [els.paymentAmount, els.paymentSub, els.mortgageAmount, els.totalInterest, 
    els.totalCost, els.downPct, els.cmhcAmount, els.payoffDate,
    els.stressTestBox, els.closingCosts, els.breakdownRows].forEach(el => {
@@ -1098,17 +1192,23 @@ if (params.has("price") || params.has("province") || params.has("tab")) {
 }
 
 // ── Advanced Tools Switching ──────────────────────────────
-document.querySelectorAll(".module-tab").forEach(tab => {
+els.moduleTabs.forEach(tab => {
   tab.addEventListener("click", () => {
     // Moving to Step 3 when they start comparing options
     if (hasPerformedCalc) updateStepper(3);
 
-    document.querySelectorAll(".module-tab").forEach(t => t.classList.remove("active"));
-    document.querySelectorAll(".module-section").forEach(s => s.classList.remove("active"));
+    els.moduleTabs.forEach(t => t.classList.remove("active"));
+    els.moduleSections.forEach(s => s.classList.remove("active"));
     tab.classList.add("active");
     const target = document.getElementById("tab-" + tab.dataset.tab);
     if (target) {
       target.classList.add("active");
+      // Render the specific module for the clicked tab
+      if (window._mortgageData && window.AdvancedModules) { // Ensure data and modules are loaded
+        renderSpecificAdvancedModule(tab.dataset.tab, window._mortgageData);
+      } else {
+        console.warn("Cannot render advanced module: _mortgageData or AdvancedModules not available.");
+      }
     }
   });
 });
