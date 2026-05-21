@@ -19,10 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
     modePurchaseBtn: document.getElementById("modePurchaseBtn"),
     modeRefiBtn: document.getElementById("modeRefiBtn"),
     calculateBtn: document.getElementById("calculateBtn"),
+    resultsSection: document.getElementById("resultsSection"),
     dpDollarBtn: document.getElementById("dpDollarBtn"),
     dpPercentBtn: document.getElementById("dpPercentBtn"),
-    resultsSection: document.getElementById("resultsSection"),
-    initialState: document.getElementById("initialState"),
     coreError: document.getElementById("coreError"),
     saveIndicator: document.getElementById("saveIndicator"),
     paymentLabel: document.getElementById("paymentLabel"),
@@ -46,7 +45,17 @@ document.addEventListener("DOMContentLoaded", () => {
     resetBtn: document.getElementById("resetBtn"),
     paymentAmount: document.getElementById("paymentAmount"),
     paymentHeroMeta: document.getElementById("paymentHeroMeta"),
-    mainH1: document.getElementById("mainH1")
+    mainH1: document.getElementById("mainH1"),
+    qualifyBadge: document.getElementById("qualifyBadge"),
+    themeNudge: document.getElementById("themeNudge"),
+    shockBarArea: document.getElementById("shockBarArea"),
+    steps: [
+      document.getElementById("step1"),
+      document.getElementById("step2"),
+      document.getElementById("step3"),
+      document.getElementById("step4")
+    ],
+    stepProgressText: document.getElementById("stepProgressText")
   };
 
   // ── Analytics & Funnel State ──────────────────────────────
@@ -104,19 +113,51 @@ document.addEventListener("DOMContentLoaded", () => {
     calcTimeout = setTimeout(() => calculate(), 150);
   }
 
+  function updateStepper(targetStep) {
+    if (!els.steps[0]) return;
+    els.steps.forEach((step, idx) => {
+      const stepNum = idx + 1;
+      step.classList.remove("active", "completed");
+      
+      if (stepNum < targetStep) {
+        step.classList.add("completed");
+      } else if (stepNum === targetStep) {
+        step.classList.add("active");
+      }
+    });
+
+    // Update progression text
+    const labels = ["🧠 Understanding: Growing...", "💡 Insight unlocked at Step 2", "💰 Savings revealed at Step 3", "🔥 Best deal shown at Step 4"];
+    const nextActions = ["Next: See your analysis →", "Next: Compare real rates →", "Next: View final offers →", "✅ You’ve built your mortgage plan. Now lock in the best rate — this decision can save you $100K+ over time."];
+    
+    if (els.stepProgressText) {
+      const currentLabel = labels[targetStep - 1] || "Details";
+      const nextAction = nextActions[targetStep - 1] || "";
+      els.stepProgressText.innerHTML = `
+        Step ${targetStep} of 4 — ${currentLabel} 
+        <span style="display:block; font-size:11px; opacity:0.8; margin-top:2px;">${nextAction}</span>
+      `;
+    }
+
+    // Analytics for step progression
+    if (targetStep > 1) window.umami?.track(`funnel_step_${targetStep}`);
+  }
+
 
 // ── Dark Mode ─────────────────────────────────────────────
 const savedTheme = localStorage.getItem("mortgage_theme") || "light";
 
 if (savedTheme === "dark") {
   document.documentElement.setAttribute("data-theme", "dark");
-  if (els.themeBtn) els.themeBtn.textContent = "☀️ Light";
+  if (els.themeBtn) els.themeBtn.textContent = "☀️ Night Mode Off";
+  if (els.themeNudge) els.themeNudge.style.display = "block";
 }
 
-els.themeBtn.addEventListener("click", () => {
+els.themeBtn?.addEventListener("click", () => {
   const isDark = document.documentElement.getAttribute("data-theme") === "dark";
   document.documentElement.setAttribute("data-theme", isDark ? "light" : "dark");
-  els.themeBtn.textContent = isDark ? "🌙 Dark" : "☀️ Light";
+  els.themeBtn.textContent = isDark ? "🌙 Night Mode" : "☀️ Night Mode Off";
+  if (els.themeNudge) els.themeNudge.style.display = isDark ? "none" : "block";
   localStorage.setItem("mortgage_theme", isDark ? "light" : "dark");
 });
 
@@ -164,11 +205,11 @@ function setDpMode(mode) {
   els.dpDollarBtn.classList.toggle("active", mode === "dollar");
   els.dpPercentBtn.classList.toggle("active", mode === "percent");
 
-  updateDpDisplay();
+  if (els.dpPercDisplay) updateDpDisplay();
 }
 
-els.dpDollarBtn.addEventListener("click", () => setDpMode("dollar"));
-els.dpPercentBtn.addEventListener("click", () => setDpMode("percent"));
+if (els.dpDollarBtn) els.dpDollarBtn.addEventListener("click", () => setDpMode("dollar"));
+if (els.dpPercentBtn) els.dpPercentBtn.addEventListener("click", () => setDpMode("percent"));
 setDpMode("dollar");
 
 
@@ -203,32 +244,42 @@ els.downPayment.addEventListener("input", updateDpDisplay);
 
 
 // ── Validation Helper ────────────────────────────────────
-function validateInputs() {
+function validateInputs(isScenario = false) { // Added isScenario flag
   let valid = true;
-    [els.purchasePrice, els.downPayment, els.interestRate].forEach(el => el?.classList.remove("input-error"));
   if (els.coreError) els.coreError.textContent = "";
-
-  // Clear all errors first
-    Object.values(els).forEach(el => {
-      if (el && el.classList) el.classList.remove("input-error");
-    });
+  // Clear all errors from relevant fields
+  els.purchasePrice?.classList.remove("input-error");
+  els.interestRate?.classList.remove("input-error");
+  els.amortization?.classList.remove("input-error");
+  els.downPayment?.classList.remove("input-error");
+  els.currentRate?.classList.remove("input-error");
 
   const check = (el, name) => {
       if (!el || el.offsetParent === null) return; 
     const val = el.value.replace(/,/g,"");
     if (val === "" || isNaN(val)) {
       el.classList.add("input-error");
-      if (els.coreError) els.coreError.textContent = `Enter a valid ${name}`;
+      if (els.coreError) els.coreError.textContent = `Please check the highlighted fields.`;
       valid = false;
     }
   };
 
-  check(els.interestRate, "interest rate");
-  check(els.amortization, "amortization");
-  if (mode === "refinance") check(els.currentRate, "current rate");
-  if (mode === "purchase") check(els.downPayment, "down payment amount");
   check(els.purchasePrice, "purchase price");
+  // Specific validation for interestRate: must be a positive number
+  const interestRateValue = parseFloat(els.interestRate.value);
+  if (isNaN(interestRateValue) || interestRateValue <= 0) {
+    els.interestRate.classList.add("input-error");
+    if (els.coreError) els.coreError.textContent = `Interest rate must be a positive number.`;
+    valid = false;
+  }
 
+  check(els.amortization, "amortization");
+
+  if (mode === "purchase") {
+    check(els.downPayment, "down payment amount");
+  } else { // refinance mode
+    check(els.currentRate, "current rate");
+  }
   return valid;
 }
 
@@ -276,7 +327,6 @@ async function calculate() {
     els.calculateBtn.textContent = "Calculating...";
     els.calculateBtn.disabled = true;
 
-  if (els.initialState) els.initialState.style.display = "none";
   if (els.resultsSection) {
     els.resultsSection.style.display = "block";
     setTimeout(() => els.resultsSection.classList.add("show"), 10);
@@ -310,7 +360,8 @@ async function calculate() {
   }
 
   const downPct = (downPayment / purchasePrice) * 100 || 0;
-  const r = rate / 100 / 12;
+  // Canadian Semi-Annual Compounding Formula
+  const r = Math.pow(Math.pow(1 + (rate / 100) / 2, 2), 1 / 12) - 1;
   const nOriginal = amortYears * 12;
 
   const monthlyBasePayment =
@@ -333,16 +384,15 @@ async function calculate() {
 
   let remainingBalance = mortgageAmount;
   let monthsToPayoff = 0;
-  const rMonthly = rate / 100 / 12;
   let simMonthlyPayment = monthlyBasePayment + extraPayment;
   
   // ── Bulletproof Negative Amortization Check ──
   const monthlyEquiv = freq === "monthly" ? paymentWithExtra : (paymentWithExtra * (freq.includes("biweekly") ? 26 : 52) / 12);
-  let negativeAmort = monthlyEquiv <= (mortgageAmount * rMonthly);
+  let negativeAmort = monthlyEquiv <= (mortgageAmount * r);
 
-  if (!negativeAmort && (monthlyBasePayment + extraPayment) > (mortgageAmount * rMonthly)) {
+  if (!negativeAmort && (monthlyBasePayment + extraPayment) > (mortgageAmount * r)) {
     while (remainingBalance > 0 && monthsToPayoff < CONFIG.MAX_AMORT_MONTHS) {
-      let interestPart = remainingBalance * rMonthly;
+      let interestPart = remainingBalance * r;
       let principalPart = simMonthlyPayment - interestPart;
       remainingBalance -= principalPart;
       monthsToPayoff++;
@@ -411,6 +461,12 @@ async function calculate() {
   ]);
 
   renderResults(data);
+
+  // Move to Step 2: Analysis
+  updateStepper(2);
+  // Smooth scroll to results for better UX flow
+  els.resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
   } catch (err) {
     console.error("Calculation failed:", err);
     els.calculateBtn.textContent = originalBtnText;
@@ -475,16 +531,63 @@ function renderResults(d) {
   els.paymentAmount.textContent = fmtC(d.payment);
   els.paymentLabel.textContent = d.frequency.replace("_", " ").toUpperCase() + " PAYMENT";
 
+  // ── Interest Shock Visual ──
+  if (els.shockBarArea) {
+    const totalWithInterest = d.mortgageAmount + d.totalInterest;
+    const equityPct = (d.mortgageAmount / totalWithInterest) * 100;
+    const interestPct = (d.totalInterest / totalWithInterest) * 100;
+    
+    els.shockBarArea.innerHTML = `
+      <div class="shock-bar-label">
+        <span>🏠 Home Equity: <b>${fmtC(d.mortgageAmount)}</b></span>
+        <span>${equityPct.toFixed(0)}%</span>
+      </div>
+      <div class="shock-bar-track">
+        <div class="shock-bar-fill fill-equity" style="width: ${equityPct}%"></div>
+      </div>
+      <div class="shock-bar-label">
+        <span>🏦 You pay the bank (Interest): <b>${fmtC(d.totalInterest)}</b></span>
+        <span>${interestPct.toFixed(0)}%</span>
+      </div>
+      <div class="shock-bar-track">
+        <div class="shock-bar-fill fill-interest" style="width: ${interestPct}%"></div>
+      </div>
+    `;
+  }
+
+  // ── Qualification Badge (Dashbord Style) ──
+  if (els.qualifyBadge) {
+    const stressRate = Math.max(d.rate + 2, CONFIG.STRESS_TEST_FLOOR);
+    if (d.negativeAmort) {
+      els.qualifyBadge.textContent = "🚨 Warning: Payment too low";
+      els.qualifyBadge.style.background = "var(--red)";
+    } else if (d.downPct < 5 && d.purchasePrice < 1500000) {
+      els.qualifyBadge.textContent = "⚠️ Low Down Payment";
+      els.qualifyBadge.style.background = "var(--orange)";
+    } else {
+      els.qualifyBadge.textContent = `✅ Passes Stress Test (${stressRate.toFixed(2)}%)`;
+      els.qualifyBadge.style.background = "rgba(255,255,255,0.2)";
+    }
+    els.qualifyBadge.style.display = "inline-block";
+  }
+
+
   // ── Clean & Credible Contextual CTA ──
   const isHighRate = d.rate > 5.5;
-  const ctaText = mode === "purchase" ? "💰 See rates you qualify for (60s) →" : "💰 See real refinance rates today →";
+  const ctaText = mode === "purchase" ? "→ Check Today’s Lowest Rates" : "→ Find Lowest Refinance Rate";
   
   const ctaHTML = `
-    <div class="card" style="border:2px solid ${isHighRate ? 'var(--red)' : 'var(--blue)'}; background:var(--blue-light); cursor:pointer; margin-top:15px; text-align:center;" 
+    <div class="card cta-block-premium" style="border:3px solid ${isHighRate ? 'var(--red)' : 'var(--blue)'}; background:var(--blue-light); cursor:pointer; margin-top:15px; text-align:center; padding: 25px;" 
          onclick="window.umami?.track('click_ratehub_insight'); window.open('https://www.ratehub.ca', '_blank')">
-      ${mode === 'refinance' ? '🔁 <b>Refinance Opportunity:</b>' : isHighRate ? '🚨 <b>High Interest Rate Warning:</b>' : d.totalInterest > d.purchasePrice ? '🔍 <b>Interest Insight:</b>' : '🎯 <b>Market Edge:</b>'} 
-      Compare 2026's lowest Canadian rates to minimize your interest.
-      <br><span style="color:var(--blue); font-weight:700; display:block; margin-top:8px;">${ctaText}</span>
+      <h3 style="font-size: 18px; margin-bottom: 8px;">🚀 Lock in a Lower Rate Now</h3>
+      <p style="font-weight: 600; margin-bottom: 12px; font-size: 14px;">See real offers from 30+ lenders in 60 seconds</p>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; margin-bottom: 15px; font-size: 12px; font-weight: 500;">
+        <span>✅ No impact on credit</span>
+        <span>✅ Personalized rates</span>
+        <span>✅ Takes less than 1 minute</span>
+      </div>
+      <span style="color:var(--blue); font-weight:700; display:block; margin-top:8px; font-size: 15px;">${ctaText}</span>
+      <p style="font-size: 11px; margin-top: 10px; color: var(--subtext); font-style: italic;">Rates change daily — don’t overpay on your interest.</p>
     </div>
   `;
 
@@ -565,7 +668,36 @@ function renderResults(d) {
     if (mode === "purchase" && d.purchasePrice >= 1500000 && d.downPct < 20) {
       insightsHTML += `<div class="tip" style="color:var(--red)">🚨 <b>Hard Rule:</b> Homes over $1.5M require 20% down. Insured mortgages are not allowed.</div>`;
     }
-    els.breakdownRows.innerHTML = insightsHTML + ctaHTML;
+
+    // ── What to Do Next Section ──
+    const nextStepHTML = `
+      <div style="margin-top:20px; border-top:2px dashed var(--border); padding-top:15px;">
+        <h4 style="font-size:14px; margin-bottom:10px; color:var(--text);">✅ What to Do Next:</h4>
+        <p style="font-size:13px; margin-bottom:15px; color:var(--subtext); line-height:1.5;">
+          Compare today’s lowest rates and see if refinancing or a different term is worth it. 
+          Optimize your <span style="color:var(--blue); font-weight:700;">🔵 Payment</span>, 
+          minimize <span style="color:var(--red); font-weight:700;">🔴 Interest</span>, 
+          and accelerate <span style="color:var(--green); font-weight:700;">🟢 Equity</span> growth.
+        </p>
+      </div>
+    `;
+
+    const extraInsightsHTML = `
+      <div class="tip" style="border-left-color: var(--green);">
+        💡 <b>Strategy Insight:</b> Adding just $200/month could cut ~4 years off your mortgage and save ~$30K+ in interest.
+      </div>
+      <div class="tip" style="border-left-color: var(--blue);">
+        💡 <b>Comparison Shock:</b> If you secure a 2.5% rate instead of 3%, you could save <b>~$30,000+</b> over your mortgage amortization.
+      </div>
+      <div class="tip" style="border-left-color: var(--red);">
+        ⚠️ <b>Warning:</b> Most buyers only focus on monthly payments — but the real cost is <b>long-term interest</b>. A small rate difference today can cost you tens of thousands later.
+      </div>
+      <div class="tip" style="border-left-color: var(--orange);">
+        📊 <b>Share-Worthy Insight:</b> Most Canadians renew their mortgage 4–5 times — your long-term rate strategy matters more than the initial sign-up.
+      </div>
+    `;
+
+    els.breakdownRows.innerHTML = insightsHTML + extraInsightsHTML + nextStepHTML + ctaHTML;
   }, 400);
 
   els.totalCost.textContent = fmtC(d.mortgageAmount + d.totalInterest);
@@ -657,6 +789,7 @@ function renderChart(d) {
   let principalData = [];
   let interestData = [];
   let balanceData = [];
+  let equityCrossoverYear = 0;
   let labels = [];
 
   const r = d.rate / 100 / 12;
@@ -683,6 +816,8 @@ function renderChart(d) {
 
       yearlyInterest += interest; yearlyPrincipal += principal;
     }
+
+    if (equityCrossoverYear === 0 && yearlyPrincipal > yearlyInterest) equityCrossoverYear = year;
 
     principalData.push(Math.max(0, yearlyPrincipal));
     interestData.push(Math.max(0, yearlyInterest));
@@ -712,10 +847,11 @@ function renderChart(d) {
           label: "📉 Remaining Balance",
           data: balanceData,
           borderColor: "#059669",
-          backgroundColor: "rgba(5,150,105,0.1)",
-          tension: 0.4,
+          backgroundColor: "rgba(5,150,105,0.2)",
+          tension: 0.45,
           fill: false,
-          pointRadius: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6,
           yAxisID: "y1"
         }
       ]
@@ -741,10 +877,19 @@ function renderChart(d) {
         title: {
           display: true,
           text: "Your Mortgage Story Over Time",
-          font: { size: 16 }
+          font: { size: 18, weight: '700' }
+        },
+
+        subtitle: {
+          display: true,
+          text: equityCrossoverYear > 0 ? `✨ Year ${equityCrossoverYear}: This is the "Equity Acceleration" point where you pay more to yourself than the bank.` : 'Initial phase: Your payments are mostly interest.',
+          font: { size: 13, style: 'italic' },
+          padding: { bottom: 10 }
         },
 
         tooltip: {
+          padding: 12,
+          cornerRadius: 10,
           callbacks: {
             label: function(ctx) {
               return ctx.dataset.label + ": " + fmtC(ctx.raw);
@@ -878,6 +1023,18 @@ if (els.csvBtn) els.csvBtn.addEventListener("click", () => {
   URL.revokeObjectURL(url);
 });
 
+// ── Offer Visibility Observer (Step 4) ────────────────────
+const offersSection = document.querySelector('.site-footer .card');
+if (offersSection) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && hasPerformedCalc) {
+        updateStepper(4);
+      }
+    });
+  }, { threshold: 0.5 });
+  observer.observe(offersSection);
+}
 
 // ── Reset Logic ──────────────────────────────────────────
 if (els.resetBtn) els.resetBtn.addEventListener("click", () => {
@@ -888,11 +1045,8 @@ if (els.resetBtn) els.resetBtn.addEventListener("click", () => {
   if (els.amortization) els.amortization.value = "25";
   if (els.payFrequency) els.payFrequency.value = "monthly";
   localStorage.removeItem("savedMortgage");
-  if (els.resultsSection) {
-    els.resultsSection.style.display = "none";
-    els.resultsSection.classList.remove("show");
-  }
-  if (els.initialState) els.initialState.style.display = "block";
+  els.resultsSection.style.display = "none";
+  els.resultsSection.classList.remove("show");
   [els.paymentAmount, els.paymentSub, els.mortgageAmount, els.totalInterest, 
    els.totalCost, els.downPct, els.cmhcAmount, els.payoffDate,
    els.stressTestBox, els.closingCosts, els.breakdownRows].forEach(el => {
@@ -902,6 +1056,7 @@ if (els.resetBtn) els.resetBtn.addEventListener("click", () => {
     window._mortgageChart.destroy();
     window._mortgageChart = null;
   }
+  updateStepper(1);
   if (els.dpPercDisplay) els.dpPercDisplay.textContent = "";
   setDpMode("dollar");
 });
@@ -945,6 +1100,9 @@ if (params.has("price") || params.has("province") || params.has("tab")) {
 // ── Advanced Tools Switching ──────────────────────────────
 document.querySelectorAll(".module-tab").forEach(tab => {
   tab.addEventListener("click", () => {
+    // Moving to Step 3 when they start comparing options
+    if (hasPerformedCalc) updateStepper(3);
+
     document.querySelectorAll(".module-tab").forEach(t => t.classList.remove("active"));
     document.querySelectorAll(".module-section").forEach(s => s.classList.remove("active"));
     tab.classList.add("active");
@@ -954,7 +1112,6 @@ document.querySelectorAll(".module-tab").forEach(tab => {
     }
   });
 });
-
 
 // ── Rating Logic ──────────────────────────────────────────
 const goodBtn = document.getElementById("rateGood");

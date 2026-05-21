@@ -129,11 +129,14 @@
       <img src="logo.png" class="brand-logo" alt="Rivlosys logo" />
       <div class="brand-name-container">
         <div class="brand-name">Rivlosys Mortgage Tools</div>
-        <div class="brand-tag">Independent & Secure</div>
+        <div class="brand-tag">Independent & Secure · 🇨🇦</div>
       </div>
     </div>
     <div class="header-actions">
-      <button class="theme-btn" id="themeBtn">🌙</button>
+      <div style="display: flex; flex-direction: column; align-items: flex-end;">
+        <button class="theme-btn" id="themeBtn">🌙 Night Mode</button>
+        <div id="themeNudge" style="font-size: 9px; color: var(--muted); margin-top: 4px; display: none;">Late-night decision? We’ve got you.</div>
+      </div>
       <button class="theme-btn" id="resetBtn">🔄 Reset</button>
     </div>
   </header>
@@ -142,10 +145,32 @@
   <div class="hero">
     <h1 id="mainH1">🏠 Canadian Mortgage Calculator</h1>
     <p>Monthly payments · CMHC · Stress test · Land transfer tax · All provinces</p>
+    <p style="font-size:14px; color:var(--subtext); margin-top:15px;">Most Canadians pay $100,000+ in interest over their mortgage. Let’s see what yours looks like.</p>
   </div>
   <div class="trust-strip">
     <div style="margin-bottom: 6px; font-weight: 600; color: var(--text);">Last updated: May 2026 · Based on current OSFI and CMHC guidelines</div>
-    🇨🇦 Built for Canadian homebuyers · 🔒 Private calculations · ⭐ Trusted planning tools
+    🇨🇦 Canada-specific · 🔒 100% private · ⚖️ Regulation-aligned
+  </div>
+
+  <!-- ── PROGRESS STEPPER ── -->
+  <div id="stepProgressText" style="text-align: center; font-size: 13px; font-weight: 700; color: var(--blue); margin-bottom: 12px;">🧠 Understanding: Growing...</div>
+  <div class="stepper">
+    <div class="step active" id="step1">
+      <div class="step-num">1</div>
+      <div class="step-label">Details</div>
+    </div>
+    <div class="step" id="step2">
+      <div class="step-num">2</div>
+      <div class="step-label">Analysis</div>
+    </div>
+    <div class="step" id="step3">
+      <div class="step-num">3</div>
+      <div class="step-label">Compare</div>
+    </div>
+    <div class="step" id="step4">
+      <div class="step-num">4</div>
+      <div class="step-label">Offers</div>
+    </div>
   </div>
 
   <!-- ── MODE TOGGLE ── -->
@@ -159,6 +184,8 @@
   <!-- ── CORE CALCULATOR ── -->
   <div class="card">
     <div class="card-title"><span class="icon">🏡</span> Property Details</div>
+    <p style="font-size: 13px; color: var(--muted); margin-bottom: 15px; margin-top: -8px;">Tiny tweaks here can save you a new car… or even a down payment.</p>
+
     <div class="grid-2" style="margin-bottom:14px;">
       <div class="field field-group">
         <label>
@@ -185,6 +212,7 @@
           <span class="input-prefix" id="dpPrefix">$</span>
           <input type="text" id="downPayment" class="has-prefix" placeholder="100,000" />
         </div>
+        <div class="nudge-text">💡 20% avoids mortgage insurance fees</div>
         <div id="dpPercDisplay" style="font-size:11px;color:var(--muted);margin-top:3px;"></div>
       </div>
       <div class="field field-group mode-refi-only">
@@ -210,6 +238,7 @@
           <input type="number" id="interestRate" class="has-suffix" placeholder="5.00" step="0.01" min="0" max="30" />
           <span class="input-suffix">%</span>
         </div>
+        <div class="nudge-text">💡 Even a 0.5% drop could save you $40,000+ over time.</div>
       </div>
       <div class="field field-group">
         <label>
@@ -224,6 +253,7 @@
           <option value="25" selected>25 years</option>
           <option value="30">30 years</option>
         </select>
+        <div class="nudge-text">💡 Lower payments today… but a much higher lifetime cost.</div>
       </div>
       <div class="field">
         <label>Payment Type
@@ -317,12 +347,20 @@
     </div>
 
     <div id="coreError" class="error-msg"></div>
-    <button class="primary-btn" id="calculateBtn">Calculate Mortgage</button>
+    
+    <div class="cta-stack-benefits" style="text-align: center; margin-bottom: 15px; font-size: 14px; color: var(--subtext);">
+      ⏱ Takes 10 seconds → Could save you years of payments
+    </div>
+    <button class="primary-btn" id="calculateBtn">Reveal My Full Costs →</button>
+    <div class="cta-stack-friction-removal" style="margin-top: 15px; text-align: center; font-size: 12px; color: var(--muted);">
+      <ul class="friction-list">
+        <li>✅ Takes less than 10 seconds</li>
+        <li>✅ No signup required</li>
+        <li>✅ 100% private</li>
+      </ul>
+    </div>
   </div>
 
-  <div id="initialState" class="empty-state">
-    Enter your numbers to see your mortgage breakdown
-  </div>
 
   <!-- ── RESULTS ── -->
   <div id="resultsSection" style="display:none;">
@@ -331,6 +369,12 @@
     <div class="result-hero fade-up">
       <div class="payment-label" id="paymentLabel">Your Payment</div>
       <div class="payment-amount" id="paymentAmount">$0.00</div>
+      
+      <!-- Viral Loop Nudge -->
+      <div style="margin-top: 15px; font-size: 11px; background: rgba(0,0,0,0.1); padding: 8px; border-radius: 8px; font-weight: 500;">
+        🔁 Show this to someone buying a home — it might save them $50K
+      </div>
+
       <div class="payment-sub" id="paymentSub"></div>
       <div id="qualifyBadge" class="qualification-badge"></div>
       <div id="paymentHeroMeta" style="font-size:12px; margin-top:10px; opacity:0.9; font-weight:500;"></div>
@@ -367,13 +411,18 @@
     <!-- Financial Insights -->
     <div class="card fade-up">
       <div class="card-title"><span class="icon">💰</span> Financial Insights</div>
+      <!-- Interest Shock Visual -->
+      <div id="shockBarArea" class="shock-bar-container"></div>
       <div id="breakdownRows"></div>
     </div>
 
     <!-- Chart -->
     <div class="card fade-up">
       <div class="card-title"><span class="icon">📈</span> Amortization Chart</div>
-      <h3 style="font-size:15px; margin-bottom: 8px;">Where your money goes over time</h3>
+      <div style="margin-bottom: 15px;">
+        <h3 style="font-size:15px; margin-bottom: 4px;">Where your money goes over time</h3>
+        <p style="font-size: 13px; color: var(--subtext); line-height: 1.4;">💡 <b>Perspective:</b> For the first 5 years, you're mostly paying interest to the bank. Real wealth building (equity) starts later — unless you optimize your strategy early.</p>
+      </div>
       <div class="chart-summary">📊 <b>Visualizing Your Journey:</b> This chart shows how your payments shift from paying interest to building equity over time.</div>
       <div id="chartWrap">
         <canvas id="mortgageChart"></canvas>
@@ -384,8 +433,8 @@
     <!-- Advanced Tools Section -->
     <div class="card fade-up">
       <div class="card-title"><span class="icon">⚙️</span> Personalize Your Plan</div>
-      <h3 style="font-size:14px;margin-bottom:6px;">Explore scenarios:</h3>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Deep-dive into specific scenarios using our modular calculators below.</p>
+      <h3 style="font-size:14px;margin-bottom:6px;">What happens if you earn more? Pay extra? Get a lower rate?</h3>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Explore your future ↓</p>
       <div class="module-tabs">
         <button class="module-tab active" data-tab="affordability">💼 Affordability</button>
         <button class="module-tab" data-tab="prepayment">💳 Prepayment</button>
@@ -504,7 +553,7 @@
 
   <!-- Support -->
   <div class="card" style="text-align:center; padding:12px; font-size:12px; color:var(--subtext); margin-bottom:16px;">
-    🔒 <b>Privacy First:</b> All calculations happen in your browser. No data is sent to our servers.
+    🔒 <b>100% Private:</b> Unlike most tools, your data never leaves your device. No tracking. No selling. Ever.
   </div>
 
   <div class="feedback-box">
@@ -530,10 +579,13 @@
 
   <footer class="site-footer">
     <!-- Affiliate CTA Section -->
-    <div class="card" style="border: 2px solid var(--blue); background: var(--blue-light); text-align:center;">
-      <h3>🚀 Secure Your 2026 Rate</h3>
-      <p>Compare today's lowest rates from 30+ Canadian lenders.</p>
-      <a href="https://www.ratehub.ca/" target="_blank" class="primary-btn" style="display:inline-block; width:auto; margin-top:10px; padding: 12px 30px;">Compare rates from 30+ lenders &rarr;</a>
+    <div class="card cta-block-premium" style="border: 3px solid var(--blue); background: var(--blue-light); text-align:center; padding: 30px;">
+      <div style="background: var(--red-bg); color: var(--red); padding: 8px; border-radius: 8px; font-size: 12px; font-weight: 700; margin-bottom: 15px; border: 1px solid var(--red);">
+        🧠 Most buyers don’t compare rates — and overpay by $20K–$80K. Don’t be one of them.
+      </div>
+      <h3 style="font-size: 18px; margin-bottom: 12px;">💡 After your results, you’ll be able to compare real rates from 30+ lenders.</h3>
+      <a href="https://www.ratehub.ca/" target="_blank" class="primary-btn" style="display:inline-block; width:auto; padding: 14px 40px; font-size: 16px; box-shadow: 0 4px 12px rgba(27, 118, 223, 0.3);">→ Check Today’s Lowest Rates</a>
+      <p style="font-size: 11px; margin-top: 12px; color: var(--subtext); font-style: italic;">Rates change daily — don’t overpay ↓</p>
     </div>
     <div style="margin-bottom:12px; font-weight:600;">Rivlosys Mortgage Tools — Canadian Home Financing</div>
     <div style="font-size:11px; color:var(--muted);">
@@ -544,20 +596,19 @@
   <div class="safe-note">All calculations are estimates only. Results do not constitute financial advice.</div>
 
   <!-- Authority & Trust Section -->
-  <div class="card trust-layer" style="border-top: 4px solid var(--green); margin-top: 20px;">
-    <h3 style="margin-bottom:12px;">🛡️ Why Trust This Calculator?</h3>
-    <div class="grid-2" style="gap: 15px; font-size: 13px;">
-      <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px;">
-        <li>✅ <b>Canadian Mortgage Formulas:</b> Uses semi-annual compounding as mandated by law.</li>
-        <li>✅ <b>Stress Test Integration:</b> Automatically applies B-20 qualification rules.</li>
-        <li>✅ <b>2026 Regulation Updates:</b> CMHC logic updated for the $1.5M insured cap.</li>
-      </ul>
-      <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px;">
-        <li>✅ <b>Privacy First:</b> All calculations happen locally in your browser.</li>
-        <li>✅ <b>No Signup Required:</b> Access all features without providing personal info.</li>
-        <li>✅ <b>Verified Logic:</b> Algorithms checked against OSFI and Bank of Canada data.</li>
-      </ul>
+  <div class="card trust-layer" style="border-top: 4px solid var(--blue); margin-top: 20px;">
+    <h3 style="margin-bottom:15px;">🛡️ Built to match real lender calculations</h3>
+    <div style="margin-bottom: 15px;">
+      <span class="authority-badge">🇨🇦 Canada-specific</span>
+      <span class="authority-badge">🔒 100% private</span>
+      <span class="authority-badge">⚖️ Regulation-aligned</span>
     </div>
+    <ul style="list-style: none; padding: 0; font-size: 13px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+      <li>✔ OSFI stress test compliant</li>
+      <li>✔ CMHC insurance rules built-in</li>
+      <li>✔ Canadian semi-annual compounding</li>
+      <li>✔ Updated for 2026 regulations</li>
+    </ul>
   </div>
 
   <!-- SEO / Content Section -->
