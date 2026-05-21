@@ -14,7 +14,10 @@
     <header class="site-header">
       <div class="brand" onclick="window.location.href='/'" style="cursor:pointer">
         <img src="../logo.png" class="brand-logo" alt="Rivlosys logo" />
-        <div><div class="brand-name">Rivlosys</div><div class="brand-tag">Renewal Planner</div></div>
+        <div class="brand-name-container">
+          <div class="brand-name">Rivlosys Mortgage Tools</div>
+          <div class="brand-tag">Renewal Planner</div>
+        </div>
       </div>
     </header>
     <div class="hero">
@@ -24,7 +27,7 @@
     <div class="card">
       <h2>Is your renewal coming up?</h2>
       <p>Don't wait for your lender's offer. Calculate how a rate change will impact your cash flow and total interest costs.</p>
-      <button class="primary-btn" onclick="window.location.href='/?tab=renewal'">Open Renewal Tool</button>
+      <a href="/?tab=renewal" class="primary-btn">Open Renewal Tool</a>
     </div>
     <script>
       if (window.location.pathname.includes('mortgage-renewal-calculator')) {
@@ -32,8 +35,5 @@
       }
     </script>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="../modules/advanced.js"></script>
-  <script src="../index.js"></script>
 </body>
 </html>

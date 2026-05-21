@@ -14,7 +14,10 @@
     <header class="site-header">
       <div class="brand" onclick="window.location.href='/'" style="cursor:pointer">
         <img src="../logo.png" class="brand-logo" alt="Rivlosys logo" />
-        <div><div class="brand-name">Rivlosys</div><div class="brand-tag">Savings Tool</div></div>
+        <div class="brand-name-container">
+          <div class="brand-name">Rivlosys Mortgage Tools</div>
+          <div class="brand-tag">Savings Tool</div>
+        </div>
       </div>
     </header>
     <div class="hero">
@@ -24,7 +27,7 @@
     <div class="card">
       <h2>Save Thousands in Interest</h2>
       <p>Even small additions to your principal can shave years off your amortization. Use this tool to simulate your debt-free date.</p>
-      <button class="primary-btn" onclick="window.location.href='/?tab=prepayment'">Open Prepayment Tool</button>
+      <a href="/?tab=prepayment" class="primary-btn">Open Prepayment Tool</a>
     </div>
     <script>
       if (window.location.pathname.includes('prepayment-calculator-canada')) {
@@ -32,8 +35,5 @@
       }
     </script>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="../modules/advanced.js"></script>
-  <script src="../index.js"></script>
 </body>
 </html>

@@ -14,7 +14,10 @@
     <header class="site-header">
       <div class="brand" onclick="window.location.href='/'" style="cursor:pointer">
         <img src="../logo.png" class="brand-logo" alt="Rivlosys logo" />
-        <div><div class="brand-name">Rivlosys</div><div class="brand-tag">Decision Tool</div></div>
+        <div class="brand-name-container">
+          <div class="brand-name">Rivlosys Mortgage Tools</div>
+          <div class="brand-tag">Decision Tool</div>
+        </div>
       </div>
     </header>
     <div class="hero">
@@ -24,7 +27,7 @@
     <div class="card">
       <h2>Stop Renting or Keep Saving?</h2>
       <p>We factor in rent increases, home appreciation, and the cost of capital to help you make an informed financial decision.</p>
-      <button class="primary-btn" onclick="window.location.href='/?tab=rentvsbuy'">Open Rent vs Buy Tool</button>
+      <a href="/?tab=rentvsbuy" class="primary-btn">Open Rent vs Buy Tool</a>
     </div>
     <script>
       if (window.location.pathname.includes('rent-vs-buy-canada')) {
@@ -32,8 +35,5 @@
       }
     </script>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="../modules/advanced.js"></script>
-  <script src="../index.js"></script>
 </body>
 </html>

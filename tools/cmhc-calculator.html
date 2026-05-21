@@ -15,8 +15,8 @@
     <header class="site-header">
       <div class="brand" onclick="window.location.href='/'" style="cursor:pointer">
         <img src="../logo.png" class="brand-logo" alt="Rivlosys logo" />
-        <div>
-          <div class="brand-name">Rivlosys</div>
+        <div class="brand-name-container">
+          <div class="brand-name">Rivlosys Mortgage Tools</div>
           <div class="brand-tag">CMHC Insurance Tool</div>
         </div>
       </div>
@@ -30,7 +30,7 @@
     <div class="card">
       <h2>What is CMHC Insurance?</h2>
       <p>Mortgage loan insurance is mandatory in Canada if your down payment is less than 20% of the home's purchase price. It protects the lender, not you, in case of default.</p>
-      <button class="primary-btn" onclick="window.location.href='/'">Open CMHC Calculator</button>
+      <a href="/" class="primary-btn">Open CMHC Calculator</a>
     </div>
 
     <!-- Load the main app logic (CMHC is part of the main calculation) -->
@@ -40,8 +40,5 @@
       }
     </script>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="../modules/advanced.js"></script>
-  <script src="../index.js"></script>
 </body>
 </html>
