@@ -6,7 +6,7 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://mortgage.usecos.app/tools/mortgage-payment-calculator-canada.html</loc>
+    <loc>https://mortgage.usecos.app/tools/mortgage-payment-calculator.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -21,22 +21,17 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://mortgage.usecos.app/tools/amortization-calculator.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://mortgage.usecos.app/tools/cmhc-calculator.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://mortgage.usecos.app/tools/amortization-schedule-canada.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://mortgage.usecos.app/tools/prepayment-calculator-canada.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://mortgage.usecos.app/tools/rent-vs-buy-canada.html</loc>
+    <loc>https://mortgage.usecos.app/tools/extra-payment-calculator.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -46,24 +41,29 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://mortgage.usecos.app/tools/rate-comparison-mortgage-canada.html</loc>
+    <loc>https://mortgage.usecos.app/tools/vancouver-mortgage-calculator.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://mortgage.usecos.app/tools/mortgage-calculator-ontario.html</loc>
+    <loc>https://mortgage.usecos.app/tools/ottawa-mortgage-calculator.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://mortgage.usecos.app/tools/mortgage-calculator-bc.html</loc>
+    <loc>https://mortgage.usecos.app/tools/montreal-mortgage-calculator.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://mortgage.usecos.app/tools/mortgage-calculator-alberta.html</loc>
+    <loc>https://mortgage.usecos.app/tools/should-i-refinance-canada-2026.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mortgage.usecos.app/blog/cmhc-changes-2024.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://mortgage.usecos.app/tools/toronto-mortgage-calculator.html</loc>
