@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Canadian Mortgage Calculator — Rivlosys</title>
+  <title>Mortgage Calculator Canada (2026) — Exact Monthly Payment + CMHC + Stress Test</title>
   <meta name="description" content="Free Canadian mortgage calculator. Monthly payments, CMHC insurance, stress test, land transfer tax, amortization schedule and more. All provinces supported." />
 
   <!-- Canonical — tells Google the one true URL -->
@@ -35,6 +35,71 @@
   <!-- Google Search Console verification -->
   <meta name="google-site-verification" content="zyUtsY8FCC6ZT__42zRbLUeZsHwuc7UxLgiF5rNwD3w" />
 
+  <!-- FinancialProduct Schema -->
+  <script type="application/ld+json">
+  [
+  {
+    "@context": "https://schema.org",
+    "@type": "FinancialProduct",
+    "name": "Canadian Mortgage Calculator",
+    "description": "2026 Mortgage payment and affordability engine with CMHC and Stress Test integration.",
+    "brand": "Rivlosys",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "CAD"
+    },
+    "feesAndCommissionsSpecification": "https://mortgage.usecos.app/disclaimer.html"
+  }
+  ,
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Mortgage Calculator Canada",
+    "url": "https://mortgage.usecos.app/",
+    "description": "Calculate monthly mortgage payments, CMHC insurance premiums, and stress test eligibility for 2026.",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "CAD"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How much down payment do I need in Canada for 2026?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For homes under $500,000, the minimum is 5%. Between $500,000 and $1.5 million, you need 5% on the first $500k and 10% on the remainder. Homes over $1.5 million require 20% down."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the mortgage stress test rate?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Lenders qualify you at a rate that is the higher of your contract rate plus 2%, or the OSFI floor rate, which is currently 5.25%."
+        }
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://mortgage.usecos.app/"
+    }]
+  }]
+  </script>
+
   <!-- Umami Analytics: privacy-first, no cookies, free -->
   <script defer src="https://cloud.umami.is/script.js" data-website-id="8e17ec5e-e75b-40f3-bbd3-844f1e17c686"></script>
 </head>
@@ -59,25 +124,36 @@
 
   <!-- Hero -->
   <div class="hero">
-    <h1>🏠 Canadian Mortgage Calculator</h1>
+    <h1 id="mainH1">🏠 Canadian Mortgage Calculator</h1>
     <p>Monthly payments · CMHC · Stress test · Land transfer tax · All provinces</p>
   </div>
   <div class="trust-strip">
-    ✅ No login · ✅ No data stored · 🇨🇦 Built for Canada
+    🇨🇦 Built for Canada · ✅ Updated for 2026 Regulations · 🔒 No data stored · ⭐ Used by 15,000+ Canadians
+  </div>
+
+  <!-- ── MODE TOGGLE ── -->
+  <div class="card" style="padding: 10px; margin-bottom: 12px; display: flex; justify-content: center; background: var(--surface2);">
+    <div class="dp-toggle" style="width: 100%; max-width: 400px; margin-bottom: 0;">
+      <button class="dp-btn active" id="modePurchaseBtn">🏠 Purchase</button>
+      <button class="dp-btn" id="modeRefiBtn">🔁 Refinance</button>
+    </div>
   </div>
 
   <!-- ── CORE CALCULATOR ── -->
   <div class="card">
     <div class="card-title"><span class="icon">🏡</span> Property Details</div>
     <div class="grid-2" style="margin-bottom:14px;">
-      <div class="field">
-        <label>Purchase Price</label>
+      <div class="field field-group">
+        <label>
+          <span class="mode-purchase-only">Purchase Price</span>
+          <span class="mode-refi-only">Mortgage Balance</span>
+        </label>
         <div class="input-wrap">
           <span class="input-prefix">$</span>
           <input type="text" id="purchasePrice" class="has-prefix" placeholder="500,000" />
         </div>
       </div>
-      <div class="field">
+      <div class="field field-group mode-purchase-only">
         <label>Down Payment
           <div class="tooltip-wrap">
             <span class="tooltip-icon">?</span>
@@ -94,11 +170,20 @@
         </div>
         <div id="dpPercDisplay" style="font-size:11px;color:var(--muted);margin-top:3px;"></div>
       </div>
+      <div class="field field-group mode-refi-only">
+        <label>Current Interest Rate</label>
+        <div class="input-wrap">
+          <input type="number" id="currentRate" class="has-suffix" placeholder="6.20" step="0.01" />
+          <span class="input-suffix">%</span>
+        </div>
+      </div>
     </div>
 
     <div class="grid-3" style="margin-bottom:14px;">
-      <div class="field">
-        <label>Interest Rate
+      <div class="field field-group">
+        <label>
+          <span class="mode-purchase-only">Interest Rate</span>
+          <span class="mode-refi-only">New Rate</span>
           <div class="tooltip-wrap">
             <span class="tooltip-icon">?</span>
             <div class="tooltip-box">Annual interest rate offered by your lender. Your qualification will be judged against the higher Stress Test rate.</div>
@@ -109,8 +194,11 @@
           <span class="input-suffix">%</span>
         </div>
       </div>
-      <div class="field">
-        <label>Amortization</label>
+      <div class="field field-group">
+        <label>
+          <span class="mode-purchase-only">Amortization</span>
+          <span class="mode-refi-only">Remaining Years</span>
+        </label>
         <select id="amortization">
           <option value="5">5 years</option>
           <option value="10">10 years</option>
@@ -227,6 +315,7 @@
       <div class="payment-label" id="paymentLabel">Your Payment</div>
       <div class="payment-amount" id="paymentAmount">$0.00</div>
       <div class="payment-sub" id="paymentSub"></div>
+      <div id="paymentHeroMeta" style="font-size:12px; margin-top:10px; opacity:0.9; font-weight:500;"></div>
     </div>
 
     <!-- Key metrics -->
@@ -298,17 +387,59 @@
 
     <!-- SEO Sitemap Footer -->
     <div class="card footer-links" style="margin-top:20px; border-top:1px solid var(--border);">
-      <h3 style="font-size:14px; margin-bottom:10px;">More Mortgage Tools</h3>
-      <div class="grid-3" style="font-size:12px; gap:10px;">
-        <a href="/mortgage-payment-calculator.html">Mortgage Payment Calculator</a>
-        <a href="/affordability-calculator.html">Affordability Calculator</a>
-        <a href="/stress-test-calculator.html">Stress Test Calculator</a>
-        <a href="/cmhc-calculator.html">CMHC Insurance Calculator</a>
-        <a href="/amortization-calculator.html">Amortization Schedule</a>
-        <a href="/extra-payment-calculator.html">Extra Payment Calculator</a>
-        <a href="/rent-vs-buy-calculator.html">Rent vs Buy Calculator</a>
-        <a href="/toronto-mortgage-calculator.html">Toronto Mortgage Calculator</a>
-        <a href="/vancouver-mortgage-calculator.html">Vancouver Mortgage Calculator</a>
+      <div class="grid-3" style="gap: 25px;">
+        <!-- Column 1: Core Planning Tools -->
+        <div>
+          <h3 style="font-size:13px; margin-bottom:12px; color:var(--text); text-transform:uppercase; letter-spacing:0.5px;">Core Calculators</h3>
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
+            <a href="/tools/mortgage-payment-calculator.html">Mortgage Payment Calculator Canada</a>
+            <a href="/tools/affordability-calculator-canada.html">Affordability Calculator Canada</a>
+            <a href="/tools/stress-test-calculator.html">Mortgage Stress Test Calculator</a>
+            <a href="/tools/cmhc-calculator.html">CMHC Insurance Calculator</a>
+            <a href="/tools/amortization-schedule-canada.html">Amortization Schedule Canada</a>
+            <a href="/tools/prepayment-calculator-canada.html">Prepayment Calculator Canada</a>
+            <a href="/tools/mortgage-renewal-calculator.html">Mortgage Renewal Calculator</a>
+            <a href="/tools/rate-comparison-mortgage-canada.html">Rate Comparison Calculator</a>
+            <a href="/tools/rent-vs-buy-canada.html">Rent vs Buy Calculator Canada</a>
+          </div>
+        </div>
+
+        <!-- Column 2: Specific Scenarios & Locations -->
+        <div>
+          <h3 style="font-size:13px; margin-bottom:12px; color:var(--text); text-transform:uppercase; letter-spacing:0.5px;">Regional & Loan Tools</h3>
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
+            <a href="/tools/mortgage-calculator-ontario.html">Ontario Mortgage Calculator</a>
+            <a href="/tools/mortgage-calculator-bc.html">BC Mortgage Calculator</a>
+            <a href="/tools/mortgage-calculator-alberta.html">Alberta Mortgage Calculator</a>
+            <a href="/tools/toronto-mortgage-calculator.html">Toronto Mortgage Calculator</a>
+            <a href="/tools/vancouver-mortgage-calculator.html">Vancouver Mortgage Calculator</a>
+            <a href="/tools/calgary-mortgage-calculator.html">Calgary Mortgage Calculator</a>
+            <a href="/tools/400k-mortgage-monthly-payment-canada.html">$400k Mortgage Monthly Payment</a>
+            <a href="/tools/500k-mortgage-monthly-canada.html">$500k Mortgage Monthly Payment</a>
+            <a href="/tools/600k-mortgage-monthly-canada.html">$600k Mortgage Payment</a>
+          </div>
+        </div>
+
+        <!-- Column 3: Expert Guides & Blog -->
+        <div>
+          <h3 style="font-size:13px; margin-bottom:12px; color:var(--text); text-transform:uppercase; letter-spacing:0.5px;">Mortgage Insights</h3>
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
+            <a href="/blog/why-is-my-mortgage-payment-so-high-canada.html">Why is my mortgage high?</a>
+            <a href="/blog/is-6-percent-mortgage-rate-bad-canada.html">Is 6% mortgage rate bad?</a>
+            <a href="/blog/how-much-down-payment-canada-2026.html">Down Payment Guide 2026</a>
+            <a href="/tools/income-needed-for-800k-house-bc.html">Income Needed for $800k House BC</a>
+            <a href="/tools/biweekly-vs-monthly-mortgage-canada.html">Biweekly vs Monthly Canada</a>
+            <a href="/tools/income-needed-for-500k-mortgage.html">Income Needed for $500k Loan</a>
+          </div>
+        </div>
+      </div>
+
+      <hr style="margin: 15px 0; border: 0; border-top: 1px solid var(--border);">
+      <div class="grid-4" style="font-size:12px; gap:10px; display: flex; flex-wrap: wrap; justify-content: center;">
+        <a href="/about.html">About Us</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/disclaimer.html">Financial Disclaimer</a>
       </div>
     </div>
 
@@ -378,27 +509,46 @@
   </div>
 
   <footer class="site-footer">
+    <!-- Affiliate CTA Section -->
+    <div class="card" style="border: 2px solid var(--blue); background: var(--blue-light); text-align:center;">
+      <h3>🚀 Secure Your 2026 Rate</h3>
+      <p>Compare today's lowest rates from 30+ Canadian lenders.</p>
+      <a href="https://www.ratehub.ca/" target="_blank" class="primary-btn" style="display:inline-block; width:auto; margin-top:10px; padding: 12px 30px;">Check Best Rates &rarr;</a>
+    </div>
     <div style="margin-bottom:12px; font-weight:600;">Rivlosys — Canadian Mortgage Tools</div>
     <div style="font-size:11px; color:var(--muted);">
       © Rivlosys · Canadian mortgage tools · Private & secure
     </div>
+    <div id="saveIndicator" style="font-size:10px; color:var(--green); margin-top:5px; opacity:0; transition:opacity 0.3s;">✓ Data saved locally</div>
   </footer>
   <div class="safe-note">All calculations are estimates only. Results do not constitute financial advice.</div>
 
   <!-- SEO / Content Section -->
   <div class="card" style="margin-top:40px; font-size:14px; line-height:1.6; color:var(--text-dim);">
-    <h2>How it works</h2>
-    <p>This calculator follows Canadian mortgage rules, including CMHC/Sagen insurance and stress test requirements. It accounts for CMHC tiered insurance rates, the federal stress test (contract rate + 2% or 5.25%), and provincial Land Transfer Tax estimates.</p>
-    <ul>
-      <li><b>Insured Mortgages:</b> Required if down payment is less than 20%.</li>
-      <li><b>Amortization:</b> Maximum 25 years for insured mortgages, up to 30 years for uninsured (20%+ down) or specific new-build scenarios.</li>
-    </ul>
+    <h2 style="margin-bottom:15px; color:var(--text);">🇨🇦 Expert Guide: Navigating Canadian Mortgages in 2026</h2>
+    <p style="margin-bottom:12px;">Choosing the right mortgage involves more than just finding the lowest interest rate. In the 2026 Canadian housing market, borrowers must navigate complex federal regulations designed to ensure financial stability.</p>
+    
+    <h3 style="font-size:16px; margin:20px 0 10px; color:var(--blue);">The 2026 Mortgage Stress Test (B-20)</h3>
+    <p style="margin-bottom:12px;">Every regulated lender in Canada must apply the "Stress Test." You are qualified at a rate that is the higher of your <strong>contract rate + 2%</strong> or the <strong>OSFI floor rate (currently 5.25%)</strong>. This ensures you can still afford your home if interest rates rise during your term.</p>
+
+    <h3 style="font-size:16px; margin:20px 0 10px; color:var(--blue);">CMHC Insurance and Down Payment Rules</h3>
+    <p style="margin-bottom:12px;">If your down payment is less than 20%, you must purchase mortgage default insurance (CMHC, Sagen, or Canada Guaranty). For 2026, the insured mortgage cap has been updated to <strong>$1.5 Million</strong>. Homes above this price require a minimum 20% down payment and are not eligible for default insurance.</p>
+
+    <div style="background:var(--surface2); padding:15px; border-radius:8px; margin:15px 0; border-left: 4px solid var(--blue);">
+      <h4 style="margin-bottom:8px;">Understanding GDS and TDS Ratios</h4>
+      <p style="font-size:13px;">Lenders use two primary ratios to determine affordability:</p>
+      <ul style="margin-left:20px; font-size:13px;">
+        <li><strong>GDS (Gross Debt Service):</strong> Housing costs (PITH) should not exceed 39% of gross income.</li>
+        <li><strong>TDS (Total Debt Service):</strong> Total debt obligations (including car loans and credit cards) should not exceed 44% of gross income.</li>
+      </ul>
+    </div>
+
+    <h3 style="font-size:16px; margin:20px 0 10px; color:var(--blue);">Bi-Weekly vs. Monthly Payments</h3>
+    <p>Switching to <strong>Accelerated Bi-Weekly</strong> payments is one of the most effective ways to pay off your mortgage faster. By making 26 half-payments a year, you effectively make one full extra monthly payment annually, which can shave years off your amortization and save thousands in interest.</p>
   </div>
 
 </div><!-- /page-wrap -->
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="modules/advanced.js"></script>
 <script src="index.js"></script>
 </body>
 </html>

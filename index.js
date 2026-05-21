@@ -1,24 +1,122 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-// ── Formatter ─────────────────────────────────────────────
-const fmtC = (n) => "$" + Math.abs(n || 0)
-  .toFixed(2)
-  .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  // ── Element Cache ─────────────────────────────────────────
+  const els = {
+    purchasePrice: document.getElementById("purchasePrice"),
+    downPayment: document.getElementById("downPayment"),
+    interestRate: document.getElementById("interestRate"),
+    amortization: document.getElementById("amortization"),
+    payFrequency: document.getElementById("payFrequency"),
+    extraPayment: document.getElementById("extraPayment"),
+    currentRate: document.getElementById("currentRate"),
+    refiCosts: document.getElementById("refiCosts"),
+    province: document.getElementById("province"),
+    propertyTax: document.getElementById("propertyTax"),
+    heatingCost: document.getElementById("heatingCost"),
+    condoFees: document.getElementById("condoFees"),
+    newBuild: document.getElementById("newBuild"),
+    firstTimeBuyer: document.getElementById("firstTimeBuyer"),
+    modePurchaseBtn: document.getElementById("modePurchaseBtn"),
+    modeRefiBtn: document.getElementById("modeRefiBtn"),
+    calculateBtn: document.getElementById("calculateBtn"),
+    dpDollarBtn: document.getElementById("dpDollarBtn"),
+    dpPercentBtn: document.getElementById("dpPercentBtn"),
+    resultsSection: document.getElementById("resultsSection"),
+    initialState: document.getElementById("initialState"),
+    coreError: document.getElementById("coreError"),
+    saveIndicator: document.getElementById("saveIndicator"),
+    paymentLabel: document.getElementById("paymentLabel"),
+    totalCost: document.getElementById("totalCost"),
+    downPct: document.getElementById("downPct"),
+    cmhcAmount: document.getElementById("cmhcAmount"),
+    payoffDate: document.getElementById("payoffDate"),
+    breakdownRows: document.getElementById("breakdownRows"),
+    paymentSub: document.getElementById("paymentSub"),
+    mortgageAmount: document.getElementById("mortgageAmount"),
+    totalInterest: document.getElementById("totalInterest"),
+    stressTestBox: document.getElementById("stressTestBox"),
+    closingCosts: document.getElementById("closingCosts"),
+    dpPrefix: document.getElementById("dpPrefix"),
+    dpPercDisplay: document.getElementById("dpPercDisplay"),
+    themeBtn: document.getElementById("themeBtn"),
+    shareBtn: document.getElementById("shareBtn"),
+    copyBtn: document.getElementById("copyBtn"),
+    printBtn: document.getElementById("printBtn"),
+    csvBtn: document.getElementById("csvBtn"),
+    resetBtn: document.getElementById("resetBtn"),
+    paymentAmount: document.getElementById("paymentAmount"),
+    paymentHeroMeta: document.getElementById("paymentHeroMeta"),
+    mainH1: document.getElementById("mainH1")
+  };
+
+  // ── Analytics & Funnel State ──────────────────────────────
+  let hasStartedTyping = false;
+  let mode = "purchase";
+  let hasPerformedCalc = false;
+
+  // ── Lazy Script Loader ──────────────────────────────────
+  let chartLoaded = false;
+  let modulesLoaded = false;
+
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      if (document.querySelector(`script[src="${src}"]`)) return resolve();
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.body.appendChild(script);
+    });
+  }
+
+  function loadChartLib() {
+    if (chartLoaded) return Promise.resolve();
+    return new Promise(resolve => {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/chart.js";
+      script.onload = () => {
+        chartLoaded = true;
+        resolve();
+      };
+      document.body.appendChild(script);
+    });
+  }
+
+  const CONFIG = {
+    CLOSING_COST_RATE: 0.015,
+    MAX_AMORT_MONTHS: 600,
+    STRESS_TEST_FLOOR: 5.25,
+    GDS_LIMIT: 0.39,
+    TDS_LIMIT: 0.44,
+    AVG_BUYER_DP: 18
+  };
+
+  // ── High-Performance Formatter ────────────────────────────
+  const fmtC = (n) => new Intl.NumberFormat('en-CA', { 
+    style: 'currency', 
+    currency: 'CAD',
+    maximumFractionDigits: 0 
+  }).format(n || 0);
+
+  let calcTimeout;
+  function triggerCalc() {
+    clearTimeout(calcTimeout);
+    calcTimeout = setTimeout(() => calculate(), 150);
+  }
 
 
 // ── Dark Mode ─────────────────────────────────────────────
-const themeBtn = document.getElementById("themeBtn");
 const savedTheme = localStorage.getItem("mortgage_theme") || "light";
 
 if (savedTheme === "dark") {
   document.documentElement.setAttribute("data-theme", "dark");
-  themeBtn.textContent = "☀️ Light";
+  if (els.themeBtn) els.themeBtn.textContent = "☀️ Light";
 }
 
-themeBtn.addEventListener("click", () => {
+els.themeBtn.addEventListener("click", () => {
   const isDark = document.documentElement.getAttribute("data-theme") === "dark";
   document.documentElement.setAttribute("data-theme", isDark ? "light" : "dark");
-  themeBtn.textContent = isDark ? "🌙 Dark" : "☀️ Light";
+  els.themeBtn.textContent = isDark ? "🌙 Dark" : "☀️ Light";
   localStorage.setItem("mortgage_theme", isDark ? "light" : "dark");
 });
 
@@ -27,12 +125,16 @@ themeBtn.addEventListener("click", () => {
 let dpMode = "dollar";
 
 function setDpMode(mode) {
-  const input = document.getElementById("downPayment");
-  const prefix = document.getElementById("dpPrefix");
-  const priceInput = document.getElementById("purchasePrice").value || "0";
+  const priceInput = els.purchasePrice.value || "0";
   const price = parseFloat(priceInput.replace(/,/g, ""));
 
-  let value = parseFloat((input.value || "0").replace(/,/g, ""));
+  // Analytics: Track when user starts interacting
+  if (!hasStartedTyping) {
+    hasStartedTyping = true;
+    window.umami?.track('funnel_input_start');
+  }
+
+  let value = parseFloat((els.downPayment.value || "0").replace(/,/g, ""));
 
   // Limit protection
   if (mode === "percent" && value > 100) value = 100;
@@ -40,131 +142,166 @@ function setDpMode(mode) {
   // Convert value when switching
   if (mode === "percent" && dpMode === "dollar" && price > 0) {
     value = (value / price) * 100;
-    input.value = value.toFixed(1);
+    els.downPayment.value = value.toFixed(1);
   }
 
   if (mode === "dollar" && dpMode === "percent" && price > 0) {
     value = (price * value) / 100;
-    input.value = Math.round(value).toLocaleString();
+    els.downPayment.value = Math.round(value).toLocaleString();
   }
 
   dpMode = mode;
 
   // Update UI
   if (mode === "percent") {
-    prefix.textContent = "%";
-    input.placeholder = "20";
+    els.dpPrefix.textContent = "%";
+    els.downPayment.placeholder = "20";
   } else {
-    prefix.textContent = "$";
-    input.placeholder = "100,000";
+    els.dpPrefix.textContent = "$";
+    els.downPayment.placeholder = "100,000";
   }
 
-  document.getElementById("dpDollarBtn").classList.toggle("active", mode === "dollar");
-  document.getElementById("dpPercentBtn").classList.toggle("active", mode === "percent");
+  els.dpDollarBtn.classList.toggle("active", mode === "dollar");
+  els.dpPercentBtn.classList.toggle("active", mode === "percent");
 
   updateDpDisplay();
 }
 
-document.getElementById("dpDollarBtn").addEventListener("click", () => setDpMode("dollar"));
-document.getElementById("dpPercentBtn").addEventListener("click", () => setDpMode("percent"));
+els.dpDollarBtn.addEventListener("click", () => setDpMode("dollar"));
+els.dpPercentBtn.addEventListener("click", () => setDpMode("percent"));
 setDpMode("dollar");
 
 
 // ── DP Display (UPGRADED) ────────────────────────────────────
 function updateDpDisplay() {
-  const priceRaw = document.getElementById("purchasePrice").value || "0";
-  const dpRaw = document.getElementById("downPayment").value || "0";
+  const priceRaw = els.purchasePrice.value || "0";
+  const dpRaw = els.downPayment.value || "0";
   const price = parseFloat(priceRaw.replace(/,/g, ""));
   const dp = parseFloat(dpRaw.replace(/,/g, ""));
-  const el = document.getElementById("dpPercDisplay");
-  const input = document.getElementById("downPayment");
 
   if (!price || isNaN(dp)) {
-    el.textContent = "";
+    els.dpPercDisplay.textContent = "";
     return;
   }
 
   // Auto-reset unrealistic percent values
   if (dpMode === "percent" && dp > 100) {
-    input.value = "100";
+    els.downPayment.value = "100";
   }
 
   if (dpMode === "dollar") {
     const percent = (dp / price) * 100;
-    el.textContent = `= ${percent.toFixed(1)}% of home price`;
+    els.dpPercDisplay.textContent = `= ${percent.toFixed(1)}% of home price`;
   } else {
     const amount = (price * dp) / 100;
-    el.textContent = `= ${Math.round(amount).toLocaleString()} down payment`;
+    els.dpPercDisplay.textContent = `= ${Math.round(amount).toLocaleString()} down payment`;
   }
 }
 
-document.getElementById("purchasePrice").addEventListener("input", updateDpDisplay);
-document.getElementById("downPayment").addEventListener("input", updateDpDisplay);
+els.purchasePrice.addEventListener("input", updateDpDisplay);
+els.downPayment.addEventListener("input", updateDpDisplay);
 
 
 // ── Validation Helper ────────────────────────────────────
 function validateInputs() {
   let valid = true;
-  const purchase = document.getElementById("purchasePrice");
-  const down = document.getElementById("downPayment");
-  const rate = document.getElementById("interestRate");
-  const error = document.getElementById("coreError");
+  [els.purchasePrice, els.downPayment, els.interestRate].forEach(el => el.classList.remove("input-error"));
+  if (els.coreError) els.coreError.textContent = "";
 
-  [purchase, down, rate].forEach(el => el.classList.remove("input-error"));
-  if (error) error.textContent = "";
+  // Clear all errors first
+  Object.values(els).forEach(el => el?.classList?.remove("input-error"));
 
-  if (!purchase.value || isNaN(purchase.value.replace(/,/g,""))) {
-    purchase.classList.add("input-error");
-    valid = false;
-  }
-  if (!down.value || isNaN(down.value.replace(/,/g,""))) {
-    down.classList.add("input-error");
-    valid = false;
-  }
-  if (!rate.value || isNaN(rate.value)) {
-    rate.classList.add("input-error");
-    valid = false;
-  }
+  const check = (el, name) => {
+    if (!el || el.offsetParent === null) return; // Ignore hidden fields
+    const val = el.value.replace(/,/g,"");
+    if (val === "" || isNaN(val)) {
+      el.classList.add("input-error");
+      if (els.coreError) els.coreError.textContent = `Enter a valid ${name}`;
+      valid = false;
+    }
+  };
 
-  if (!valid && error) {
-    error.textContent = "Please fill purchase price, down payment, and interest rate";
-  }
+  check(els.interestRate, "interest rate");
+  check(els.amortization, "amortization");
+  if (mode === "refinance") check(els.currentRate, "current rate");
+  if (mode === "purchase") check(els.downPayment, "down payment");
+  check(els.purchasePrice, "purchase price");
+
   return valid;
 }
 
+/**
+ * CMHC Insurance Logic (2026 Rules)
+ * Cap: Homes > $1M cannot have insured mortgages.
+ */
+function calculateInsurance(price, mortgageAmount, downPct) {
+  if (price >= 1500000 || downPct >= 20) return 0;
+  let rate = 0;
+  if (downPct < 10) rate = 0.04;
+  else if (downPct < 15) rate = 0.031;
+  else rate = 0.028;
+  return mortgageAmount * rate;
+}
 
-// ── Calculate ─────────────────────────────────────────────
-document.getElementById("calculateBtn").addEventListener("click", calculate);
+/** ── Mode Switch Logic ── **/
+function setMode(m) {
+  mode = m;
+  document.querySelector(".page-wrap").setAttribute("data-mode", m);
+  els.modePurchaseBtn.classList.toggle("active", m === "purchase");
+  els.modeRefiBtn.classList.toggle("active", m === "refinance");
 
-function calculate() {
-  if (!validateInputs()) return;
-
-  const resultsSection = document.getElementById("resultsSection");
-  const initialState = document.getElementById("initialState");
-  if (initialState) initialState.style.display = "none";
-  if (resultsSection) {
-    resultsSection.style.display = "block";
-    setTimeout(() => resultsSection.classList.add("show"), 10);
+  // Safety: Explicitly hide Refi-only fields if Purchase is selected to prevent "2 options"
+  if (els.currentRate) {
+    const refiField = els.currentRate.closest(".field") || els.currentRate.parentElement;
+    if (refiField) refiField.style.display = (m === "refinance") ? "flex" : "none";
   }
 
-  const purchasePriceRaw = document.getElementById("purchasePrice").value || "";
-  const downPaymentRaw = document.getElementById("downPayment").value || "";
+  triggerCalc();
+}
+els.modePurchaseBtn?.addEventListener("click", () => setMode("purchase"));
+els.modeRefiBtn?.addEventListener("click", () => setMode("refinance"));
+
+// ── Calculate ─────────────────────────────────────────────
+els.calculateBtn.addEventListener("click", calculate);
+
+async function calculate() {
+  if (!validateInputs()) return;
+
+  const originalBtnText = els.calculateBtn.textContent;
   
-  const extraEl = document.getElementById("extraPayment");
-  const extraPaymentRaw = extraEl ? extraEl.value : "0";
+  try {
+    // Visual Feedback
+    els.calculateBtn.textContent = "Calculating...";
+    els.calculateBtn.disabled = true;
+
+  if (els.initialState) els.initialState.style.display = "none";
+  if (els.resultsSection) {
+    els.resultsSection.style.display = "block";
+    setTimeout(() => els.resultsSection.classList.add("show"), 10);
+  }
+
+  const purchasePriceRaw = els.purchasePrice.value || "";
+  const downPaymentRaw = els.downPayment.value || "";
+  
+  const extraPaymentRaw = els.extraPayment ? els.extraPayment.value : "0";
 
   const purchasePrice = parseFloat(purchasePriceRaw.replace(/,/g, ""));
   const dpRaw = parseFloat(downPaymentRaw.replace(/,/g, ""));
-  const rate = parseFloat(document.getElementById("interestRate").value);
-  const amortYears = parseInt(document.getElementById("amortization").value);
+  const rate = parseFloat(els.interestRate.value);
+  const amortYears = parseInt(els.amortization.value);
   const extraPayment = parseFloat(extraPaymentRaw.replace(/,/g, "")) || 0;
+  
+  let mortgageAmount;
+  let downPayment = 0;
 
-  const downPayment = dpMode === "dollar"
-    ? dpRaw
-    : purchasePrice * dpRaw / 100;
+  if (mode === "purchase") {
+    downPayment = dpMode === "dollar" ? dpRaw : purchasePrice * dpRaw / 100;
+    mortgageAmount = purchasePrice - downPayment;
+  } else {
+    mortgageAmount = purchasePrice; // Purchase Price field is used for 'Balance'
+  }
 
   const downPct = (downPayment / purchasePrice) * 100;
-  const mortgageAmount = purchasePrice - downPayment;
   const r = rate / 100 / 12;
   const nOriginal = amortYears * 12;
 
@@ -173,7 +310,7 @@ function calculate() {
       ? mortgageAmount * r / (1 - Math.pow(1 + r, -nOriginal))
       : mortgageAmount / nOriginal;
 
-  const freq = document.getElementById("payFrequency").value;
+  const freq = els.payFrequency.value;
 
   let payment = monthlyBasePayment;
   if (freq === "biweekly") payment = monthlyBasePayment * 12 / 26;
@@ -190,20 +327,35 @@ function calculate() {
   let monthsToPayoff = 0;
   const rMonthly = rate / 100 / 12;
   let simMonthlyPayment = monthlyBasePayment + extraPayment;
+  
+  // ── Bulletproof Negative Amortization Check ──
+  const monthlyEquiv = freq === "monthly" ? paymentWithExtra : (paymentWithExtra * (freq.includes("biweekly") ? 26 : 52) / 12);
+  let negativeAmort = monthlyEquiv <= (mortgageAmount * rMonthly);
 
-  while (remainingBalance > 0 && monthsToPayoff < 600) {
-    let interestPart = remainingBalance * rMonthly;
-    let principalPart = simMonthlyPayment - interestPart;
-    if (principalPart <= 0) {
-      monthsToPayoff = amortYears * 12;
-      break;
+  if (!negativeAmort && (monthlyBasePayment + extraPayment) > (mortgageAmount * rMonthly)) {
+    while (remainingBalance > 0 && monthsToPayoff < CONFIG.MAX_AMORT_MONTHS) {
+      let interestPart = remainingBalance * rMonthly;
+      let principalPart = simMonthlyPayment - interestPart;
+      remainingBalance -= principalPart;
+      monthsToPayoff++;
     }
-    remainingBalance -= principalPart;
-    monthsToPayoff++;
+  } else {
+    monthsToPayoff = CONFIG.MAX_AMORT_MONTHS;
   }
 
   const totalInterest = (simMonthlyPayment * monthsToPayoff) - mortgageAmount;
   const finalAmortYears = monthsToPayoff / 12;
+
+  // Refinance Intelligence
+  let refiData = null;
+  if (mode === "refinance") {
+    const oldRate = parseFloat(els.currentRate.value) || 0;
+    const rOld = oldRate / 100 / 12;
+    const oldPmt = rOld > 0 ? mortgageAmount * rOld / (1 - Math.pow(1 + rOld, -nOriginal)) : mortgageAmount / nOriginal;
+    const monthlySavings = oldPmt - monthlyBasePayment;
+    const refiCosts = 3000; // Average penalty/legal estimate
+    refiData = { oldPmt, monthlySavings, totalSavings: monthlySavings * nOriginal, breakEven: monthlySavings > 0 ? refiCosts / monthlySavings : 0 };
+  }
 
   const data = {
     purchasePrice,
@@ -213,124 +365,220 @@ function calculate() {
     rate,
     amortYears,
     finalAmortYears,
+    refi: refiData,
     payment: paymentWithExtra,
+    monthlyBase: monthlyBasePayment,
+    negativeAmort,
     frequency: freq,
     totalInterest,
-    cmhc: (() => {
-      let cmhcRate = 0;
-      if (downPct < 20) {
-        if (downPct < 10) cmhcRate = 0.04;
-        else if (downPct < 15) cmhcRate = 0.031;
-        else cmhcRate = 0.028;
-      }
-      return cmhcRate > 0 ? mortgageAmount * cmhcRate : 0;
-    })()
+    cmhc: calculateInsurance(purchasePrice, mortgageAmount, downPct)
   };
 
-  renderResults(data);
+  // ── Dynamic SEO & UX Multipliers ──
+  const priceLabel = fmtC(purchasePrice).replace(".00", "");
+  document.title = `Mortgage Payment ${fmtC(paymentWithExtra)}/mo on ${priceLabel} Home in Canada`;
+  if (els.mainH1 && purchasePrice > 0) {
+    els.mainH1.textContent = mode === "purchase"
+      ? `Buying a ${priceLabel} Home: Mortgage Breakdown`
+      : `Refinance Analysis: ${priceLabel} Balance`;
+  }
+
+  if (!hasPerformedCalc) {
+    hasPerformedCalc = true;
+    window.umami?.track('funnel_first_calc');
+  }
 
   window._mortgageData = data;
   localStorage.setItem("savedMortgage", JSON.stringify(data));
+  
+  // Persistence Clarity
+  if (els.saveIndicator) {
+    els.saveIndicator.style.opacity = "1";
+    setTimeout(() => { els.saveIndicator.style.opacity = "0"; }, 2000);
+  }
+
+  await Promise.all([
+    loadChartLib(),
+    loadScript("modules/advanced.js")
+  ]);
+
+  renderResults(data);
+  } catch (err) {
+    console.error("Calculation failed:", err);
+    els.calculateBtn.textContent = originalBtnText;
+    els.calculateBtn.disabled = false;
+  } finally {
+    els.calculateBtn.textContent = originalBtnText;
+    els.calculateBtn.disabled = false;
+  }
 }
 
 
 // ── Input Formatting (UPGRADED) ──────────────────────────────
 function formatCurrencyInput(el) {
   if (!el) return;
-
   el.addEventListener("input", () => {
     let raw = el.value.replace(/[^\d.]/g, "");
     // Prevent multiple dots
     const parts = raw.split(".");
     if (parts.length > 2) raw = parts[0] + "." + parts[1];
     el.value = raw;
-    
     // Auto-clear error when user types
     el.classList.remove("input-error");
-    const error = document.getElementById("coreError");
-    if (error) error.textContent = "";
+    if (els.coreError) els.coreError.textContent = "";
   });
-
   el.addEventListener("blur", () => {
     let val = el.value.replace(/,/g, "");
-    if (!isNaN(val) && val !== "") {
-      el.value = Number(val).toLocaleString();
-    }
+    if (!isNaN(val) && val !== "") el.value = Number(val).toLocaleString();
   });
-
-  el.addEventListener("focus", () => {
-    el.value = el.value.replace(/,/g, "");
-  });
+  el.addEventListener("focus", () => el.value = el.value.replace(/,/g, ""));
 }
 
-formatCurrencyInput(document.getElementById("purchasePrice"));
-formatCurrencyInput(document.getElementById("downPayment"));
-formatCurrencyInput(document.getElementById("extraPayment"));
+formatCurrencyInput(els.purchasePrice);
+formatCurrencyInput(els.downPayment);
+formatCurrencyInput(els.extraPayment);
+
+// ── Debounced Auto-Calc Listeners ───────────────────────────
+[els.purchasePrice, els.downPayment, els.interestRate, els.extraPayment].forEach(el => {
+  if (el) el.addEventListener("input", () => {
+    if (!hasStartedTyping) {
+      hasStartedTyping = true;
+      window.umami?.track('funnel_input_start');
+    }
+    triggerCalc();
+  });
+});
+
+[els.amortization, els.payFrequency, els.province, els.newBuild, els.firstTimeBuyer].forEach(el => {
+  if (el) el.addEventListener("change", triggerCalc);
+});
 
 // Standard formatting for interest rate
-const rateEl = document.getElementById("interestRate");
-if (rateEl) {
-  rateEl.addEventListener("input", () => {
-    rateEl.classList.remove("input-error");
-    const error = document.getElementById("coreError");
-    if (error) error.textContent = "";
+if (els.interestRate) {
+  els.interestRate.addEventListener("input", () => {
+    els.interestRate.classList.remove("input-error");
+    if (els.coreError) els.coreError.textContent = "";
   });
 }
 
 
 // ── Render Results ────────────────────────────────────────
 function renderResults(d) {
+  els.paymentAmount.textContent = fmtC(d.payment);
+  els.paymentLabel.textContent = d.frequency.replace("_", " ").toUpperCase() + " PAYMENT";
 
-  document.getElementById("paymentAmount").textContent = fmtC(d.payment);
-  document.getElementById("paymentLabel").textContent = d.frequency.replace("_", " ").toUpperCase() + " PAYMENT";
+  // ── Clean & Credible Contextual CTA ──
+  const isHighRate = d.rate > 5.5;
+  const ctaText = mode === "purchase" ? "💰 See rates you qualify for (60s) →" : "💰 See real refinance rates today →";
+  
+  const ctaHTML = `
+    <div class="card" style="border:2px solid ${isHighRate ? 'var(--red)' : 'var(--blue)'}; background:var(--blue-light); cursor:pointer; margin-top:15px; text-align:center;" 
+         onclick="window.umami?.track('click_ratehub_insight'); window.open('https://www.ratehub.ca', '_blank')">
+      ${mode === 'refinance' ? '🔁 <b>Refinance Opportunity:</b>' : isHighRate ? '🚨 <b>High Interest Rate Warning:</b>' : d.totalInterest > d.purchasePrice ? '🔍 <b>Interest Insight:</b>' : '🎯 <b>Market Edge:</b>'} 
+      Compare 2026's lowest Canadian rates to minimize your interest.
+      <br><span style="color:var(--blue); font-weight:700; display:block; margin-top:8px;">${ctaText}</span>
+    </div>
+  `;
 
-  const gds = (d.payment * (d.frequency === "monthly" ? 1 : d.frequency.includes("biweekly") ? 26/12 : 52/12)) / 8000 * 100;
+  // ── Accurate Amortization Simulation ──
+  let balSim = d.mortgageAmount;
+  let totalInt5 = 0;
+  const rM = d.rate / 100 / 12;
+  for (let i = 0; i < 60; i++) {
+    const interest = balSim * rM;
+    const principal = d.monthlyBase - interest;
+    balSim -= principal;
+    totalInt5 += interest;
+    if (balSim <= 0) break;
+  }
+  const bankShare = (totalInt5 / (d.monthlyBase * 60)) * 100;
+
+  // Timeline Break-even logic
+  const breakEvenMonth = Math.log(2) / Math.log(1 + rM); 
+
+  // Conversion Boost under payment
+  if (els.paymentHeroMeta) {
+    const intPercent = Math.round((d.totalInterest / d.purchasePrice) * 100);
+    els.paymentHeroMeta.innerHTML = `⚠️ Over ${d.amortYears} years, you pay <b>${fmtC(d.totalInterest)}</b> in interest (${intPercent}% of home price).`;
+  }
+
+  // ── SMART INSIGHTS ──
+  const rLower = (d.rate - 0.5) / 100 / 12;
+  const pmtLower = rLower > 0 ? d.mortgageAmount * rLower / (1 - Math.pow(1 + rLower, -(d.amortYears * 12))) : d.mortgageAmount / (d.amortYears * 12);
+  const rateSavings = (d.monthlyBase - pmtLower);
+  const timeSaved = d.amortYears - d.finalAmortYears;
 
   const affordabilityStatus =
     d.totalInterest < d.mortgageAmount
-      ? "✅ Comfortable"
-      : d.totalInterest < d.mortgageAmount * 1.2
-      ? "⚠️ Manageable"
-      : "❌ Expensive";
+      ? "✅ Efficient structure"
+      : d.totalInterest < d.mortgageAmount * 1.5
+      ? "⚠️ Interest-heavy profile"
+      : "🚨 High interest load";
 
-  document.getElementById("totalCost").textContent = fmtC(d.mortgageAmount + d.totalInterest);
-  document.getElementById("downPct").textContent = d.downPct.toFixed(1) + "%";
-  document.getElementById("cmhcAmount").textContent = fmtC(d.cmhc);
+  // Add micro-delay animation to results
+  els.breakdownRows.style.opacity = "0";
+  setTimeout(() => {
+    els.breakdownRows.style.transition = "opacity 0.5s ease";
+    els.breakdownRows.style.opacity = "1";
+    
+    let insightsHTML = '';
+    if (d.negativeAmort) {
+      insightsHTML += `<div class="tip" style="background:var(--red-bg); border:2px solid var(--red); color:var(--red);">🚨 <b>Warning:</b> Negative Amortization. Your payment is too low to cover interest. The loan will never be paid off.</div>`;
+    }
+
+    if (mode === "refinance" && d.refi) {
+      insightsHTML += `
+        <div class="tip" style="background:var(--green-bg); border-color:var(--green);">
+          💡 <b>Refinance Impact:</b> By switching to ${d.rate}%, you save <b>${fmtC(d.refi.monthlySavings)}/month</b> and <b>${fmtC(d.refi.totalSavings)}</b> over your remaining term.
+        </div>
+        <div class="tip">
+          🧮 <b>Refinance Break-even:</b> Your costs are recovered via savings in <b>${Math.round(d.refi.breakEven)} months</b>.
+        </div>
+      `;
+    }
+
+    insightsHTML += `
+      <div class="tip" style="background:var(--blue-light); border-color:var(--blue);">
+        💡 <b>Optimization:</b> A 0.5% lower rate would save you <b>${fmtC(rateSavings)}/month</b>.
+      </div>
+    `;
+
+    if (d.totalInterest > d.purchasePrice) {
+      insightsHTML += `<div class="tip" style="background:var(--red-bg); border-color:var(--red);">📊 <b>Long-term cost insight:</b> Your total interest payments will eventually exceed the original price of the home.</div>`;
+    } else {
+      insightsHTML += `<div class="tip" style="background:var(--red-bg); border-color:var(--red);">⏳ <b>5-Year Outlook:</b> <b>${Math.round(bankShare)}%</b> of your payments go toward interest rather than building equity.</div>`;
+    }
+
+    if (d.downPct < 20) {
+      insightsHTML += `<div class="tip">💰 <b>Insurance Saving:</b> Add 5% more down to save approx. ${fmtC(d.mortgageAmount * 0.005)} in insurance fees.</div>`;
+    }
+    if (d.purchasePrice >= 1500000 && d.downPct < 20) {
+      insightsHTML += `<div class="tip" style="color:var(--red)">🚨 <b>Hard Rule:</b> Homes over $1.5M require 20% down. Insured mortgages are not allowed.</div>`;
+    }
+    els.breakdownRows.innerHTML = insightsHTML + ctaHTML;
+  }, 400);
+
+  els.totalCost.textContent = fmtC(d.mortgageAmount + d.totalInterest);
+  els.downPct.textContent = d.downPct.toFixed(1) + "%";
+  els.cmhcAmount.textContent = fmtC(d.cmhc);
 
   // payoff date
   const payoff = new Date();
   payoff.setMonth(payoff.getMonth() + (d.amortYears * 12));
 
-  if (d.finalAmortYears < d.amortYears) {
-    document.getElementById("payoffDate").textContent = `Paid off in ${Math.floor(d.finalAmortYears)} yrs (${Math.round(d.finalAmortYears * 12)} months)`;
-  } else {
-    document.getElementById("payoffDate").textContent = payoff.toLocaleDateString();
-  }
+  els.payoffDate.textContent = (d.finalAmortYears < d.amortYears) 
+    ? `Paid off in ${Math.floor(d.finalAmortYears)} yrs (${Math.round(d.finalAmortYears * 12)} months)`
+    : payoff.toLocaleDateString();
 
-  const breakdown = document.getElementById("breakdownRows");
-  breakdown.innerHTML = ""; // reset first
-
-  document.getElementById("paymentSub").innerHTML = `
-    ${fmtC(d.mortgageAmount)} loan size · ${d.finalAmortYears.toFixed(1)} yrs
-    <div style="margin-top:6px;font-size:12px;">
-      ${affordabilityStatus} · 
-      Total interest: ${fmtC(d.totalInterest)}
-    </div>
-    <br><span style="font-size:11px;color:var(--muted)">
-      Most early payments go toward interest — this is normal
-    </span>
-    <br><span style="font-size:11px;color:var(--muted)">Based on standard Canadian mortgage formulas</span>
-  `;
-
-  document.getElementById("mortgageAmount").textContent = fmtC(d.mortgageAmount);
-  document.getElementById("totalInterest").textContent = fmtC(d.totalInterest);
+  els.mortgageAmount.textContent = fmtC(d.mortgageAmount);
+  els.totalInterest.textContent = fmtC(d.totalInterest);
 
   // Stress Test
-  const stressRate = Math.max(d.rate + 2, 5.25);
+  const stressRate = Math.max(d.rate + 2, CONFIG.STRESS_TEST_FLOOR);
   const stressPayment = d.mortgageAmount * (stressRate/100/12) /
     (1 - Math.pow(1 + stressRate/100/12, -d.amortYears*12));
 
-  document.getElementById("stressTestBox").innerHTML = `
+  els.stressTestBox.innerHTML = `
     <div class="tip">
       🧪 <b>Stress Test Rate:</b> ${stressRate.toFixed(2)}%<br>
       📉 <b>Payment at stress rate:</b> ${fmtC(stressPayment)}
@@ -338,34 +586,14 @@ function renderResults(d) {
   `;
 
   // Closing costs
-  const closing = d.purchasePrice * 0.015;
+  const closing = d.purchasePrice * CONFIG.CLOSING_COST_RATE;
 
-  document.getElementById("closingCosts").innerHTML = `
+  els.closingCosts.innerHTML = `
     <div class="tip">
       📋 <b>Estimated closing costs:</b> ${fmtC(closing)}<br>
       (legal, tax, inspection approx.)
     </div>
   `;
-
-  // Filter and Render top 3 insights
-  const tips = [];
-  if (d.downPct < 20) {
-    tips.push(`💰 <b>Insurance Saving:</b> Add 5% more down to save approx. ${fmtC(d.mortgageAmount * 0.005)} in insurance fees.`);
-    tips.push(`⚠️ <b>Insurance Warning:</b> You’re paying mortgage insurance. Reaching 20% down removes it.`);
-  }
-  if (d.rate > 5.5) {
-    tips.push(`🎯 <b>Market Reality:</b> Rates are above 5-year average — timing matters.`);
-  }
-  if (d.totalInterest > d.mortgageAmount) {
-    tips.push(`💸 <b>Smart Suggestion:</b> Interest costs are higher than principal. Consider a shorter amortization.`);
-  } else {
-    tips.push(`✅ <b>Smart Suggestion:</b> Your mortgage structure looks solid. Consider accelerated payments to build equity faster.`);
-  }
-  tips.push(`🛡 <b>Trust:</b> Used by 10,000+ Canadians · Matches bank formulas · No data stored.`);
-  
-  tips.slice(0, 3).forEach(t => {
-    breakdown.innerHTML += `<div class="tip">${t}</div>`;
-  });
 
   // Render Advanced Modules
   if (window.AdvancedModules) {
@@ -379,9 +607,9 @@ function renderResults(d) {
       downPct: d.downPct,
       downPayment: d.downPayment,
       closingCosts: closing,
-      propertyTax: parseFloat((document.getElementById("propertyTax").value || "").replace(/,/g, "")) || 0,
-      heatingCost: parseFloat((document.getElementById("heatingCost").value || "").replace(/,/g, "")) || 0,
-      condoFees: parseFloat((document.getElementById("condoFees").value || "").replace(/,/g, "")) || 0
+      propertyTax: parseFloat((els.propertyTax.value || "").replace(/,/g, "")) || 0,
+      heatingCost: parseFloat((els.heatingCost.value || "").replace(/,/g, "")) || 0,
+      condoFees: parseFloat((els.condoFees.value || "").replace(/,/g, "")) || 0
     };
 
     window.AdvancedModules.renderAffordability(moduleData);
@@ -569,13 +797,16 @@ function buildShareURL() {
   url.searchParams.set("rate", d.rate);
   url.searchParams.set("amort", d.amortYears);
   url.searchParams.set("freq", d.frequency);
+  url.searchParams.set("extra", els.extraPayment.value.replace(/,/g, ""));
+  url.searchParams.set("prov", els.province.value);
+  url.searchParams.set("tax", els.propertyTax.value);
 
   return url.toString();
 }
 
 
 // ── Share Button ──────────────────────────────────────────
-document.getElementById("shareBtn").addEventListener("click", async () => {
+els.shareBtn.addEventListener("click", async () => {
   const url = buildShareURL();
   document.getElementById("shareUrlInput").value = url;
   await navigator.clipboard.writeText(url);
@@ -588,20 +819,18 @@ document.getElementById("shareBtn").addEventListener("click", async () => {
 
 
 // ── Copy Summary ──────────────────────────────────────────
-document.getElementById("copyBtn").addEventListener("click", async () => {
+els.copyBtn.addEventListener("click", async () => {
   const d = window._mortgageData;
   if (!d) return;
 
-  const text = `🏠 Mortgage Summary
+  const text = `💥 See if YOU can afford this house!
 
-Home price: ${fmtC(d.purchasePrice)}
-Down payment: ${fmtC(d.downPayment)}
-Monthly payment: ${fmtC(d.payment)}
+💰 My Payment: ${fmtC(d.payment)}/mo
+🏠 House Price: ${fmtC(d.purchasePrice)}
+💸 Total Interest: ${fmtC(d.totalInterest)}
 
-Total interest paid: ${fmtC(d.totalInterest)}
-
-👉 Try your own numbers:
-${window.location.origin}`;
+💥 Can you beat this or afford more? 
+Check your breakdown: ${buildShareURL()}`;
 
   await navigator.clipboard.writeText(text);
   const btn = document.getElementById("copyBtn");
@@ -611,13 +840,13 @@ ${window.location.origin}`;
 });
 
 // ── Print Button ──────────────────────────────────────────
-document.getElementById("printBtn").addEventListener("click", () => {
+els.printBtn.addEventListener("click", () => {
   window.print();
 });
 
 
 // ── CSV Export ────────────────────────────────────────────
-document.getElementById("csvBtn").addEventListener("click", () => {
+els.csvBtn.addEventListener("click", () => {
   const d = window._mortgageData;
   if (!d) return;
 
@@ -640,6 +869,69 @@ document.getElementById("csvBtn").addEventListener("click", () => {
 });
 
 
+// ── Reset Logic ──────────────────────────────────────────
+els.resetBtn.addEventListener("click", () => {
+  document.querySelectorAll("input").forEach(input => {
+    input.value = "";
+    input.classList.remove("input-error");
+  });
+  if (els.amortization) els.amortization.value = "25";
+  if (els.payFrequency) els.payFrequency.value = "monthly";
+  localStorage.removeItem("savedMortgage");
+  if (els.resultsSection) {
+    els.resultsSection.style.display = "none";
+    els.resultsSection.classList.remove("show");
+  }
+  if (els.initialState) els.initialState.style.display = "block";
+  [els.paymentAmount, els.paymentSub, els.mortgageAmount, els.totalInterest, 
+   els.totalCost, els.downPct, els.cmhcAmount, els.payoffDate,
+   els.stressTestBox, els.closingCosts, els.breakdownRows].forEach(el => {
+    if (el) el.innerHTML = (el === els.paymentAmount) ? "—" : "";
+  });
+  if (window._mortgageChart) {
+    window._mortgageChart.destroy();
+    window._mortgageChart = null;
+  }
+  if (els.dpPercDisplay) els.dpPercDisplay.textContent = "";
+  setDpMode("dollar");
+});
+
+// Initialize default mode state
+setMode(mode);
+
+const saved = localStorage.getItem("savedMortgage");
+const params = new URLSearchParams(window.location.search);
+
+if (params.has("mode")) setMode(params.get("mode"));
+
+if (params.has("price") || params.has("province") || params.has("tab")) {
+  if (params.get("price")) {
+    els.purchasePrice.value = Number(params.get("price")).toLocaleString();
+    els.downPayment.value = Number(params.get("dp")).toLocaleString();
+    els.interestRate.value = params.get("rate");
+    els.amortization.value = params.get("amort") || "25";
+    els.payFrequency.value = params.get("freq") || "monthly";
+    if (params.has("extra")) els.extraPayment.value = Number(params.get("extra")).toLocaleString();
+    if (params.has("prov")) els.province.value = params.get("prov");
+    if (params.has("tax")) els.propertyTax.value = params.get("tax");
+  }
+  if (params.get("province")) els.province.value = params.get("province");
+  if (params.get("propertyTax")) els.propertyTax.value = Number(params.get("propertyTax")).toLocaleString();
+  const tab = params.get("tab");
+  if (tab) {
+    const tabBtn = document.querySelector(`.module-tab[data-tab="${tab}"]`);
+    if (tabBtn) tabBtn.click();
+  }
+  if (params.get("price")) calculate();
+} else if (saved && els.purchasePrice && els.purchasePrice.value === "") {
+  const d = JSON.parse(saved);
+  els.purchasePrice.value = Number(d.purchasePrice).toLocaleString();
+  els.downPayment.value = Number(d.downPayment).toLocaleString();
+  els.interestRate.value = d.rate;
+  if (els.amortization) els.amortization.value = d.amortYears || "25";
+  updateDpDisplay();
+}
+
 // ── Advanced Tools Switching ──────────────────────────────
 document.querySelectorAll(".module-tab").forEach(tab => {
   tab.addEventListener("click", () => {
@@ -649,88 +941,10 @@ document.querySelectorAll(".module-tab").forEach(tab => {
     const target = document.getElementById("tab-" + tab.dataset.tab);
     if (target) {
       target.classList.add("active");
-    } else {
-      console.warn("Missing section for:", tab.dataset.tab);
     }
   });
 });
 
-
-// ── Reset Logic ──────────────────────────────────────────
-document.getElementById("resetBtn").addEventListener("click", () => {
-  // 1. Clear inputs
-  document.querySelectorAll("input").forEach(input => {
-    input.value = "";
-    input.classList.remove("input-error");
-  });
-  
-  // Set defaults for critical selects
-  const amort = document.getElementById("amortization");
-  if (amort) amort.value = "25";
-  
-  const freq = document.getElementById("payFrequency");
-  if (freq) freq.value = "monthly";
-
-  // 2. Clear saved state
-  localStorage.removeItem("savedMortgage");
-
-  // 3. Hide results and show empty state
-  const results = document.getElementById("resultsSection");
-  if (results) {
-    results.style.display = "none";
-    results.classList.remove("show");
-  }
-  const initialState = document.getElementById("initialState");
-  if (initialState) initialState.style.display = "block";
-
-  // 4. Clear outputs
-  const ids = [
-    "paymentAmount", "paymentSub", "mortgageAmount", "totalInterest", 
-    "totalCost", "downPct", "cmhcAmount", "payoffDate", 
-    "stressTestBox", "closingCosts", "breakdownRows"
-  ];
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      if (id === "paymentAmount") el.textContent = "—";
-      else el.innerHTML = "";
-    }
-  });
-
-  // 5. Destroy chart
-  if (window._mortgageChart) {
-    window._mortgageChart.destroy();
-    window._mortgageChart = null;
-  }
-
-  // 6. Reset displays
-  const dpDisp = document.getElementById("dpPercDisplay");
-  if (dpDisp) dpDisp.textContent = "";
-  setDpMode("dollar");
-});
-
-
-// ── Restore & Auto ────────────────────────────────────────
-const saved = localStorage.getItem("savedMortgage");
-const purchasePriceInput = document.getElementById("purchasePrice");
-
-if (saved && purchasePriceInput && purchasePriceInput.value === "") {
-  const d = JSON.parse(saved);
-  purchasePriceInput.value = Number(d.purchasePrice).toLocaleString();
-  document.getElementById("downPayment").value = Number(d.downPayment).toLocaleString();
-  document.getElementById("interestRate").value = d.rate;
-  updateDpDisplay();
-} else {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get("price")) {
-    document.getElementById("purchasePrice").value = Number(params.get("price")).toLocaleString();
-    document.getElementById("downPayment").value = Number(params.get("dp")).toLocaleString();
-    document.getElementById("interestRate").value = params.get("rate");
-    document.getElementById("amortization").value = params.get("amort") || "25";
-    document.getElementById("payFrequency").value = params.get("freq") || "monthly";
-    calculate();
-  }
-}
 
 // ── Rating Logic ──────────────────────────────────────────
 const goodBtn = document.getElementById("rateGood");
@@ -755,10 +969,10 @@ if (goodBtn && badBtn) {
   });
 }
 
-// Only calculate when user clicks button
-// OR presses Enter (optional)
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") calculate();
+  if (e.key === "Enter" && ["INPUT", "SELECT"].includes(document.activeElement.tagName)) {
+    calculate();
+  }
 });
 
 });
