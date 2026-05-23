@@ -1127,6 +1127,13 @@ if (els.offersSection) {
 
 // ── Reset Logic ──────────────────────────────────────────
 if (els.resetBtn) els.resetBtn.addEventListener("click", () => {
+  // 1. Stop any pending debounced calculations immediately
+  clearTimeout(calcTimeout);
+
+  // 2. Reset the Top Heading and Page Title to original state
+  if (els.mainH1) els.mainH1.textContent = "🏠 Canadian Mortgage Calculator";
+  document.title = "Mortgage Calculator Canada – Instant Monthly Payment Estimate";
+
   document.querySelectorAll("input").forEach(input => {
     input.value = "";
     input.classList.remove("input-error");
@@ -1150,8 +1157,6 @@ if (els.resetBtn) els.resetBtn.addEventListener("click", () => {
     window._mortgageChart.destroy();
     window._mortgageChart = null;
   }
-  if (els.mainH1) els.mainH1.textContent = "🏠 Canadian Mortgage Calculator";
-  document.title = "Mortgage Calculator Canada – Instant Monthly Payment Estimate";
   updateStepper(1);
   if (els.dpPercDisplay) els.dpPercDisplay.textContent = "";
   setDpMode("dollar");
