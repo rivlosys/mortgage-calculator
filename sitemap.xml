@@ -6,43 +6,38 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://mortgage.usecos.app/tools/mortgage-payment-calculator.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://mortgage.usecos.app/tools/extra-payment-calculator.html</loc>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://mortgage.usecos.app/tools/affordability-calculator.html</loc>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://mortgage.usecos.app/tools/stress-test-calculator.html</loc>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://mortgage.usecos.app/tools/cmhc-calculator.html</loc>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://mortgage.usecos.app/tools/amortization-calculator.html</loc>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://mortgage.usecos.app/tools/rent-vs-buy-canada.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://mortgage.usecos.app/blog/why-is-my-mortgage-payment-so-high-canada.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://mortgage.usecos.app/tools/mortgage-payment-calculator.html</loc>
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
@@ -57,13 +52,8 @@
   </url>
   <url>
     <loc>https://mortgage.usecos.app/tools/500k-mortgage-monthly-canada.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://mortgage.usecos.app/privacy.html</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://mortgage.usecos.app/tools/income-needed-for-700k-house.html</loc>
@@ -78,12 +68,17 @@
   <url>
     <loc>https://mortgage.usecos.app/sources.html</loc>
     <changefreq>yearly</changefreq>
-    <priority>0.4</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://mortgage.usecos.app/contact.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://mortgage.usecos.app/privacy.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
   <url>
     <loc>https://mortgage.usecos.app/disclaimer.html</loc>
@@ -94,5 +89,10 @@
     <loc>https://mortgage.usecos.app/accessibility.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://mortgage.usecos.app/blog/why-is-my-mortgage-payment-so-high-canada.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>
