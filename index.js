@@ -326,12 +326,6 @@ function setMode(m) {
   if (els.modePurchaseBtn) els.modePurchaseBtn.classList.toggle("active", m === "purchase");
   if (els.modeRefiBtn) els.modeRefiBtn.classList.toggle("active", m === "refinance");
 
-  // Safety: Explicitly hide Refi-only fields if Purchase is selected to prevent "2 options"
-  if (els.currentRate && (els.currentRate.closest(".field") || els.currentRate.parentElement)) {
-    const refiField = els.currentRate.closest(".field") || els.currentRate.parentElement;
-    if (refiField) refiField.style.display = (m === "refinance") ? "flex" : "none";
-  }
-
   triggerCalc();
 }
 if (els.modePurchaseBtn) els.modePurchaseBtn.addEventListener("click", () => setMode("purchase"));

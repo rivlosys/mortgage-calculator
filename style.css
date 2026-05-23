@@ -24,9 +24,20 @@
   --transition: 0.18s ease;
 }
 
-.mode-refi-only { display: none; }
-[data-mode="refinance"] .mode-purchase-only { display: none; }
-[data-mode="refinance"] .mode-refi-only { display: block; }
+/* Standard mode element filters */
+.page-wrap[data-mode="purchase"] .mode-refi-only {
+  display: none !important;
+}
+
+.page-wrap[data-mode="refinance"] .mode-purchase-only {
+  display: none !important;
+}
+
+/* Ensure proper element grid behavior when active */
+.page-wrap[data-mode="purchase"] .mode-purchase-only,
+.page-wrap[data-mode="refinance"] .mode-refi-only {
+  display: flex !important; /* matches your layout structure */
+}
 
 /* ── Embed Mode ────────────────────────────────────────── */
 .is-embed .site-header,
