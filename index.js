@@ -4,6 +4,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   if (params.get("embed") === "true") document.body.classList.add("is-embed");
 
+  if (typeof gtag === "function") {
+    gtag('event', 'page_view', {
+      page_title: document.title,
+      page_location: window.location.href
+    });
+  }
+
   // ── Element Cache (Consolidated) ──────────────────────────
   const els = {
     purchasePrice: document.getElementById("purchasePrice"),
@@ -455,6 +462,12 @@ async function calculate() {
       setTimeout(() => els.resultsSection.classList.add("show"), 10);
     }
 
+    track('mortgage_calculate', {
+      price: toNumber(els.purchasePrice.value),
+      rate: toNumber(els.interestRate.value),
+      amortization: parseInt(els.amortization.value)
+    });
+
     const results = calculateMortgage({
       mode,
       purchasePrice: toNumber(els.purchasePrice.value),
@@ -651,7 +664,7 @@ function renderAdvancedDetails(d) {
   
   const ctaHTML = `
     <div class="card cta-block-premium" style="border:3px solid ${isHighRate ? 'var(--red)' : 'var(--blue)'}; background:var(--blue-light); cursor:pointer; margin-top:15px; text-align:center; padding: 25px;"
-         onclick="track('click_ratehub_insight'); window.open('https://www.ratehub.ca', '_blank')">
+         onclick="track('click_ratehub_insight', { type: '${mode}', rate: ${d.rate} }); window.open('https://www.ratehub.ca', '_blank')">
       <h3 style="font-size: 18px; margin-bottom: 8px;">🚀 Lock in a Lower Rate Now</h3>
       <p style="font-weight: 600; margin-bottom: 12px; font-size: 14px;">See real offers from 30+ lenders in 60 seconds</p>
       <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; margin-bottom: 15px; font-size: 12px; font-weight: 500;">
@@ -1048,6 +1061,7 @@ function buildShareURL() {
 
 // ── Share Button ──────────────────────────────────────────
 if (els.shareBtn) els.shareBtn.addEventListener("click", async () => {
+  track('share_clicked');
   const url = buildShareURL();
   document.getElementById("shareUrlInput").value = url;
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1066,6 +1080,7 @@ if (els.shareBtn) els.shareBtn.addEventListener("click", async () => {
 
 // ── Copy Summary ──────────────────────────────────────────
 if (els.copyBtn) els.copyBtn.addEventListener("click", async () => {
+  track('copy_summary');
   const d = window._mortgageData;
   if (!d) return;
 
