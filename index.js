@@ -1150,6 +1150,8 @@ if (els.resetBtn) els.resetBtn.addEventListener("click", () => {
     window._mortgageChart.destroy();
     window._mortgageChart = null;
   }
+  if (els.mainH1) els.mainH1.textContent = "🏠 Canadian Mortgage Calculator";
+  document.title = "Mortgage Calculator Canada – Instant Monthly Payment Estimate";
   updateStepper(1);
   if (els.dpPercDisplay) els.dpPercDisplay.textContent = "";
   setDpMode("dollar");
