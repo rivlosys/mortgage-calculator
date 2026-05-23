@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  // ── Embed Detection ──────────────────────────────────────
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("embed") === "true") document.body.classList.add("is-embed");
+
   // ── Element Cache (Consolidated) ──────────────────────────
   const els = {
     purchasePrice: document.getElementById("purchasePrice"),
