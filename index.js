@@ -84,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const track = (event, data) => window.umami?.track(event, data);
+  window.track = track; // Fix Bug 2: Make track global for inline onclicks in affiliate CTA blocks
 
   // ── Analytics & Funnel State ──────────────────────────────
   let hasStartedTyping = false;
@@ -761,7 +762,7 @@ function renderAdvancedDetails(d) {
         💡 <b>Strategy Insight:</b> Adding just $200/month could cut ~4 years off your mortgage and save ~$30K+ in interest.
       </div>
       <div class="tip" style="border-left-color: var(--blue);">
-        💡 <b>Comparison Shock:</b> If you secure a 2.5% rate instead of 3%, you could save <b>~$30,000+</b> over your mortgage amortization.
+        💡 <b>Comparison Shock:</b> If you secure a ${(d.rate - 0.5).toFixed(2)}% rate instead of ${d.rate.toFixed(2)}%, you could save <b>${fmtC(rateSavings * d.amortYears * 12)}</b> over your mortgage amortization.
       </div>
       <div class="tip" style="border-left-color: var(--red);">
         ⚠️ <b>Warning:</b> Most buyers only focus on monthly payments — but the real cost is <b>long-term interest</b>. A small rate difference today can cost you tens of thousands later.
@@ -876,7 +877,7 @@ function renderChart(d) {
   let equityCrossoverYear = 0;
   let labels = [];
 
-  const r = d.rate / 100 / 12;
+  const r = Math.pow(Math.pow(1 + (d.rate / 100) / 2, 2), 1 / 12) - 1; // Fix Bug 5: Use Canadian semi-annual compounding formula for chart accuracy
 
   const monthlyPayment =
     d.frequency === "monthly"
@@ -1031,7 +1032,7 @@ function buildShareURL() {
   const d = window._mortgageData;
   if (!d) return window.location.origin;
 
-  const url = new URL(window.location.origin);
+  const url = new URL(window.location.href.split('?')[0]); // Fix Bug 1: Use window.location.href as base to preserve path (e.g. /tools/ or /mortgage/)
   url.searchParams.set("price", d.purchasePrice);
   url.searchParams.set("dp", d.downPayment);
   url.searchParams.set("rate", d.rate);
@@ -1040,6 +1041,8 @@ function buildShareURL() {
   url.searchParams.set("extra", toNumber(els.extraPayment?.value));
   url.searchParams.set("prov", els.province.value);
   url.searchParams.set("tax", els.propertyTax.value);
+  url.searchParams.set("heat", els.heatingCost.value); // Fix Bug 4: Save heating to share URL
+  url.searchParams.set("condo", els.condoFees.value); // Fix Bug 4: Save condo fees to share URL
 
   return url.toString();
 }
@@ -1186,6 +1189,8 @@ if (params.has("price") || params.has("province") || params.has("tab")) {
     if (params.has("extra")) els.extraPayment.value = Number(params.get("extra")).toLocaleString();
     if (params.has("prov")) els.province.value = params.get("prov");
     if (params.has("tax")) els.propertyTax.value = params.get("tax");
+    if (params.has("heat")) els.heatingCost.value = params.get("heat"); // Fix Bug 4: Load heating from URL
+    if (params.has("condo")) els.condoFees.value = params.get("condo"); // Fix Bug 4: Load condo fees from URL
   }
   if (params.get("province")) els.province.value = params.get("province");
   if (params.get("propertyTax")) els.propertyTax.value = Number(params.get("propertyTax")).toLocaleString();
