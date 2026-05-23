@@ -669,7 +669,7 @@ function renderAdvancedDetails(d) {
   // ── Accurate Amortization Simulation ──
   let balSim = d.mortgageAmount;
   let totalInt5 = 0;
-  const rM = d.rate / 100 / 12;
+  const rM = Math.pow(Math.pow(1 + (d.rate / 100) / 2, 2), 1 / 12) - 1;
   for (let i = 0; i < 60; i++) {
     const interest = balSim * rM;
     const principal = d.monthlyBase - interest;
