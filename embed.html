@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mortgage Calculator Widget</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>body { background: transparent; }</style>
+</head>
+<body class="is-embed">
+  <div class="page-wrap">
+    <!-- All calculator elements are handled by index.js using existing IDs -->
+    <!-- We simply reuse index.html structure but stripped down -->
+    <div id="calculator-placeholder"></div>
+    <script>
+      // Fetch the main index and extract the calculator portion or simply 
+      // load index.html and let CSS hide the rest.
+      window.location.replace('/?embed=true');
+    </script>
+  </div>
+</body>
+</html>
