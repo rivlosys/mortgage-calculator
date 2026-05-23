@@ -83,7 +83,11 @@ document.addEventListener("DOMContentLoaded", () => {
     return parseFloat(String(val).replace(/[^\d.-]/g, "")) || 0;
   };
 
-  const track = (event, data) => window.umami?.track(event, data);
+  const track = (event, data) => {
+    if (typeof gtag === 'function') {
+      gtag('event', event, data);
+    }
+  };
   window.track = track; // Fix Bug 2: Make track global for inline onclicks in affiliate CTA blocks
 
   // ── Analytics & Funnel State ──────────────────────────────
