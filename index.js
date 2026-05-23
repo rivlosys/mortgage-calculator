@@ -322,12 +322,12 @@ function calculateInsurance(price, mortgageAmount, downPct) {
 /** ── Mode Switch Logic ── **/
 function setMode(m) {
   mode = m;
-  els.pageWrap?.setAttribute("data-mode", m);
-  els.modePurchaseBtn.classList.toggle("active", m === "purchase");
-  els.modeRefiBtn.classList.toggle("active", m === "refinance");
+  if (els.pageWrap) els.pageWrap.setAttribute("data-mode", m);
+  if (els.modePurchaseBtn) els.modePurchaseBtn.classList.toggle("active", m === "purchase");
+  if (els.modeRefiBtn) els.modeRefiBtn.classList.toggle("active", m === "refinance");
 
   // Safety: Explicitly hide Refi-only fields if Purchase is selected to prevent "2 options"
-  if (els.currentRate) {
+  if (els.currentRate && (els.currentRate.closest(".field") || els.currentRate.parentElement)) {
     const refiField = els.currentRate.closest(".field") || els.currentRate.parentElement;
     if (refiField) refiField.style.display = (m === "refinance") ? "flex" : "none";
   }
@@ -1174,34 +1174,34 @@ if (els.resetBtn) els.resetBtn.addEventListener("click", () => {
 // Initialize default mode state
 setMode(mode);
 
-const saved = localStorage.getItem("savedMortgage");
-const params = new URLSearchParams(window.location.search);
+const savedData = localStorage.getItem("savedMortgage");
+const urlParams = new URLSearchParams(window.location.search);
 
-if (params.has("mode")) setMode(params.get("mode"));
+if (urlParams.has("mode")) setMode(urlParams.get("mode"));
 
-if (params.has("price") || params.has("province") || params.has("tab")) {
-  if (params.get("price")) {
-    els.purchasePrice.value = Number(params.get("price")).toLocaleString();
-    els.downPayment.value = Number(params.get("dp")).toLocaleString();
-    els.interestRate.value = params.get("rate");
-    els.amortization.value = params.get("amort") || "25";
-    els.payFrequency.value = params.get("freq") || "monthly";
-    if (params.has("extra")) els.extraPayment.value = Number(params.get("extra")).toLocaleString();
-    if (params.has("prov")) els.province.value = params.get("prov");
-    if (params.has("tax")) els.propertyTax.value = params.get("tax");
-    if (params.has("heat")) els.heatingCost.value = params.get("heat"); // Fix Bug 4: Load heating from URL
-    if (params.has("condo")) els.condoFees.value = params.get("condo"); // Fix Bug 4: Load condo fees from URL
+if (urlParams.has("price") || urlParams.has("province") || urlParams.has("tab")) {
+  if (urlParams.get("price")) {
+    els.purchasePrice.value = Number(urlParams.get("price")).toLocaleString();
+    els.downPayment.value = Number(urlParams.get("dp")).toLocaleString();
+    els.interestRate.value = urlParams.get("rate");
+    els.amortization.value = urlParams.get("amort") || "25";
+    els.payFrequency.value = urlParams.get("freq") || "monthly";
+    if (urlParams.has("extra")) els.extraPayment.value = Number(urlParams.get("extra")).toLocaleString();
+    if (urlParams.has("prov")) els.province.value = urlParams.get("prov");
+    if (urlParams.has("tax")) els.propertyTax.value = urlParams.get("tax");
+    if (urlParams.has("heat")) els.heatingCost.value = urlParams.get("heat"); // Fix Bug 4: Load heating from URL
+    if (urlParams.has("condo")) els.condoFees.value = urlParams.get("condo"); // Fix Bug 4: Load condo fees from URL
   }
-  if (params.get("province")) els.province.value = params.get("province");
-  if (params.get("propertyTax")) els.propertyTax.value = Number(params.get("propertyTax")).toLocaleString();
-  const tab = params.get("tab");
-  if (tab) {
-    const tabBtn = document.querySelector(`.module-tab[data-tab="${tab}"]`);
+  if (urlParams.get("province")) els.province.value = urlParams.get("province");
+  if (urlParams.get("propertyTax")) els.propertyTax.value = Number(urlParams.get("propertyTax")).toLocaleString();
+  const tabName = urlParams.get("tab");
+  if (tabName) {
+    const tabBtn = document.querySelector(`.module-tab[data-tab="${tabName}"]`);
     if (tabBtn) tabBtn.click();
   }
-  if (params.get("price")) calculate();
-} else if (saved && els.purchasePrice && els.purchasePrice.value === "") {
-  const d = JSON.parse(saved);
+  if (urlParams.get("price")) calculate();
+} else if (savedData && els.purchasePrice && els.purchasePrice.value === "") {
+  const d = JSON.parse(savedData);
   els.purchasePrice.value = Number(d.purchasePrice).toLocaleString();
   els.downPayment.value = Number(d.downPayment).toLocaleString();
   els.interestRate.value = d.rate;
