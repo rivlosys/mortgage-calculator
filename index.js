@@ -1123,7 +1123,7 @@ function renderChart(d) {
 
     options: {
       responsive: true,
-      maintainAspectRatio: true,
+      maintainAspectRatio: false,
 
       interaction: {
         mode: "index",

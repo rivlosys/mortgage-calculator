@@ -707,9 +707,11 @@ body {
   border-radius: 14px;
   padding: 12px;
   border: 1px solid var(--border);
+  position: relative;
+  height: 320px;
 }
 
-#mortgageChart { max-height: 260px; }
+#mortgageChart { max-height: 100%; }
 
 .support-card {
   background: var(--surface);
@@ -975,3 +977,6 @@ select:focus {
   margin-right: 5px;
   font-weight: 600;
 }
+
+#guideToggle:focus { outline: none; }
+#guideToggle:hover div { color: var(--blue); }
