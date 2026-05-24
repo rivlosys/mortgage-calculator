@@ -1151,7 +1151,7 @@ if (els.resetBtn) els.resetBtn.addEventListener("click", () => {
   clearTimeout(calcTimeout);
 
   // 2. Reset the Top Heading and Page Title to original state
-  if (els.mainH1) els.mainH1.textContent = "🏠 Canadian Mortgage Calculator";
+  if (els.mainH1) els.mainH1.textContent = "Canadian Mortgage Calculator";
   const sub = document.getElementById("mainSubtitle");
   if (sub) sub.textContent = "Monthly payments · CMHC · Stress test · Land transfer tax · All provinces";
   document.title = "Mortgage Calculator Canada – Instant Monthly Payment Estimate";
