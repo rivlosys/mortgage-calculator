@@ -532,14 +532,10 @@ async function calculate() {
       }, 300);
     }
 
-    // 2b. Load advanced modules separately — a missing file never affects the chart
-    await loadScript("modules/advanced.js");
-
-    // 3. Render advanced details (works even if advanced.js failed to load)
     renderAdvancedDetails(results);
 
     const activeTabElement = document.querySelector(".module-tab.active");
-    if (activeTabElement && window.AdvancedModules) {
+    if (activeTabElement) {
       const activeModuleName = activeTabElement.dataset.tab;
       renderSpecificAdvancedModule(activeModuleName, results);
     }
@@ -1262,7 +1258,7 @@ els.moduleTabs.forEach(tab => {
     if (target) {
       target.classList.add("active");
       // Render the specific module for the clicked tab
-      if (window._mortgageData && window.AdvancedModules) { // Ensure data and modules are loaded
+      if (window._mortgageData && window.AdvancedModules) {
         renderSpecificAdvancedModule(tab.dataset.tab, window._mortgageData);
       } else {
         console.warn("Cannot render advanced module: _mortgageData or AdvancedModules not available.");
