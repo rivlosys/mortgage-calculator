@@ -1167,6 +1167,7 @@ if (els.resetBtn) els.resetBtn.addEventListener("click", () => {
   if (els.payFrequency) els.payFrequency.value = "monthly";
   
   localStorage.removeItem("savedMortgage");
+  window.history.replaceState(null, "", window.location.pathname);
   window._mortgageData = null;
   
   els.resultsSection.style.display = "none";
