@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function loadChartLib() {
     if (typeof Chart !== 'undefined') { chartLoaded = true; return Promise.resolve(); }
-    if (chartLoaded) return Promise.resolve();
+    if (chartLoaded && typeof Chart !== 'undefined') return Promise.resolve();
     return new Promise(resolve => {
       const script = document.createElement("script");
       script.src = "https://unpkg.com/chart.js@4.4.0/dist/chart.umd.min.js";
@@ -1025,12 +1025,11 @@ function renderChart(d) {
   const canvas = document.getElementById("mortgageChart");
   if (!canvas) return;
   try {
-
-  const ctx = canvas.getContext("2d");
-
   if (window._mortgageChart) {
     window._mortgageChart.destroy();
+    window._mortgageChart = null;
   }
+  const ctx = canvas.getContext("2d");
 
   if (!window.Chart || typeof Chart === "undefined") {
     console.warn("Chart.js not available — skipping visualization.");
