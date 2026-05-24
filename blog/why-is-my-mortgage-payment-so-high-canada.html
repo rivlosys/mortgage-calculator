@@ -6,7 +6,32 @@
   <title>Why is my mortgage payment so high? (Canada 2026 Analysis)</title>
   <meta name="description" content="Understanding why Canadian mortgage payments have increased. Analyze the impact of interest rates, property taxes, and amortization schedules." />
   <link rel="stylesheet" href="../style.css" />
+  <link rel="icon" type="image/png" href="../favicon.png" />
   <script defer src="https://cloud.umami.is/script.js" data-website-id="8e17ec5e-e75b-40f3-bbd3-844f1e17c686"></script>
+  <script src="../index.js" defer></script>
+
+  <!-- FAQ Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [{
+      "@type": "Question",
+      "name": "Why did my mortgage payment increase at renewal?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Payments are increasing because current interest rates are significantly higher than they were 5 years ago. Additionally, some variable-rate borrowers are seeing balance increases due to negative amortization."
+      }
+    }, {
+      "@type": "Question",
+      "name": "How can I lower my high mortgage payments?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can lower payments by refinancing to extend your amortization, switching to a more competitive interest rate, or making lump-sum payments to reduce your principal balance."
+      }
+    }]
+  }
+  </script>
 </head>
 <body>
   <div class="page-wrap">
@@ -23,6 +48,13 @@
     <div class="card">
       <h2>The "Payment Shock" Reality</h2>
       <p>Many Canadians renewing their mortgages in 2026 are seeing payments jump by 30-50%. This is primarily due to the transition from the ultra-low rates of 2021 to the normalized "higher for longer" environment.</p>
+
+      <div class="card" style="background: var(--blue-light); border-left: 4px solid var(--blue); padding: 15px; margin: 20px 0;">
+        <p style="margin: 0 0 8px 0; font-weight: 600;">📊 Calculate Your Exact Payments Instantly</p>
+        <p style="margin: 0 0 12px 0; font-size: 13px; color: var(--subtext);">Apply the 2026 rules to your home purchase calculations dynamically.</p>
+        <a href="../index.html" class="primary-btn" style="display: inline-block; width: auto; padding: 6px 12px; font-size: 12px; text-decoration: none;">Launch Calculator App</a>
+      </div>
+
       <h3 style="margin-top:20px;">3 Main Reasons for High Payments:</h3>
       <ul style="margin-left:20px; margin-top:10px;">
         <li><strong>The Rate Gap:</strong> Moving from a 1.9% variable to a 4.5% fixed adds hundreds to your interest costs.</li>
@@ -35,6 +67,10 @@
       <p>Use our Renewal Planner to see exactly how your payment will change.</p>
       <button class="primary-btn" onclick="window.location.href='/?tab=renewal'" style="width:auto; padding:12px 30px;">Open Renewal Planner</button>
     </div>
+    <div style="text-align: center; margin-top: 20px;">
+      <a href="index.html" style="color: var(--blue); font-size: 14px; font-weight: 600; text-decoration: none;">← Back to Guides</a>
+    </div>
+
     <footer class="site-footer" style="margin-top:40px;">
       <div style="font-size:11px; color:var(--muted);">
         © Rivlosys · Data-driven mortgage insights
