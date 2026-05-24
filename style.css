@@ -402,7 +402,13 @@ body {
 }
 
 .primary-btn:hover { background: var(--blue-dark); transform: translateY(-1px); }
-.primary-btn:disabled { background: var(--muted); cursor: not-allowed; transform: none; }
+.primary-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  background: var(--muted);
+  transform: none;
+}
 .primary-btn:active { transform: translateY(0); }
 
 /* results section reveal */
