@@ -207,16 +207,17 @@
           <input type="text" id="purchasePrice" name="purchasePrice" class="has-prefix" placeholder="500,000" />
         </div>
       </div>
+
       <div class="field field-group mode-purchase-only">
         <label for="downPayment">Down Payment
           <div class="tooltip-wrap">
             <span class="tooltip-icon">?</span>
-            <div class="tooltip-box">Minimum 5% for homes under $500K. 10% on the portion between $500K–$1.5M. 20% required for homes over $1.5M (insured mortgage cap applies).</div>
+            <div class="tooltip-box">Minimum 5% for homes under $500K. 10% on the portion between $500K–$1.5M. 20% required for homes over $1.5M.</div>
           </div>
         </label>
         <div class="dp-toggle">
-          <button class="dp-btn active" id="dpDollarBtn">$</button>
-          <button class="dp-btn" id="dpPercentBtn">%</button>
+          <button class="dp-btn active" id="dpDollarBtn" type="button">$</button>
+          <button class="dp-btn" id="dpPercentBtn" type="button">%</button>
         </div>
         <div class="input-wrap">
           <span class="input-prefix" id="dpPrefix">$</span>
@@ -225,12 +226,14 @@
         <div class="nudge-text">💡 20% avoids mortgage insurance fees</div>
         <div id="dpPercDisplay" style="font-size:11px;color:var(--muted);margin-top:3px;"></div>
       </div>
+
       <div class="field field-group mode-refi-only">
         <label for="currentRate">Current Interest Rate</label>
         <div class="input-wrap">
           <input type="number" id="currentRate" name="currentRate" class="has-suffix" placeholder="6.20" step="0.01" />
           <span class="input-suffix">%</span>
         </div>
+        <div class="nudge-text">💡 Your active existing contract rate.</div>
       </div>
     </div>
 
@@ -238,10 +241,10 @@
       <div class="field field-group">
         <label for="interestRate">
           <span class="mode-purchase-only">Interest Rate</span>
-          <span class="mode-refi-only">New Rate</span>
+          <span class="mode-refi-only">New Target Rate</span>
           <div class="tooltip-wrap">
             <span class="tooltip-icon">?</span>
-            <div class="tooltip-box">Annual interest rate offered by your lender. Your qualification will be judged against the higher Stress Test rate.</div>
+            <div class="tooltip-box">Annual interest rate offered by your lender.</div>
           </div>
         </label>
         <div class="input-wrap">
@@ -250,6 +253,7 @@
         </div>
         <div class="nudge-text">💡 Even a 0.5% drop could save you $40,000+ over time.</div>
       </div>
+
       <div class="field field-group">
         <label for="amortization">
           <span class="mode-purchase-only">Amortization</span>
@@ -263,15 +267,11 @@
           <option value="25" selected>25 years</option>
           <option value="30">30 years</option>
         </select>
-        <div class="nudge-text">💡 Lower payments today… but a much higher lifetime cost.</div>
+        <div class="nudge-text">💡 Adjusts structural calculation duration.</div>
       </div>
-      <div class="field">
-        <label for="payFrequency">Payment Type
-          <div class="tooltip-wrap">
-            <span class="tooltip-icon">?</span>
-            <div class="tooltip-box">Accelerated payments divide your monthly payment by 2 or 4, reducing your principal faster.</div>
-          </div>
-        </label>
+
+      <div class="field field-group">
+        <label for="payFrequency">Payment Type</label>
         <select id="payFrequency" name="payFrequency">
           <option value="monthly" selected>Monthly</option>
           <option value="biweekly">Bi-Weekly</option>

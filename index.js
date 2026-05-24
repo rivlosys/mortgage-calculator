@@ -448,49 +448,51 @@ els.purchasePrice.addEventListener("input", updateDpDisplay);
 els.downPayment.addEventListener("input", updateDpDisplay);
 
 
-// ── Validation Helper ────────────────────────────────────
-function validateInputs(isScenario = false) { // Added isScenario flag
+// Upgraded Validation Script Blueprint to Support Clean Mode Isolations
+function validateInputs(isScenario = false) {
   let valid = true;
   if (els.coreError) els.coreError.textContent = "";
-  // Clear all errors from relevant fields
+
   els.purchasePrice?.classList.remove("input-error");
   els.interestRate?.classList.remove("input-error");
   els.amortization?.classList.remove("input-error");
   els.downPayment?.classList.remove("input-error");
   els.currentRate?.classList.remove("input-error");
 
+  // 1. Core shared verification checks
   const check = (el, name) => {
     if (!el) return;
-    const isHidden = el.offsetParent === null;
-    if (isHidden) return;
-    const val = toNumber(el.value);
-    if (el.value === "" || isNaN(val)) {
-      if (!isScenario) {
-        el.classList.add("input-error");
-        if (els.coreError) els.coreError.textContent = `Please check the highlighted fields.`;
-      }
+    if (el.value === "" || isNaN(toNumber(el.value))) {
+      if (!isScenario) el.classList.add("input-error");
       valid = false;
     }
   };
 
   check(els.purchasePrice, "purchase price");
-  // Specific validation for interestRate: must be a positive number
-  const interestRateValue = toNumber(els.interestRate.value);
+  check(els.amortization, "amortization");
+
+  // Verify core calculation targets are valid positive numbers
+  const interestRateValue = toNumber(els.interestRate?.value);
   if (isNaN(interestRateValue) || interestRateValue <= 0) {
-    if (!isScenario) {
-      els.interestRate.classList.add("input-error");
-      if (els.coreError) els.coreError.textContent = `Interest rate must be a positive number.`;
-    }
+    if (!isScenario) els.interestRate?.classList.add("input-error");
     valid = false;
   }
 
-  check(els.amortization, "amortization");
-
+  // 2. State-aware isolated validation enforcement checks
   if (mode === "purchase") {
     check(els.downPayment, "down payment amount");
-  } else { // refinance mode
-    check(els.currentRate, "current rate");
+  } else if (mode === "refinance") {
+    const currentRateValue = toNumber(els.currentRate?.value);
+    if (isNaN(currentRateValue) || currentRateValue <= 0) {
+      if (!isScenario) els.currentRate?.classList.add("input-error");
+      valid = false;
+    }
   }
+
+  if (!valid && !isScenario && els.coreError) {
+    els.coreError.textContent = "Please check the highlighted field requirements.";
+  }
+
   return valid;
 }
 
@@ -1193,7 +1195,6 @@ function renderChart(d) {
 
       animation: {
         duration: 600
-      }
       }
     }
   });
