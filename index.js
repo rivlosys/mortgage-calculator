@@ -685,7 +685,9 @@ async function calculate() {
 
     // Load Chart.js first — independently so advanced.js can never block it
     await loadChartLib();
-    if (typeof Chart !== "undefined") renderChart(results);
+    if (typeof Chart !== "undefined") {
+      requestAnimationFrame(() => renderChart(results));
+    }
 
     renderAdvancedDetails(results);
 
