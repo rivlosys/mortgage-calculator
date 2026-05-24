@@ -156,7 +156,7 @@
     <p style="font-size:14px; color:var(--subtext); margin-top:15px;">Most Canadians pay $100,000+ in interest over their mortgage. Let’s see what yours looks like.</p>
   </div>
   <div class="trust-strip">
-    <div style="margin-bottom: 6px; font-weight: 600; color: var(--text);">Last updated: May 2026 · Based on current OSFI and CMHC guidelines</div>
+    <div style="margin-bottom: 6px; font-weight: 600; color: var(--text);">Based on current OSFI and CMHC guidelines</div>
     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Canada-specific &nbsp;
     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> 100% private &nbsp;
     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16s3-2 3-5-3-5-3-5"/><path d="M8 16s-3-2-3-5 3-5 3-5"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="7" y1="21" x2="17" y2="21"/><path d="M7 13h10"/></svg> Regulation-aligned
@@ -224,7 +224,7 @@
           <input type="text" id="downPayment" name="downPayment" class="has-prefix" placeholder="100,000" />
         </div>
         <div class="nudge-text">💡 20% avoids mortgage insurance fees</div>
-        <div id="dpPercDisplay" style="font-size:11px;color:var(--muted);margin-top:3px;"></div>
+        <div id="dpPercDisplay" class="nudge-text" style="margin-top:2px;"></div>
       </div>
 
       <div class="field field-group mode-refi-only">
@@ -267,7 +267,7 @@
           <option value="25" selected>25 years</option>
           <option value="30">30 years</option>
         </select>
-        <div class="nudge-text">💡 Adjusts structural calculation duration.</div>
+        <div class="nudge-text">💡 25 yrs is standard. Shorter = less interest, higher payment.</div>
       </div>
 
       <div class="field field-group">
@@ -279,6 +279,7 @@
           <option value="biweekly_acc">Accelerated Bi-Weekly</option>
           <option value="weekly_acc">Accelerated Weekly</option>
         </select>
+        <div class="nudge-text">💡 Accelerated bi-weekly can cut 2–3 years off your mortgage.</div>
       </div>
     </div>
 
@@ -307,6 +308,7 @@
           <option value="no">No</option>
           <option value="yes">Yes</option>
         </select>
+        <div class="nudge-text">💡 May qualify you for federal rebates and reduced land transfer tax.</div>
       </div>
     </div>
 
@@ -317,6 +319,7 @@
           <span class="input-prefix">$</span>
           <input type="number" id="propertyTax" name="propertyTax" class="has-prefix" placeholder="5,000" min="0" />
         </div>
+        <div class="nudge-text">💡 Used to calculate your GDS affordability ratio.</div>
       </div>
       <div class="field">
         <label for="heatingCost">Monthly Heating</label>
@@ -346,6 +349,7 @@
           <option value="no">No</option>
           <option value="yes">Yes — New Construction</option>
         </select>
+        <div class="nudge-text">💡 New builds qualify for 30-year insured amortization.</div>
       </div>
       <div class="field">
         <label for="extraPayment">Extra Payment (Monthly)</label>
@@ -353,16 +357,17 @@
           <span class="input-prefix">$</span>
           <input type="text" id="extraPayment" name="extraPayment" class="has-prefix" placeholder="0" />
         </div>
+        <div class="nudge-text">💡 Even $200/month extra can save years and $30K+ in interest.</div>
       </div>
     </div>
 
     <div id="coreError" class="error-msg"></div>
     
-    <div class="cta-stack-benefits" style="text-align: center; margin-bottom: 15px; font-size: 14px; color: var(--subtext);">
+    <div class="cta-stack-benefits" style="text-align: center; margin-bottom: 15px; font-size: 13px; color: var(--subtext);">
       ⏱ Takes 10 seconds → Could save you years of payments
     </div>
     <button class="primary-btn" id="calculateBtn">Reveal My Full Costs →</button>
-    <div class="cta-stack-friction-removal" style="margin-top: 15px; text-align: center; font-size: 12px; color: var(--muted);">
+    <div class="cta-stack-friction-removal" style="margin-top: 15px; text-align: center; font-size: 13px; color: var(--muted);">
       <ul class="friction-list">
         <li>✅ Takes less than 10 seconds</li>
         <li>✅ No signup required</li>
@@ -385,7 +390,6 @@
         🔁 Show this to someone buying a home — it might save them $50K
       </div>
 
-      <div class="payment-sub" id="paymentSub"></div>
       <div id="qualifyBadge" class="qualification-badge"></div>
       <div id="paymentHeroMeta" style="font-size:12px; margin-top:10px; opacity:0.9; font-weight:500;"></div>
     </div>
