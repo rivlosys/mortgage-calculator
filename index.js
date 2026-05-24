@@ -72,6 +72,12 @@ document.addEventListener("DOMContentLoaded", () => {
     stepProgressText: document.getElementById("stepProgressText")
   };
 
+  function checkBtnState() {
+    if (els.calculateBtn) {
+      els.calculateBtn.disabled = !validateInputs(true);
+    }
+  }
+
   // ── Configuration & Constants ──────────────────────────────
   const CONFIG = {
     CLOSING_COST_RATE: 0.015,
@@ -124,15 +130,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (chartLoaded || document.querySelector('script[src*="chart.js"]')) return Promise.resolve();
     return new Promise(resolve => {
       const script = document.createElement("script");
-      script.src = "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js";
+      script.src = "https://unpkg.com/chart.js@4.4.0/dist/chart.umd.min.js";
       script.onload = () => {
         chartLoaded = true;
         resolve();
       };
-        script.onerror = (e) => {
-          console.error("Failed to load Chart.js:", e);
-          resolve(); // Resolve anyway to not block the main app, but chart won't work
-        };
+      script.onerror = (e) => {
+        console.warn("Chart.js failed to load — charts disabled");
+        window.Chart = null;
+        resolve();
+      };
       document.body.appendChild(script);
     });
   }
@@ -294,8 +301,10 @@ function validateInputs(isScenario = false) { // Added isScenario flag
     if (isHidden) return;
     const val = toNumber(el.value);
     if (el.value === "" || isNaN(val)) {
-      el.classList.add("input-error");
-      if (els.coreError) els.coreError.textContent = `Please check the highlighted fields.`;
+      if (!isScenario) {
+        el.classList.add("input-error");
+        if (els.coreError) els.coreError.textContent = `Please check the highlighted fields.`;
+      }
       valid = false;
     }
   };
@@ -304,8 +313,10 @@ function validateInputs(isScenario = false) { // Added isScenario flag
   // Specific validation for interestRate: must be a positive number
   const interestRateValue = toNumber(els.interestRate.value);
   if (isNaN(interestRateValue) || interestRateValue <= 0) {
-    els.interestRate.classList.add("input-error");
-    if (els.coreError) els.coreError.textContent = `Interest rate must be a positive number.`;
+    if (!isScenario) {
+      els.interestRate.classList.add("input-error");
+      if (els.coreError) els.coreError.textContent = `Interest rate must be a positive number.`;
+    }
     valid = false;
   }
 
@@ -873,8 +884,8 @@ function renderChart(d) {
     window._mortgageChart.destroy();
   }
 
-  if (typeof Chart === "undefined") {
-    console.warn("Chart.js not loaded yet. Retrying in background...");
+  if (!window.Chart || typeof Chart === "undefined") {
+    console.warn("Chart.js not available — skipping visualization.");
     return;
   }
 
