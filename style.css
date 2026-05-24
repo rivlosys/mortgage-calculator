@@ -4,8 +4,8 @@
   --surface2: #f8fafc;
   --border: #e2e8f0;
   --text: #0f172a;
-  --subtext: #475569;
-  --muted: #94a3b8;
+  --subtext: #334155;
+  --muted: #4b5563;
   --blue: #1b76df;
   --blue-dark: #1558b0;
   --blue-light: #eff6ff;
@@ -246,9 +246,8 @@ body {
   color: var(--muted);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 .step-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-.step.active .step-num { border-color: var(--blue); background: var(--blue); color: #fff; box-shadow: 0 0 0 4px var(--blue-mid); }
+.step.active .step-num { border-color: var(--blue); background: var(--blue); color: #fff; transform: scale(1.1); }
 .step.active .step-label { color: var(--blue); }
 .step.completed .step-num { border-color: var(--green); background: var(--green); color: #fff; }
 .step.completed .step-label { color: var(--green); }
@@ -825,8 +824,8 @@ body {
 
 /* ANIMATIONS */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .fade-up { animation: fadeUp 0.4s ease forwards; }

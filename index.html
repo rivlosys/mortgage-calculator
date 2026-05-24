@@ -134,7 +134,7 @@
   <!-- Header -->
   <header class="site-header">
     <div class="brand">
-      <img src="logo.png" class="brand-logo" alt="Rivlosys logo" loading="lazy" width="34" height="34" />
+      <img src="logo.webp" class="brand-logo" alt="Rivlosys logo" loading="lazy" width="34" height="34" />
       <div class="brand-name-container">
         <div class="brand-name">Rivlosys Mortgage Tools</div>
         <div class="brand-tag">Independent & Secure · 🇨🇦</div>
@@ -193,22 +193,22 @@
 
   <!-- ── CORE CALCULATOR ── -->
   <div class="card">
-    <div class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span> Property Details</div>
+    <h2 class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span> Property Details</h2>
     <p style="font-size: 13px; color: var(--muted); margin-bottom: 15px; margin-top: -8px;">Tiny tweaks here can save you a new car… or even a down payment.</p>
 
     <div class="grid-2" style="margin-bottom:14px;">
       <div class="field field-group">
-        <label>
+        <label for="purchasePrice">
           <span class="mode-purchase-only">Purchase Price</span>
           <span class="mode-refi-only">Mortgage Balance</span>
         </label>
         <div class="input-wrap">
           <span class="input-prefix">$</span>
-          <input type="text" id="purchasePrice" class="has-prefix" placeholder="500,000" />
+          <input type="text" id="purchasePrice" name="purchasePrice" class="has-prefix" placeholder="500,000" />
         </div>
       </div>
       <div class="field field-group mode-purchase-only">
-        <label>Down Payment
+        <label for="downPayment">Down Payment
           <div class="tooltip-wrap">
             <span class="tooltip-icon">?</span>
             <div class="tooltip-box">Minimum 5% for homes under $500K. 10% on the portion between $500K–$1.5M. 20% required for homes over $1.5M (insured mortgage cap applies).</div>
@@ -220,15 +220,15 @@
         </div>
         <div class="input-wrap">
           <span class="input-prefix" id="dpPrefix">$</span>
-          <input type="text" id="downPayment" class="has-prefix" placeholder="100,000" />
+          <input type="text" id="downPayment" name="downPayment" class="has-prefix" placeholder="100,000" />
         </div>
         <div class="nudge-text">💡 20% avoids mortgage insurance fees</div>
         <div id="dpPercDisplay" style="font-size:11px;color:var(--muted);margin-top:3px;"></div>
       </div>
       <div class="field field-group mode-refi-only">
-        <label>Current Interest Rate</label>
+        <label for="currentRate">Current Interest Rate</label>
         <div class="input-wrap">
-          <input type="number" id="currentRate" class="has-suffix" placeholder="6.20" step="0.01" />
+          <input type="number" id="currentRate" name="currentRate" class="has-suffix" placeholder="6.20" step="0.01" />
           <span class="input-suffix">%</span>
         </div>
       </div>
@@ -236,7 +236,7 @@
 
     <div class="grid-3" style="margin-bottom:14px;">
       <div class="field field-group">
-        <label>
+        <label for="interestRate">
           <span class="mode-purchase-only">Interest Rate</span>
           <span class="mode-refi-only">New Rate</span>
           <div class="tooltip-wrap">
@@ -245,17 +245,17 @@
           </div>
         </label>
         <div class="input-wrap">
-          <input type="number" id="interestRate" class="has-suffix" placeholder="5.00" step="0.01" min="0" max="30" />
+          <input type="number" id="interestRate" name="interestRate" class="has-suffix" placeholder="5.00" step="0.01" min="0" max="30" />
           <span class="input-suffix">%</span>
         </div>
         <div class="nudge-text">💡 Even a 0.5% drop could save you $40,000+ over time.</div>
       </div>
       <div class="field field-group">
-        <label>
+        <label for="amortization">
           <span class="mode-purchase-only">Amortization</span>
           <span class="mode-refi-only">Remaining Years</span>
         </label>
-        <select id="amortization">
+        <select id="amortization" name="amortization">
           <option value="5">5 years</option>
           <option value="10">10 years</option>
           <option value="15">15 years</option>
@@ -266,13 +266,13 @@
         <div class="nudge-text">💡 Lower payments today… but a much higher lifetime cost.</div>
       </div>
       <div class="field">
-        <label>Payment Type
+        <label for="payFrequency">Payment Type
           <div class="tooltip-wrap">
             <span class="tooltip-icon">?</span>
             <div class="tooltip-box">Accelerated payments divide your monthly payment by 2 or 4, reducing your principal faster.</div>
           </div>
         </label>
-        <select id="payFrequency">
+        <select id="payFrequency" name="payFrequency">
           <option value="monthly" selected>Monthly</option>
           <option value="biweekly">Bi-Weekly</option>
           <option value="weekly">Weekly</option>
@@ -284,8 +284,8 @@
 
     <div class="grid-2" style="margin-bottom:14px;">
       <div class="field">
-        <label>Province / Territory</label>
-        <select id="province">
+        <label for="province">Province / Territory</label>
+        <select id="province" name="province">
           <option value="AB">Alberta (AB)</option>
           <option value="BC">British Columbia (BC)</option>
           <option value="MB">Manitoba (MB)</option>
@@ -302,8 +302,8 @@
         </select>
       </div>
       <div class="field">
-        <label>First Time Buyer?</label>
-        <select id="firstTimeBuyer">
+        <label for="firstTimeBuyer">First Time Buyer?</label>
+        <select id="firstTimeBuyer" name="firstTimeBuyer">
           <option value="no">No</option>
           <option value="yes">Yes</option>
         </select>
@@ -312,46 +312,46 @@
 
     <div class="grid-3" style="margin-bottom:14px;">
       <div class="field">
-        <label>Annual Property Tax</label>
+        <label for="propertyTax">Annual Property Tax</label>
         <div class="input-wrap">
           <span class="input-prefix">$</span>
-          <input type="number" id="propertyTax" class="has-prefix" placeholder="5,000" min="0" />
+          <input type="number" id="propertyTax" name="propertyTax" class="has-prefix" placeholder="5,000" min="0" />
         </div>
       </div>
       <div class="field">
-        <label>Monthly Heating</label>
+        <label for="heatingCost">Monthly Heating</label>
         <div class="input-wrap">
           <span class="input-prefix">$</span>
-          <input type="number" id="heatingCost" class="has-prefix" placeholder="150" min="0" />
+          <input type="number" id="heatingCost" name="heatingCost" class="has-prefix" placeholder="150" min="0" />
         </div>
       </div>
       <div class="field">
-        <label>Monthly Condo Fees</label>
+        <label for="condoFees">Monthly Condo Fees</label>
         <div class="input-wrap">
           <span class="input-prefix">$</span>
-          <input type="number" id="condoFees" class="has-prefix" placeholder="0" min="0" />
+          <input type="number" id="condoFees" name="condoFees" class="has-prefix" placeholder="0" min="0" />
         </div>
       </div>
     </div>
 
     <div class="grid-2" style="margin-bottom:14px;">
       <div class="field">
-        <label>New Build?
+        <label for="newBuild">New Build?
           <div class="tooltip-wrap">
             <span class="tooltip-icon">?</span>
             <div class="tooltip-box">Newly constructed homes qualify for 30-year insured amortization.</div>
           </div>
         </label>
-        <select id="newBuild">
+        <select id="newBuild" name="newBuild">
           <option value="no">No</option>
           <option value="yes">Yes — New Construction</option>
         </select>
       </div>
       <div class="field">
-        <label>Extra Payment (Monthly)</label>
+        <label for="extraPayment">Extra Payment (Monthly)</label>
         <div class="input-wrap">
           <span class="input-prefix">$</span>
-          <input type="text" id="extraPayment" class="has-prefix" placeholder="0" />
+          <input type="text" id="extraPayment" name="extraPayment" class="has-prefix" placeholder="0" />
         </div>
       </div>
     </div>
@@ -420,7 +420,7 @@
 
     <!-- Financial Insights -->
     <div class="card fade-up">
-      <div class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg></span> Financial Insights</div>
+      <h2 class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg></span> Financial Insights</h2>
       <!-- Interest Shock Visual -->
       <div id="shockBarArea" class="shock-bar-container"></div>
       <div id="breakdownRows"></div>
@@ -428,7 +428,7 @@
 
     <!-- Chart -->
     <div class="card fade-up">
-      <div class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span> Amortization Chart</div>
+      <h2 class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span> Amortization Chart</h2>
       <div style="margin-bottom: 15px;">
         <h3 style="font-size:15px; margin-bottom: 4px;">Where your money goes over time</h3>
         <p style="font-size: 13px; color: var(--subtext); line-height: 1.4;">💡 <b>Perspective:</b> For the first 5 years, you're mostly paying interest to the bank. Real wealth building (equity) starts later — unless you optimize your strategy early.</p>
@@ -442,7 +442,7 @@
 
     <!-- Advanced Tools Section -->
     <div class="card fade-up">
-      <div class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span> Personalize Your Plan</div>
+      <h2 class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span> Personalize Your Plan</h2>
       <h3 style="font-size:14px;margin-bottom:6px;">What happens if you earn more? Pay extra? Get a lower rate?</h3>
       <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Explore your future ↓</p>
       <div class="module-tabs">
@@ -526,18 +526,18 @@
     <!-- Technical Details Section -->
     <div class="grid-2">
       <div class="card fade-up">
-        <div class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31"/><path d="M14 2v6.69"/><path d="M8.5 2h7"/><path d="M14 11.5a6.5 6.5 0 0 1 4.5 5.81V20a2 2 0 0 1-2 2H7.5a2 2 0 0 1-2-2v-2.69a6.5 6.5 0 0 1 4.5-5.81"/><path d="M9 11V9"/><path d="M15 11V8.5"/></svg></span> Stress Test</div>
+        <h2 class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31"/><path d="M14 2v6.69"/><path d="M8.5 2h7"/><path d="M14 11.5a6.5 6.5 0 0 1 4.5 5.81V20a2 2 0 0 1-2 2H7.5a2 2 0 0 1-2-2v-2.69a6.5 6.5 0 0 1 4.5-5.81"/><path d="M9 11V9"/><path d="M15 11V8.5"/></svg></span> Stress Test</h2>
         <div id="stressTestBox"></div>
       </div>
       <div class="card fade-up">
-        <div class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></span> Closing Costs</div>
+        <h2 class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></span> Closing Costs</h2>
         <div id="closingCosts"></div>
       </div>
     </div>
 
   <!-- Actions -->
   <div class="card fade-up">
-    <div class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7l9.2 9.2M17 7v10H7"/></svg></span> Quick Actions</div>
+    <h2 class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7l9.2 9.2M17 7v10H7"/></svg></span> Quick Actions</h2>
     <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">Save your calculation, share it with others, or export the data for your records.</p>
     <div class="action-row">
       <button class="action-btn" id="copyBtn"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg> Copy to Message</button>
