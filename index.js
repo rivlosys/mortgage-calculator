@@ -1026,6 +1026,7 @@ function renderSpecificAdvancedModule(moduleName, data) {
 function renderChart(d) {
   const canvas = document.getElementById("mortgageChart");
   if (!canvas || canvas.offsetWidth === 0) return;
+  try {
 
   const ctx = canvas.getContext("2d");
 
@@ -1193,8 +1194,9 @@ function renderChart(d) {
       animation: {
         duration: 600
       }
+      }
     }
-    });
+  });
   } catch (err) {
     console.error("Chart.js failed to initialize:", err);
   }
