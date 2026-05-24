@@ -681,20 +681,9 @@ async function calculate() {
     
     updateURLState();
 
-    // 2a. Load Chart.js first — independently so advanced.js can never block it
+    // Load Chart.js first — independently so advanced.js can never block it
     await loadChartLib();
-    if (typeof Chart !== "undefined") {
-      renderChart(results);
-    } else {
-      let retries = 0;
-      const retryChart = setInterval(() => {
-        retries++;
-        if (retries > 10 || typeof Chart !== "undefined") {
-          clearInterval(retryChart);
-          renderChart(results);
-        }
-      }, 300);
-    }
+    if (typeof Chart !== "undefined") renderChart(results);
 
     renderAdvancedDetails(results);
 
@@ -1036,7 +1025,7 @@ function renderSpecificAdvancedModule(moduleName, data) {
 // ── Render Chart ──────────────────────────────────────────
 function renderChart(d) {
   const canvas = document.getElementById("mortgageChart");
-  if (!canvas) return;
+  if (!canvas || canvas.offsetWidth === 0) return;
 
   const ctx = canvas.getContext("2d");
 
@@ -1155,13 +1144,6 @@ function renderChart(d) {
           font: { size: 18, weight: '700' }
         },
 
-        subtitle: {
-          display: true,
-          text: equityCrossoverYear > 0 ? `✨ Year ${equityCrossoverYear}: This is the "Equity Acceleration" point where you pay more to yourself than the bank.` : 'Initial phase: Your payments are mostly interest.',
-          font: { size: 13, style: 'italic' },
-          padding: { bottom: 10 }
-        },
-
         tooltip: {
           padding: 12,
           cornerRadius: 10,
@@ -1212,7 +1194,10 @@ function renderChart(d) {
         duration: 600
       }
     }
-  });
+    });
+  } catch (err) {
+    console.error("Chart.js failed to initialize:", err);
+  }
 }
 
 
