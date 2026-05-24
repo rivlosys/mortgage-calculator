@@ -707,10 +707,6 @@ function updateURLState() {
   try {
     const url = buildShareURL();
     window.history.replaceState(null, "", url);
-    if (els.saveIndicator) {
-      els.saveIndicator.style.opacity = "1";
-      setTimeout(() => { els.saveIndicator.style.opacity = "0"; }, 2000);
-    }
   } catch(e) {
     // Silently ignore when running as a local file (file:// origin restriction)
   }
@@ -1329,7 +1325,6 @@ if (els.resetBtn) els.resetBtn.addEventListener("click", () => {
   if (els.amortization) els.amortization.value = "25";
   if (els.payFrequency) els.payFrequency.value = "monthly";
   
-  localStorage.removeItem("savedMortgage");
   window.history.replaceState(null, "", window.location.pathname);
   window._mortgageData = null;
   
@@ -1366,7 +1361,6 @@ if (els.resetBtn) els.resetBtn.addEventListener("click", () => {
 // Initialize default mode state
 setMode(mode);
 
-const savedData = localStorage.getItem("savedMortgage");
 const urlParams = new URLSearchParams(window.location.search);
 
 if (urlParams.has("mode")) setMode(urlParams.get("mode"));
@@ -1392,13 +1386,6 @@ if (urlParams.has("price") || urlParams.has("province") || urlParams.has("tab"))
     if (tabBtn) tabBtn.click();
   }
   if (urlParams.get("price")) calculate();
-} else if (savedData && els.purchasePrice && els.purchasePrice.value === "") {
-  const d = JSON.parse(savedData);
-  els.purchasePrice.value = Number(d.purchasePrice).toLocaleString();
-  els.downPayment.value = Number(d.downPayment).toLocaleString();
-  els.interestRate.value = d.rate;
-  if (els.amortization) els.amortization.value = d.amortYears || "25";
-  updateDpDisplay();
 }
 
 // ── Advanced Tools Switching ──────────────────────────────
