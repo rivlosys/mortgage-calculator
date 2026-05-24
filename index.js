@@ -127,7 +127,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function loadChartLib() {
-    if (chartLoaded || document.querySelector('script[src*="chart.js"]')) return Promise.resolve();
+    if (typeof Chart !== 'undefined') { chartLoaded = true; return Promise.resolve(); }
+    if (chartLoaded) return Promise.resolve();
     return new Promise(resolve => {
       const script = document.createElement("script");
       script.src = "https://unpkg.com/chart.js@4.4.0/dist/chart.umd.min.js";
@@ -356,6 +357,9 @@ if (savedTheme === "dark") {
   if (els.themeBtn) els.themeBtn.textContent = "☀️ Night Mode Off";
   if (els.themeNudge) els.themeNudge.style.display = "block";
 }
+
+const footerYear = document.getElementById("footer-year");
+if (footerYear) footerYear.textContent = new Date().getFullYear();
 
 els.themeBtn?.addEventListener("click", () => {
   const isDark = document.documentElement.getAttribute("data-theme") === "dark";
