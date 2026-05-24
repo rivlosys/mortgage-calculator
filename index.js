@@ -537,7 +537,7 @@ async function calculate() {
     console.error("Calculation failed:", err);
   } finally {
     els.calculateBtn.textContent = originalBtnText;
-    els.calculateBtn.disabled = false;
+    checkBtnState();
   }
 }
 
@@ -1185,6 +1185,7 @@ if (els.resetBtn) els.resetBtn.addEventListener("click", () => {
   updateStepper(1);
   if (els.dpPercDisplay) els.dpPercDisplay.textContent = "";
   setDpMode("dollar");
+  checkBtnState();
 });
 
 // Initialize default mode state
