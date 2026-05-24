@@ -1184,6 +1184,17 @@ if (els.resetBtn) els.resetBtn.addEventListener("click", () => {
     window._mortgageChart = null;
   }
   updateStepper(1);
+
+  // Reset active tab back to first tab
+  els.moduleTabs.forEach(t => t.classList.remove("active"));
+  els.moduleSections.forEach(s => s.classList.remove("active"));
+  if (els.moduleTabs[0]) els.moduleTabs[0].classList.add("active");
+  const firstSection = document.getElementById("tab-" + els.moduleTabs[0]?.dataset.tab);
+  if (firstSection) firstSection.classList.add("active");
+
+  // Reset hasPerformedCalc so stepper behaves fresh
+  hasPerformedCalc = false;
+
   if (els.dpPercDisplay) els.dpPercDisplay.textContent = "";
   setDpMode("dollar");
   checkBtnState();
