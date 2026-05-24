@@ -130,18 +130,26 @@ document.addEventListener("DOMContentLoaded", () => {
     if (typeof Chart !== 'undefined') { chartLoaded = true; return Promise.resolve(); }
     if (chartLoaded && typeof Chart !== 'undefined') return Promise.resolve();
     return new Promise(resolve => {
-      const script = document.createElement("script");
-      script.src = "https://unpkg.com/chart.js@4.4.0/dist/chart.umd.min.js";
-      script.onload = () => {
-        chartLoaded = true;
-        resolve();
-      };
-      script.onerror = (e) => {
-        console.warn("Chart.js failed to load — charts disabled");
-        window.Chart = null;
-        resolve();
-      };
-      document.body.appendChild(script);
+      function tryLoad(src, fallbackSrc) {
+        const script = document.createElement("script");
+        script.src = src;
+        script.crossOrigin = "anonymous";
+        script.onload = () => { chartLoaded = true; resolve(); };
+        script.onerror = () => {
+          if (fallbackSrc) {
+            tryLoad(fallbackSrc, null); // try fallback once
+          } else {
+            console.warn("Chart.js failed to load — charts disabled");
+            window.Chart = null;
+            resolve();
+          }
+        };
+        document.body.appendChild(script);
+      }
+      tryLoad(
+        "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js",
+        "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"
+      );
     });
   }
 
