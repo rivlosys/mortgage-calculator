@@ -601,7 +601,7 @@ function calculateMortgage(params) {
   let refiData = null;
   if (mode === "refinance") {
     const oldRate = toNumber(currentRate);
-    const rOld = oldRate / 100 / 12;
+    const rOld = Math.pow(Math.pow(1 + (oldRate / 100) / 2, 2), 1 / 12) - 1;
     const oldPmt = rOld > 0 ? mortgageAmount * rOld / (1 - Math.pow(1 + rOld, -nOriginal)) : mortgageAmount / nOriginal;
     const monthlySavings = oldPmt - monthlyBasePayment;
     refiData = { oldPmt, monthlySavings, totalSavings: monthlySavings * nOriginal, breakEven: monthlySavings > 0 ? CONFIG.REFI_PENALTY_EST / monthlySavings : 0 };
@@ -1027,7 +1027,7 @@ function renderSpecificAdvancedModule(moduleName, data) {
 // ── Render Chart ──────────────────────────────────────────
 function renderChart(d) {
   const canvas = document.getElementById("mortgageChart");
-  if (!canvas || canvas.offsetWidth === 0) return;
+  if (!canvas) return;
   try {
 
   const ctx = canvas.getContext("2d");
