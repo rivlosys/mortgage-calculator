@@ -121,10 +121,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function loadChartLib() {
-    if (chartLoaded) return Promise.resolve();
+    if (chartLoaded || document.querySelector('script[src*="chart.js"]')) return Promise.resolve();
     return new Promise(resolve => {
       const script = document.createElement("script");
-      script.src = "https://cdn.jsdelivr.net/npm/chart.js";
+      script.src = "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js";
       script.onload = () => {
         chartLoaded = true;
         resolve();
@@ -289,7 +289,9 @@ function validateInputs(isScenario = false) { // Added isScenario flag
   els.currentRate?.classList.remove("input-error");
 
   const check = (el, name) => {
-      if (!el || el.offsetParent === null) return; 
+    if (!el) return;
+    const isHidden = el.offsetParent === null;
+    if (isHidden) return;
     const val = toNumber(el.value);
     if (el.value === "" || isNaN(val)) {
       el.classList.add("input-error");
@@ -509,13 +511,14 @@ async function calculate() {
     if (typeof Chart !== "undefined") {
       renderChart(results);
     } else {
+      let retries = 0;
       const retryChart = setInterval(() => {
-        if (typeof Chart !== "undefined") {
-          renderChart(results);
+        retries++;
+        if (retries > 10 || typeof Chart !== "undefined") {
           clearInterval(retryChart);
+          renderChart(results);
         }
-      }, 200);
-      setTimeout(() => clearInterval(retryChart), 5000);
+      }, 300);
     }
 
     // 2b. Load advanced modules separately — a missing file never affects the chart
