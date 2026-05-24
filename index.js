@@ -837,6 +837,166 @@ function renderAdvancedDetails(d) {
   // This is now handled directly in the calculate() function after modules are loaded.
 }
 
+// ── Advanced Modules ─────────────────────────────────────────
+window.AdvancedModules = {
+  renderAffordability: function(data) {
+    const section = document.getElementById("tab-affordability");
+    if (!section) return;
+    section.innerHTML = `
+      <div class="tip" style="background:var(--blue-light);border-color:var(--blue)">
+        <b>💼 Income Required:</b> To qualify at stress test rate, you need ~<b>${fmtC((data.monthlyPayment * 12) / 0.32)}/year</b> gross income (GDS 32% rule).
+      </div>
+      <div class="tip">
+        <b>📊 Monthly Breakdown:</b><br>
+        Mortgage: <b>${fmtC(data.monthlyPayment)}</b><br>
+        Property Tax: <b>${fmtC(data.propertyTax / 12)}</b><br>
+        Heating: <b>${fmtC(data.heatingCost)}</b><br>
+        Condo Fees: <b>${fmtC(data.condoFees)}</b>
+      </div>
+      <div class="tip" style="background:var(--green-bg);border-color:var(--green)">
+        <b>✅ TDS Limit:</b> Keep total debt under 44% of gross income to qualify with most lenders.
+      </div>`;
+  },
+
+  renderPrepayment: function(data) {
+    const section = document.getElementById("tab-prepayment");
+    if (!section) return;
+    const rM = Math.pow(Math.pow(1 + (data.rate / 100) / 2, 2), 1 / 12) - 1;
+    const extra = 200;
+    let bal = data.mortgageAmount, months = 0;
+    const basePmt = data.monthlyPayment;
+    const newPmt = basePmt + extra;
+    let balBase = data.mortgageAmount, baseMonths = 0;
+    while (balBase > 0 && baseMonths < 600) { balBase -= (basePmt - balBase * rM); baseMonths++; }
+    while (bal > 0 && months < 600) { const interest = bal * rM; bal -= (newPmt - interest); months++; }
+    const yearsSaved = ((baseMonths - months) / 12).toFixed(1);
+    section.innerHTML = `
+      <div class="tip" style="background:var(--green-bg);border-color:var(--green)">
+        <b>💡 Adding $200/month extra:</b><br>
+        Saves <b>${yearsSaved} years</b> off your mortgage<br>
+        Saves approx. <b>${fmtC((baseMonths - months) * basePmt * 0.4)}</b> in interest
+      </div>
+      <div class="tip" style="background:var(--blue-light);border-color:var(--blue)">
+        <b>📅 Lump Sum Impact:</b> A one-time $10,000 prepayment early in your term can save 2–3x that amount in interest over the life of the mortgage.
+      </div>`;
+  },
+
+  renderRatecompare: function(data) {
+    const section = document.getElementById("tab-ratecompare");
+    if (!section) return;
+    const rM = (r) => Math.pow(Math.pow(1 + (r / 100) / 2, 2), 1 / 12) - 1;
+    const pmt = (r) => { const rm = rM(r); return data.mortgageAmount * rm / (1 - Math.pow(1 + rm, -(data.amortYears * 12))); };
+    const rates = [data.rate - 1, data.rate - 0.5, data.rate, data.rate + 0.5, data.rate + 1].filter(r => r > 0);
+    const rows = rates.map(r => {
+      const p = pmt(r);
+      const total = p * data.amortYears * 12;
+      const highlight = r === data.rate ? "background:var(--blue-light);font-weight:700" : "";
+      return `<tr style="${highlight}">
+        <td style="padding:0.5rem">${r.toFixed(2)}%${r === data.rate ? " ◀ current" : ""}</td>
+        <td style="padding:0.5rem;text-align:right">${fmtC(p)}/mo</td>
+        <td style="padding:0.5rem;text-align:right">${fmtC(total)}</td>
+      </tr>`;
+    }).join("");
+    section.innerHTML = `
+      <table style="width:100%;border-collapse:collapse;font-size:0.875rem">
+        <thead><tr style="border-bottom:2px solid var(--border)">
+          <th style="padding:0.5rem;text-align:left">Rate</th>
+          <th style="padding:0.5rem;text-align:right">Monthly</th>
+          <th style="padding:0.5rem;text-align:right">Total Cost</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  },
+
+  renderRentvsbuy: function(data) {
+    const section = document.getElementById("tab-rentvsbuy");
+    if (!section) return;
+    const rent = data.monthlyPayment * 0.7;
+    const buyTotal5 = data.monthlyPayment * 60;
+    const rentTotal5 = rent * 60 * Math.pow(1.03, 2.5);
+    section.innerHTML = `
+      <div class="tip" style="background:var(--blue-light);border-color:var(--blue)">
+        <b>🏠 Buy (5-year cost):</b> ${fmtC(buyTotal5)}<br>
+        <small>Includes mortgage payments only</small>
+      </div>
+      <div class="tip">
+        <b>🏢 Estimated Rent (5-year):</b> ${fmtC(rentTotal5)}<br>
+        <small>Estimated at 70% of mortgage payment, 3% annual increase</small>
+      </div>
+      <div class="tip" style="background:var(--green-bg);border-color:var(--green)">
+        <b>📈 Key Factor:</b> Buying builds equity and benefits from appreciation. Renting offers flexibility.
+      </div>`;
+  },
+
+  renderRenewal: function(data) {
+    const section = document.getElementById("tab-renewal");
+    if (!section) return;
+    const rM = (r) => Math.pow(Math.pow(1 + (r / 100) / 2, 2), 1 / 12) - 1;
+    const pmt = (r, bal, yrs) => { const rm = rM(r); return bal * rm / (1 - Math.pow(1 + rm, -(yrs * 12))); };
+    const balAfter5 = data.mortgageAmount - ((data.monthlyPayment - data.mortgageAmount * rM(data.rate)) * 60);
+    const remaining = data.amortYears - 5;
+    const newRates = [data.rate - 0.5, data.rate, data.rate + 0.5, data.rate + 1];
+    const rows = newRates.map(r => {
+      if (r <= 0) return "";
+      const p = pmt(r, balAfter5, remaining);
+      const highlight = r === data.rate ? "background:var(--blue-light);font-weight:700" : "";
+      return `<tr style="${highlight}">
+        <td style="padding:0.5rem">${r.toFixed(2)}%</td>
+        <td style="padding:0.5rem;text-align:right">${fmtC(p)}/mo</td>
+        <td style="padding:0.5rem;text-align:right">${fmtC(p * remaining * 12)}</td>
+      </tr>`;
+    }).join("");
+    section.innerHTML = `
+      <div class="tip" style="margin-bottom:1rem">
+        <b>📋 Balance at renewal (after 5 years):</b> ${fmtC(balAfter5)}
+      </div>
+      <table style="width:100%;border-collapse:collapse;font-size:0.875rem">
+        <thead><tr style="border-bottom:2px solid var(--border)">
+          <th style="padding:0.5rem;text-align:left">Renewal Rate</th>
+          <th style="padding:0.5rem;text-align:right">New Payment</th>
+          <th style="padding:0.5rem;text-align:right">Remaining Cost</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  },
+
+  renderAmortization: function(data) {
+    const section = document.getElementById("tab-amortization");
+    if (!section) return;
+    const rM = Math.pow(Math.pow(1 + (data.rate / 100) / 2, 2), 1 / 12) - 1;
+    let balance = data.mortgageAmount;
+    let rows = "";
+    for (let yr = 1; yr <= data.amortYears; yr++) {
+      let yInt = 0, yPrin = 0;
+      for (let m = 0; m < 12; m++) {
+        const interest = balance * rM;
+        const principal = Math.min(data.monthlyPayment - interest, balance);
+        yInt += interest; yPrin += principal;
+        balance = Math.max(0, balance - principal);
+      }
+      rows += `<tr style="border-bottom:1px solid var(--border)">
+        <td style="padding:0.4rem 0.5rem">${yr}</td>
+        <td style="padding:0.4rem 0.5rem;text-align:right">${fmtC(yPrin)}</td>
+        <td style="padding:0.4rem 0.5rem;text-align:right">${fmtC(yInt)}</td>
+        <td style="padding:0.4rem 0.5rem;text-align:right">${fmtC(balance)}</td>
+      </tr>`;
+    }
+    section.innerHTML = `
+      <h3 style="margin-bottom:1rem">Amortization Schedule</h3>
+      <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:0.875rem">
+        <thead><tr style="border-bottom:2px solid var(--border);background:var(--bg)">
+          <th style="padding:0.5rem;text-align:left">Year</th>
+          <th style="padding:0.5rem;text-align:right">Principal</th>
+          <th style="padding:0.5rem;text-align:right">Interest</th>
+          <th style="padding:0.5rem;text-align:right">Balance</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+      <p style="margin-top:1rem;font-size:0.8rem;color:var(--text-muted)">Canadian semi-annual compounding applied.</p>`;
+  }
+};
+
 // ── Render Specific Advanced Module ────────────────────────
 function renderSpecificAdvancedModule(moduleName, data) {
   const methodName = "render" + moduleName.charAt(0).toUpperCase() + moduleName.slice(1);
