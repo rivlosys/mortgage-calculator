@@ -1062,13 +1062,18 @@ function renderChart(d) {
   let equityCrossoverYear = 0;
   let labels = [];
 
-  const r = Math.pow(Math.pow(1 + (d.rate / 100) / 2, 2), 1 / 12) - 1; // Fix Bug 5: Use Canadian semi-annual compounding formula for chart accuracy
-
-  // Clear out frequency multipliers inside the chart generator to prevent compound inflation
-  const monthlyPayment = d.monthlyBase + (toNumber(els.extraPayment?.value) || 0);
+  // Fix: Explicitly factor the exact monthly payment equivalent being simulated
+  const r = Math.pow(Math.pow(1 + (d.rate / 100) / 2, 2), 1 / 12) - 1;
+  
+  // Use the pre-calculated payment baseline from the engine to guarantee consistency
+  const paymentFreq = d.frequency || "monthly";
+  let monthlyPayment = d.monthlyBase;
+  
+  if (els.extraPayment && toNumber(els.extraPayment.value) > 0) {
+    monthlyPayment += toNumber(els.extraPayment.value);
+  }
 
   for (let year = 1; year <= d.amortYears; year++) {
-
     let yearlyPrincipal = 0;
     let yearlyInterest = 0;
 
@@ -1076,19 +1081,21 @@ function renderChart(d) {
       if (balance <= 0) break;
 
       const interest = balance * r;
-      // Ensure principal part doesn't pull a larger amount than remaining balance
+      // Prevent principal from drawing more than the absolute remaining balance
       const principal = Math.min(monthlyPayment - interest, balance);
 
       balance -= principal;
-
-      yearlyInterest += interest; yearlyPrincipal += principal;
+      yearlyInterest += interest; 
+      yearlyPrincipal += principal;
     }
 
-    if (equityCrossoverYear === 0 && yearlyPrincipal > yearlyInterest) equityCrossoverYear = year;
+    if (equityCrossoverYear === 0 && yearlyPrincipal > yearlyInterest) {
+      equityCrossoverYear = year;
+    }
 
-    principalData.push(Math.max(0, yearlyPrincipal));
-    interestData.push(Math.max(0, yearlyInterest));
-    balanceData.push(Math.max(0, balance));
+    principalData.push(Math.round(Math.max(0, yearlyPrincipal)));
+    interestData.push(Math.round(Math.max(0, yearlyInterest)));
+    balanceData.push(Math.round(Math.max(0, balance)));
     labels.push("Year " + year);
   }
 
