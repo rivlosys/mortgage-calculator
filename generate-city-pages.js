@@ -79,9 +79,17 @@ function generateCityPage(city) {
   <div class="page-wrap">
     <header class="site-header">
       <div class="brand" onclick="window.location.href='/'" style="cursor:pointer">
-        <img src="../logo.png" class="brand-logo" alt="Rivlosys logo" />
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="url(#logo_grad_city)"/>
+          <path d="M22 11L13.5 20L10 16.5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="logo_grad_city" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#1b76df"/><stop offset="1" stop-color="#22c98a"/>
+            </linearGradient>
+          </defs>
+        </svg>
         <div class="brand-name-container">
-          <div class="brand-name">Rivlosys Mortgage Tools</div>
+          <div class="brand-name">use<span style="color:#22c98a">cos</span> · Canadian Mortgage Tools</div>
           <div class="brand-tag">${city.name} Edition</div>
         </div>
       </div>
@@ -107,7 +115,7 @@ function generateCityPage(city) {
 
     <footer class="site-footer">
        <div style="font-size:11px; color:var(--muted);">
-        © Rivlosys · Specialized ${city.name} Financing Tools
+        © use<span style="color:#22c98a">cos</span> · Specialized ${city.name} Financing Tools
       </div>
     </footer>
   </div>

@@ -28,7 +28,7 @@
   <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/png" href="favicon.png" />
@@ -44,7 +44,7 @@
     "@type": "FinancialProduct",
     "name": "Canadian Mortgage Calculator",
     "description": "2026 Mortgage payment and affordability engine with CMHC and Stress Test integration.",
-    "brand": "Rivlosys",
+    "brand": "Usecos",
     "offers": {
       "@type": "Offer",
       "price": "0",
@@ -92,7 +92,7 @@
         "name": "Are my financial details stored on your servers?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. Rivlosys Mortgage Tools performs all calculations locally in your web browser. Your private financial data never leaves your device."
+          "text": "No. Usecos Mortgage Tools performs all calculations locally in your web browser. Your private financial data never leaves your device."
         }
       },
       {
@@ -133,9 +133,17 @@
   <!-- Header -->
   <header class="site-header">
     <div class="brand">
-      <img src="logo.png" class="brand-logo" alt="Rivlosys logo" loading="eager" width="34" height="34" />
+      <svg width="34" height="34" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius:8px">
+        <rect width="32" height="32" rx="8" fill="url(#logo_grad_mort)"/>
+        <path d="M22 11L13.5 20L10 16.5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <defs>
+          <linearGradient id="logo_grad_mort" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#1b76df"/><stop offset="1" stop-color="#22c98a"/>
+          </linearGradient>
+        </defs>
+      </svg>
       <div class="brand-name-container">
-        <div class="brand-name">Rivlosys Mortgage Tools</div>
+        <div class="brand-name">use<span style="color:#22c98a">cos</span> · Mortgage Tools</div>
         <div class="brand-tag">Independent & Secure · 🇨🇦</div>
       </div>
     </div>
@@ -494,9 +502,9 @@
         <div>
           <h2 style="font-size:13px; margin-bottom:12px; color:var(--text); text-transform:uppercase; letter-spacing:0.5px;">📊 Resource Center</h2>
           <div style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
-            <a href="/blog/index.html" style="font-weight:700; color: var(--blue);">View All Mortgage Guides & Articles →</a>
-            <a href="/blog/cmhc-changes-2026.html">CMHC 2026 Rule Changes Guide</a>
-            <a href="/blog/income-needed-for-500k-mortgage.html">Income Threshold Frameworks</a>
+            <a href="https://usecos.app/blog/" style="font-weight:700; color: var(--blue);">View All Mortgage Guides & Articles →</a>
+            <a href="https://usecos.app/blog/cmhc-changes-2026.html">CMHC 2026 Rule Changes Guide</a>
+            <a href="https://usecos.app/blog/how-much-house-can-i-afford-canada.html">Affordability Frameworks</a>
           </div>
         </div>
       </div>
@@ -504,7 +512,7 @@
       <div style="margin-top: 25px; margin-bottom: 14px;">
         <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; 
                     color: var(--muted); margin-bottom: 8px; font-weight: 600;">
-          🧰 More Free Tools by Rivlosys
+          🧰 More Free Tools by Usecos
         </div>
         <div style="display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px;">
           <a href="https://vin.usecos.app" target="_blank" rel="noopener">
@@ -585,7 +593,7 @@
   </div>
 
   <div class="support-card">
-    <a href="https://www.buymeacoffee.com/rivlosys" target="_blank" class="bmc-btn">
+    <a href="https://www.buymeacoffee.com/usecos" target="_blank" class="bmc-btn">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
         <path d="M7 17C7 17 6 21 12 21C18 21 17 17 17 17H7Z" fill="#000"/>
         <path d="M5 8H19L17 17H7L5 8Z" fill="#000"/>
@@ -607,9 +615,9 @@
       <a href="https://www.ratehub.ca/" target="_blank" class="primary-btn" style="display:inline-block; width:auto; padding: 14px 40px; font-size: 16px; box-shadow: 0 4px 12px rgba(27, 118, 223, 0.3);">→ Check Today’s Lowest Rates</a>
       <p style="font-size: 11px; margin-top: 12px; color: var(--subtext); font-style: italic;">Rates change daily — don’t overpay ↓</p>
     </div>
-    <div style="margin-bottom:12px; font-weight:600;">Rivlosys Mortgage Tools — Canadian Home Financing</div>
+    <div style="margin-bottom:12px; font-weight:600;">use<span style="color:#22c98a">cos</span> · Canadian Mortgage Tools</div>
     <div style="font-size:11px; color:var(--muted);">
-      © Rivlosys · Canadian mortgage tools · Private & secure
+      © use<span style="color:#22c98a">cos</span> · Canadian mortgage tools · Private & secure
     </div>
   </footer>
   <div class="safe-note">All calculations are estimates only. Results do not constitute financial advice.</div>

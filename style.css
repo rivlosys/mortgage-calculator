@@ -90,7 +90,7 @@ body, .card, .result-hero, .result-tile, .hero, .support-card,
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
@@ -124,11 +124,9 @@ body {
 }
 
 .brand-logo {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  object-fit: cover;
 }
 
 .brand-name {
