@@ -1,361 +1,676 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1VDXWTL2CJ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mortgage Calculator Canada – Instant Monthly Payment Estimate</title>
+  <meta name="description" content="Free Canadian mortgage calculator with CMHC, taxes, insurance, and amortization breakdown. Fast, accurate, mobile-friendly.">
 
-      gtag('config', 'G-1VDXWTL2CJ');
-    </script>
-    <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💳</text></svg>">
-    <link rel="apple-touch-icon" href="favicon.svg">
-    <title>Salary After Tax Calculator — See Your Take‑Home Pay Instantly (USA & Canada)</title>
-    <meta name="description" id="meta-desc" content="Free paycheck calculator for USA & Canada. Enter your salary → see exact take-home after federal tax, state/province tax, CPP, EI, and Social Security. No signup needed.">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://pay.usecos.app/">
-    <link rel="preload" as="style" href="style.css">
-    <meta name="theme-color" content="#2563eb">
-    <link rel="manifest" href="manifest.json">
-    <meta name="google-site-verification" content="zyUtsY8FCC6ZT__42zRbLUeZsHwuc7UxLgiF5rNwD3w" />
+  <!-- Canonical — tells Google the one true URL -->
+  <link rel="canonical" href="https://mortgage.usecos.app/" />
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://pay.usecos.app/">
-    <meta property="og:title" content="Paycheck Calculator USA & Canada — Free Take-Home Pay">
-    <meta property="og:description" content="Free paycheck calculator for USA and Canada. See take-home pay after federal tax, CPP, EI, Social Security.">
-    <meta property="og:site_name" content="Usecos Tools">
-    <meta property="og:locale" content="en_US">
+  <!-- Open Graph — controls link preview on Reddit, iMessage, WhatsApp etc. -->
+  <meta property="og:title" content="Free Canadian Mortgage Calculator 2026">
+  <meta property="og:description" content="See your exact payment, CMHC cost, and stress test in 10 seconds.">
+  <meta property="og:url" content="https://mortgage.usecos.app">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://mortgage.usecos.app/logo.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Free Canadian Mortgage Calculator 2026" />
+  <meta name="twitter:description" content="Free Canadian mortgage calculator. Payments, CMHC/Sagen insurance, stress test, land transfer tax, all provinces." />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://pay.usecos.app/">
-    <meta property="twitter:title" content="Paycheck Calculator USA & Canada — Free Take-Home Pay">
-    <meta property="twitter:description" content="Free paycheck calculator for USA and Canada. See take-home pay after federal tax, CPP, EI, Social Security.">
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#1b76df" />
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Paycheck Calculator Canada & USA",
-      "url": "https://pay.usecos.app/",
-      "description": "Free paycheck calculator for USA and Canada. See exact take-home pay after federal tax, CPP, EI, and Social Security. No signup needed.",
-      "applicationCategory": "FinanceApplication",
-      "operatingSystem": "All",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "CAD"
-      }
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <!-- Google Search Console verification -->
+  <meta name="google-site-verification" content="zyUtsY8FCC6ZT__42zRbLUeZsHwuc7UxLgiF5rNwD3w" />
+
+  <!-- FinancialProduct Schema -->
+  <script type="application/ld+json">
+  [
+  {
+    "@context": "https://schema.org",
+    "@type": "FinancialProduct",
+    "name": "Canadian Mortgage Calculator",
+    "description": "2026 Mortgage payment and affordability engine with CMHC and Stress Test integration.",
+    "brand": "Usecos",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "CAD"
+    },
+    "feesAndCommissionsSpecification": "https://mortgage.usecos.app/disclaimer.html"
+  }
+  ,
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Mortgage Calculator Canada",
+    "url": "https://mortgage.usecos.app/",
+    "description": "Calculate monthly mortgage payments, CMHC insurance premiums, and stress test eligibility for 2026.",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "CAD"
     }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [{
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "https://pay.usecos.app/"
-      }]
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "url": "https://pay.usecos.app/",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://pay.usecos.app/?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [{
-        "@type": "Question",
-        "name": "Is the Usecos Paycheck Calculator free to use?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes, it is 100% free and does not store your data." }
-      },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
       {
         "@type": "Question",
-        "name": "Does this support both USA and Canada tax brackets?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes, it supports standard federal tax brackets for both the United States and Canada." }
-      },
-      {
-        "@type": "Question",
-        "name": "Does it include provincial or state taxes?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes — select your state or province from the dropdown for a combined federal + regional estimate." }
-      },
-      {
-        "@type": "Question",
-        "name": "Is my salary data stored?",
-        "acceptedAnswer": { "@type": "Answer", "text": "No. All calculations happen locally in your browser. No data is sent to our servers." }
-      }]
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "HowTo",
-      "name": "How to calculate your paycheck",
-      "step": [
-        {
-          "@type": "HowToStep",
-          "name": "Enter Amount",
-          "text": "Enter your gross pay amount."
-        },
-        {
-          "@type": "HowToStep",
-          "name": "Select Region",
-          "text": "Select your country and pay period."
-        },
-        {
-          "@type": "HowToStep",
-          "name": "Calculate",
-          "text": "Click calculate to see your take-home pay."
+        "name": "How much down payment do I need in Canada for 2026?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For homes under $500,000, the minimum is 5%. Between $500,000 and $1.5 million, you need 5% on the first $500k and 10% on the remainder. Homes over $1.5 million require 20% down."
         }
-      ]
-    }
-    </script>
-    <script src="app.js" defer></script>
+      },
+      {
+        "@type": "Question",
+        "name": "What is the mortgage stress test rate?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Lenders qualify you at a rate that is the higher of your contract rate plus 2%, or the OSFI floor rate, which is currently 5.25%."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are my financial details stored on your servers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Usecos Mortgage Tools performs all calculations locally in your web browser. Your private financial data never leaves your device."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this calculator updated for 2026 Canadian mortgage rules?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Our engine is updated for 2026 regulations, including the $1.5 million insured mortgage cap and the latest CMHC premium tiers."
+        }
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://mortgage.usecos.app/"
+    }]
+  }]
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1VDXWTL2CJ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-1VDXWTL2CJ');
+  </script>
+  <script src="index.js" defer></script>
 </head>
-    <body>
-    <header>
-        <nav class="container">
-            <div class="logo">
-                <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius:6px">
-                    <rect width="32" height="32" rx="8" fill="url(#logo_grad_pay)"/>
-                    <path d="M22 11L13.5 20L10 16.5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <defs><linearGradient id="logo_grad_pay" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#1b76df"/><stop offset="1" stop-color="#22c98a"/></linearGradient></defs>
-                </svg>
-                <span>use<span style="color:#22c98a">cos</span></span>
-            </div>
-            <button id="theme-toggle" aria-label="Toggle dark mode" class="icon-btn">
-                <svg id="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
-                <svg id="moon-icon" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-            </button>
-        </nav>
-    </header>
+<body>
+<main>
+<div class="page-wrap">
+  <!-- Header -->
+  <header class="site-header">
+    <a href="https://usecos.app" style="text-decoration:none; font-size:13px; color:var(--muted);">← Back to tools</a>
+    <div class="brand">
+      <div class="wordmark">
+        <svg width="34" height="34" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius:8px" aria-label="Usecos Logo">
+          <rect width="32" height="32" rx="8" fill="url(#logo_grad_mort)"/>
+          <path d="M22 11L13.5 20L10 16.5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="logo_grad_mort" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#1b76df"/><stop offset="1" stop-color="#22c98a"/>
+            </linearGradient>
+          </defs>
+        </svg>use<span>cos</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div style="display: flex; flex-direction: column; align-items: flex-end;">
+        <button class="theme-btn" id="themeBtn"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Night Mode</button>
+        <div id="themeNudge" style="font-size: 9px; color: var(--muted); margin-top: 4px; display: none;">Late-night decision? We’ve got you.</div>
+      </div>
+      <button class="theme-btn" id="resetBtn"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg> Reset</button>
+      <a href="https://usecos.app" target="_blank" rel="noopener"
+         style="font-size: 11px; color: var(--muted); text-decoration: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; white-space: nowrap;">
+        🧰 More Tools
+      </a>
+    </div>
+  </header>
 
-    <main class="container">
-        <section class="hero">
-            <h1 id="main-h1">Your Take-Home Pay, Instantly</h1>
-            <p class="hero-sub">See your real paycheck after federal + state taxes in seconds.</p>
-            <p class="hook-line">The average Canadian loses 28% of their salary to taxes. See where you stand.</p>
-            <div class="trust-bar">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                <span>✓ No data stored</span>
-                <span>✓ Runs locally in your browser</span>
-                <span>✓ Current Tax Data</span>
-            </div>
-        </section>
+  <!-- Hero -->
+  <div class="hero">
+    <h1 id="mainH1">Canadian Mortgage Calculator</h1>
+    <p id="mainSubtitle">Monthly payments · CMHC · Stress test · Land transfer tax · All provinces</p>
+    <p style="font-size:14px; color:var(--subtext); margin-top:15px;">Most Canadians pay $100,000+ in interest over their mortgage. Let’s see what yours looks like.</p>
+  </div>
+  <div class="trust-strip">
+    <div style="margin-bottom: 6px; font-weight: 600; color: var(--text);">Based on current OSFI and CMHC guidelines</div>
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Canada-specific &nbsp;
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> 100% private &nbsp;
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16s3-2 3-5-3-5-3-5"/><path d="M8 16s-3-2-3-5 3-5 3-5"/><line x1="12" y1="3" x2="12" y2="21"/><line x1="7" y1="21" x2="17" y2="21"/><path d="M7 13h10"/></svg> Regulation-aligned
+  </div>
 
-        <div class="card">
-            <div class="step-nav">
-                <button class="step-item active" id="step-1-tab">1. Your Info</button>
-                <button class="step-item" id="step-2-tab" disabled>2. Your Results</button>
-            </div>
+  <!-- ── PROGRESS STEPPER ── -->
+  <div id="stepProgressText" style="text-align: center; font-size: 13px; font-weight: 700; color: var(--blue); margin-bottom: 12px;">🧠 Understanding: Growing...</div>
+  <div class="stepper">
+    <div class="step active" id="step1">
+      <div class="step-num">1</div>
+      <div class="step-label">Details</div>
+    </div>
+    <div class="step" id="step2">
+      <div class="step-num">2</div>
+      <div class="step-label">Analysis</div>
+    </div>
+    <div class="step" id="step3">
+      <div class="step-num">3</div>
+      <div class="step-label">Compare</div>
+    </div>
+    <div class="step" id="step4">
+      <div class="step-num">4</div>
+      <div class="step-label">Offers</div>
+    </div>
+  </div>
 
-            <div id="step-1-content">
-                <div class="tabs">
-                    <button id="mode-gross" class="tab-btn active">Gross → Net</button>
-                    <button id="mode-net" class="tab-btn">Target take-home</button>
-                </div>
-                <div class="input-grid">
-                    <div class="input-group">
-                        <label for="amount">Salary (before tax)</label>
-                        <div class="input-wrapper">
-                            <input type="number" id="amount" placeholder="0.00" min="0" step="any" autocomplete="off">
-                            <button id="paste-btn" type="button" aria-label="Paste">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <label for="from-currency">Country</label>
-                        <select id="from-currency">
-                            <option value="USA">United States</option>
-                            <option value="CAN">Canada</option>
-                        </select>
-                    </div>
-                    <div class="input-group" id="region-group">
-                        <label for="region">Province (Canada) / State (US)</label>
-                        <select id="region">
-                            <!-- Populated by JS -->
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label for="pay-period">Pay Period</label>
-                        <select id="pay-period">
-                            <option value="annual">Annual</option>
-                            <option value="monthly">Monthly</option>
-                            <option value="biweekly">Bi-Weekly</option>
-                            <option value="weekly">Weekly</option>
-                        </select>
-                    </div>
-                </div>
+  <!-- ── MODE TOGGLE ── -->
+  <div class="card" style="padding: 10px; margin-bottom: 12px; display: flex; justify-content: center; background: var(--surface2);">
+    <div class="dp-toggle" style="width: 100%; max-width: 400px; margin-bottom: 0;">
+      <button class="dp-btn active" id="modePurchaseBtn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Purchase</button>
+      <button class="dp-btn" id="modeRefiBtn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg> Refinance</button>
+    </div>
+  </div>
 
-                <div class="actions">
-                    <button id="convert-btn" type="button" class="primary-btn" disabled title="Enter your salary above to calculate">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                        See Your Paycheck →
-                    </button>
-                    <button id="reset-btn" class="secondary-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
-                        Reset
-                    </button>
-                </div>
-                <div id="calc-error" class="hidden error-text"></div>
-                <p id="empty-hint" class="muted" style="text-align: center; margin-top: 1rem;">Enter your salary to estimate take-home pay</p>
-            </div>
+  <!-- ── CORE CALCULATOR ── -->
+  <div class="card">
+    <h2 class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span> Property Details</h2>
+    <p style="font-size: 13px; color: var(--muted); margin-bottom: 15px; margin-top: -8px;">Tiny tweaks here can save you a new car… or even a down payment.</p>
 
-            <div id="step-2-content" class="hidden">
-                <div id="loading-skeleton" class="skeleton hidden"></div>
-                <section id="result-area" class="hidden">
-            <div class="result-card">
-                <div id="insight-headline" class="insight-headline"></div>
-                <div class="results-grid">
-                    <div class="metric-card primary-metric">
-                        <span class="metric-label">Monthly Take-Home</span>
-                        <span class="metric-value" id="monthly-takehome">$0.00</span>
-                    </div>
-                    <div class="metric-card">
-                        <span class="metric-label">Annual Net Income</span>
-                        <span class="metric-value" id="annual-takehome">$0.00</span>
-                    </div>
-                    <div class="metric-card">
-                        <span class="metric-label">Estimated Hourly</span>
-                        <span class="metric-value" id="hourly-takehome">$0.00</span>
-                    </div>
-                </div>
-                <div id="result-text" class="keep-rate-line"></div>
-                <div id="result-viz" class="viz-container"></div>
-                <div id="result-breakdown" class="result-breakdown muted"></div>
-                <div class="badge" id="result-count">0 calculations so far</div>
-                <div class="export-tools">
-                    <button id="print-btn" class="icon-btn" aria-label="Print"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button>
-                    <button id="copy-btn" class="icon-btn" aria-label="Copy"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
-                    <button id="share-btn" class="icon-btn" aria-label="Share Link" title="Share this estimate"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>
-                    <button id="qr-btn" class="icon-btn" aria-label="Show QR Code" title="Scan to share on mobile"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3m0 0h4m-4 0v3m0 3h3m-3 0h-3m3 0v-3"/></svg></button>
-                    <button id="csv-btn" class="icon-btn" aria-label="Download CSV"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
-                </div>
-                <div id="qr-container" class="hidden" style="margin-top: 1rem; text-align: center;">
-                    <p class="muted" style="margin-bottom: 0.5rem;">Scan to open on mobile:</p>
-                    <img id="qr-code-img" src="" alt="QR Code" style="border: 4px solid white; border-radius: 8px; background: white;">
-                </div>
-                <div class="reverse-cta">
-                    <button id="reverse-mode-btn" class="secondary-btn">
-                        What salary gives me this take-home?
-                    </button>
-                </div>
-                <div id="feedback-row" class="feedback-row hidden"></div>
-                <div id="donate-container" class="hidden">
-                    <a href="https://www.buymeacoffee.com/usecos" target="_blank" rel="noopener noreferrer" class="bmc-btn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-                        Buy Me a Coffee
-                    </a>
-                    <p class="tagline">Enjoyed it? Keep it free.</p>
-                </div>
-            </div>
-            <div class="compare-box">
-                <p class="muted" style="margin-bottom: 0.75rem;">Compare with other salaries:</p>
-                <div id="compare-links" class="chips-container" style="justify-content: center;"></div>
-            </div>
-                </section>
-            </div>
+    <div class="grid-2" style="margin-bottom:14px;">
+      <div class="field field-group">
+        <label for="purchasePrice">
+          <span class="mode-purchase-only">Purchase Price</span>
+          <span class="mode-refi-only">Mortgage Balance</span>
+        </label>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="text" id="purchasePrice" name="purchasePrice" class="has-prefix" placeholder="500,000" />
+        </div>
+      </div>
+
+      <div class="field field-group mode-purchase-only">
+        <label for="downPayment">Down Payment
+          <div class="tooltip-wrap">
+            <span class="tooltip-icon">?</span>
+            <div class="tooltip-box">Minimum 5% for homes under $500K. 10% on the portion between $500K–$1.5M. 20% required for homes over $1.5M.</div>
+          </div>
+        </label>
+        <div class="dp-toggle">
+          <button class="dp-btn active" id="dpDollarBtn" type="button">$</button>
+          <button class="dp-btn" id="dpPercentBtn" type="button">%</button>
+        </div>
+        <div class="input-wrap">
+          <span class="input-prefix" id="dpPrefix">$</span>
+          <input type="text" id="downPayment" name="downPayment" class="has-prefix" placeholder="100,000" />
+        </div>
+        <div class="nudge-text">💡 20% avoids mortgage insurance fees</div>
+        <div id="dpPercDisplay" class="nudge-text" style="margin-top:2px;"></div>
+      </div>
+
+      <div class="field field-group mode-refi-only">
+        <label for="currentRate">Current Interest Rate</label>
+        <div class="input-wrap">
+          <input type="number" id="currentRate" name="currentRate" class="has-suffix" placeholder="6.20" step="0.01" />
+          <span class="input-suffix">%</span>
+        </div>
+        <div class="nudge-text">💡 Your active existing contract rate.</div>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:14px;">
+      <div class="field field-group">
+        <label for="interestRate">
+          <span class="mode-purchase-only">Interest Rate</span>
+          <span class="mode-refi-only">New Target Rate</span>
+          <div class="tooltip-wrap">
+            <span class="tooltip-icon">?</span>
+            <div class="tooltip-box">Annual interest rate offered by your lender.</div>
+          </div>
+        </label>
+        <div class="input-wrap">
+          <input type="number" id="interestRate" name="interestRate" class="has-suffix" placeholder="5.00" step="0.01" min="0" max="30" />
+          <span class="input-suffix">%</span>
+        </div>
+        <div class="nudge-text">💡 Even a 0.5% drop could save you $40,000+ over time.</div>
+      </div>
+
+      <div class="field field-group">
+        <label for="amortization">
+          <span class="mode-purchase-only">Amortization</span>
+          <span class="mode-refi-only">Remaining Years</span>
+        </label>
+        <select id="amortization" name="amortization">
+          <option value="5">5 years</option>
+          <option value="10">10 years</option>
+          <option value="15">15 years</option>
+          <option value="20">20 years</option>
+          <option value="25" selected>25 years</option>
+          <option value="30">30 years</option>
+        </select>
+        <div class="nudge-text">💡 25 yrs is standard. Shorter = less interest, higher payment.</div>
+      </div>
+
+      <div class="field field-group">
+        <label for="payFrequency">Payment Type</label>
+        <select id="payFrequency" name="payFrequency">
+          <option value="monthly" selected>Monthly</option>
+          <option value="biweekly">Bi-Weekly</option>
+          <option value="weekly">Weekly</option>
+          <option value="biweekly_acc">Accelerated Bi-Weekly</option>
+          <option value="weekly_acc">Accelerated Weekly</option>
+        </select>
+        <div class="nudge-text">💡 Accelerated bi-weekly can cut 2–3 years off your mortgage.</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:14px;">
+      <div class="field">
+        <label for="province">Province / Territory</label>
+        <select id="province" name="province">
+          <option value="AB">Alberta (AB)</option>
+          <option value="BC">British Columbia (BC)</option>
+          <option value="MB">Manitoba (MB)</option>
+          <option value="NB">New Brunswick (NB)</option>
+          <option value="NL">Newfoundland & Labrador (NL)</option>
+          <option value="NS">Nova Scotia (NS)</option>
+          <option value="NT">Northwest Territories (NT)</option>
+          <option value="NU">Nunavut (NU)</option>
+          <option value="ON" selected>Ontario (ON)</option>
+          <option value="PE">Prince Edward Island (PE)</option>
+          <option value="QC">Quebec (QC)</option>
+          <option value="SK">Saskatchewan (SK)</option>
+          <option value="YT">Yukon (YT)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="firstTimeBuyer">First Time Buyer?</label>
+        <select id="firstTimeBuyer" name="firstTimeBuyer">
+          <option value="no">No</option>
+          <option value="yes">Yes</option>
+        </select>
+        <div class="nudge-text">💡 May qualify you for federal rebates and reduced land transfer tax.</div>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:14px;">
+      <div class="field">
+        <label for="propertyTax">Annual Property Tax</label>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="number" id="propertyTax" name="propertyTax" class="has-prefix" placeholder="5,000" min="0" />
+        </div>
+        <div class="nudge-text">💡 Used to calculate your GDS affordability ratio.</div>
+      </div>
+      <div class="field">
+        <label for="heatingCost">Monthly Heating</label>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="number" id="heatingCost" name="heatingCost" class="has-prefix" placeholder="150" min="0" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="condoFees">Monthly Condo Fees</label>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="number" id="condoFees" name="condoFees" class="has-prefix" placeholder="0" min="0" />
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:14px;">
+      <div class="field">
+        <label for="newBuild">New Build?
+          <div class="tooltip-wrap">
+            <span class="tooltip-icon">?</span>
+            <div class="tooltip-box">Newly constructed homes qualify for 30-year insured amortization.</div>
+          </div>
+        </label>
+        <select id="newBuild" name="newBuild">
+          <option value="no">No</option>
+          <option value="yes">Yes — New Construction</option>
+        </select>
+        <div class="nudge-text">💡 New builds qualify for 30-year insured amortization.</div>
+      </div>
+      <div class="field">
+        <label for="extraPayment">Extra Payment (Monthly)</label>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input type="text" id="extraPayment" name="extraPayment" class="has-prefix" placeholder="0" />
+        </div>
+        <div class="nudge-text">💡 Even $200/month extra can save years and $30K+ in interest.</div>
+      </div>
+    </div>
+
+    <div id="coreError" class="error-msg"></div>
+    
+    <div class="cta-stack-benefits" style="text-align: center; margin-bottom: 15px; font-size: 13px; color: var(--subtext);">
+      ⏱ Takes 10 seconds → Could save you years of payments
+    </div>
+    <button class="primary-btn" id="calculateBtn">Reveal My Full Costs →</button>
+    <div class="cta-stack-friction-removal" style="margin-top: 15px; text-align: center; font-size: 13px; color: var(--muted);">
+      <ul class="friction-list">
+        <li>✅ Takes less than 10 seconds</li>
+        <li>✅ No signup required</li>
+        <li>✅ 100% private</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- ── RESULTS ── -->
+  <div id="resultsSection" style="display:none;">
+
+    <!-- Payment hero -->
+    <div class="result-hero fade-up">
+      <div class="payment-label" id="paymentLabel">Your Payment</div>
+      <div class="payment-amount" id="paymentAmount">$0.00</div>
+      
+      <!-- Viral Loop Nudge -->
+      <div style="margin-top: 15px; font-size: 11px; background: rgba(0,0,0,0.1); padding: 8px; border-radius: 8px; font-weight: 500;">
+        🔁 Show this to someone buying a home — it might save them $50K
+      </div>
+
+      <div id="qualifyBadge" class="qualification-badge"></div>
+      <div id="paymentHeroMeta" style="font-size:12px; margin-top:10px; opacity:0.9; font-weight:500;"></div>
+    </div>
+
+    <!-- Key metrics -->
+    <div class="result-grid fade-up">
+      <div class="result-tile">
+        <div class="tile-label">Loan</div>
+        <div class="tile-value blue" id="mortgageAmount">—</div>
+      </div>
+      <div class="result-tile">
+        <div class="tile-label">Interest Cost</div>
+        <div class="tile-value red" id="totalInterest">—</div>
+      </div>
+      <div class="result-tile">
+        <div class="tile-label">Total Cost</div>
+        <div class="tile-value" id="totalCost">—</div>
+      </div>
+      <div class="result-tile">
+        <div class="tile-label">Down Payment %</div>
+        <div class="tile-value" id="downPct">—</div>
+      </div>
+      <div class="result-tile">
+        <div class="tile-label">Insurance Cost</div>
+        <div class="tile-value orange" id="cmhcAmount">—</div>
+      </div>
+      <div class="result-tile">
+        <div class="tile-label">Payoff Date</div>
+        <div class="tile-value green" id="payoffDate">—</div>
+      </div>
+    </div>
+
+    <!-- Financial Insights -->
+    <div class="card fade-up">
+      <h2 class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg></span> Financial Insights</h2>
+      <!-- Interest Shock Visual -->
+      <div id="shockBarArea" class="shock-bar-container"></div>
+      <div id="breakdownRows"></div>
+    </div>
+
+    <!-- Chart -->
+    <div class="card fade-up">
+      <h2 class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span> Amortization Chart</h2>
+      <div style="margin-bottom: 15px;">
+        <h3 style="font-size:15px; margin-bottom: 4px;">Where your money goes over time</h3>
+        <p style="font-size: 13px; color: var(--subtext); line-height: 1.4;">💡 <b>Perspective:</b> For the first 5 years, you're mostly paying interest to the bank. Real wealth building (equity) starts later — unless you optimize your strategy early.</p>
+      </div>
+      <div class="chart-summary">📊 <b>Visualizing Your Journey:</b> This chart shows how your payments shift from paying interest to building equity over time.</div>
+      <div id="chartWrap">
+        <canvas id="mortgageChart"></canvas>
+      </div>
+      <p style="font-size:11px;color:var(--muted);margin-top:8px;">💡 Tip: The green balance line shows your debt shrinking as you build home equity.</p>
+    </div>
+
+    <!-- Advanced Tools Section -->
+    <div class="card fade-up">
+      <h2 class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span> Personalize Your Plan</h2>
+      <h3 style="font-size:14px;margin-bottom:6px;">What happens if you earn more? Pay extra? Get a lower rate?</h3>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Explore your future ↓</p>
+      <div class="module-tabs">
+        <button class="module-tab active" data-tab="affordability"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg> Affordability</button>
+        <button class="module-tab" data-tab="prepayment"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Prepayment</button>
+        <button class="module-tab" data-tab="ratecompare"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg> Rate Compare</button>
+        <button class="module-tab" data-tab="rentvsbuy"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Rent vs Buy</button>
+        <button class="module-tab" data-tab="renewal"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg> Renewal</button>
+        <button class="module-tab" data-tab="amortization"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Schedule</button>
+      </div>
+
+      <div class="module-section active" id="tab-affordability"></div>
+      <div class="module-section" id="tab-prepayment"></div>
+      <div class="module-section" id="tab-ratecompare"></div>
+      <div class="module-section" id="tab-rentvsbuy"></div>
+      <div class="module-section" id="tab-renewal"></div>
+      <div class="module-section" id="tab-amortization"></div>
+    </div>
+
+    <!-- SEO Sitemap Footer -->
+    <div class="card footer-links" style="margin-top:20px; border-top:1px solid var(--border); padding-top: 20px;">
+      <div class="grid-3" style="gap: 25px;">
+        <div>
+          <h2 style="font-size:13px; margin-bottom:12px; color:var(--text); text-transform:uppercase; letter-spacing:0.5px;">🛠️ Financial Software</h2>
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
+            <a href="/tools/mortgage-payment-calculator.html" style="font-weight: 600;">Mortgage Payment Engine</a>
+            <a href="/tools/affordability-calculator.html">Affordability Analysis Tool</a>
+            <a href="/tools/amortization-calculator.html">Amortization Schedule Planner</a>
+            <a href="/tools/should-i-refinance-canada-2026.html">Refinance Savings Calculator</a>
+          </div>
         </div>
 
-        <section class="content-seo">
-            <div class="seo-text">
-                <h2>How to Calculate Your Take-Home Pay</h2>
-                <p>Estimating your net income can be complicated. Our <strong>free paycheck calculator</strong> simplifies federal income tax, Social Security, Medicare, and regional taxes for both the USA and Canada. Whether you are hourly or salaried, understanding your "money in the bank" is the first step toward financial freedom.</p>
-                
-                <h3>Why is my take-home pay lower than my salary?</h3>
-                <p>The difference between your gross salary and your take-home pay is primarily due to tax withholdings. In the USA, this includes Federal Income Tax and FICA (Social Security and Medicare). In Canada, your employer deducts Federal Tax, CPP (Canada Pension Plan), and EI (Employment Insurance).</p>
-
-                <h3>How much tax will I pay on $80,000?</h3>
-                <p>On an $80,000 salary, your tax burden depends heavily on your location. In high-tax states or provinces, you might see up to 30% in total deductions, while in zero-income tax regions, federal taxes remain the primary deduction.</p>
-
-                <h3>$100K salary after tax (USA vs Canada)</h3>
-                <p>A $100,000 USD salary often results in a higher take-home pay than a $100,000 CAD salary due to differences in federal tax brackets and social contribution rates like CPP/EI vs FICA.</p>
-
-                <h3>Monthly vs Biweekly take-home differences</h3>
-                <p>While the annual total remains the same, biweekly pay periods mean 26 checks per year, resulting in two months with three paychecks, which can significantly help with budgeting compared to 12 fixed monthly payments.</p>
-            </div>
-        </section>
-
-        <section class="history-section">
-            <h3 class="section-title">Recent Calculations
-                <button id="clear-history-btn" class="icon-btn" aria-label="Clear history" style="width:30px;height:30px;margin-left:auto;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
-                </button>
-            </h3>
-            <div id="history-chips" class="chips-container"></div>
-        </section>
-
-        <section class="faq-section card">
-            <h3>Frequently Asked Questions</h3>
-            <details>
-                <summary>How is take-home pay calculated?</summary>
-                <p>We use current federal tax brackets for both the US and Canada to estimate your income after tax. It includes Social Security, Medicare, CPP, and EI where applicable.</p>
-            </details>
-            <details>
-                <summary>What's included in deductions?</summary>
-                <p>Calculations include Federal Income Tax, Social Security/Medicare for USA, and CPP/EI for Canada.</p>
-            </details>
-            <details>
-                <summary>Does this support provinces/states?</summary>
-                <p>Yes — select your state or province from the dropdown for a combined federal + regional estimate.</p>
-            </details>
-            <details>
-                <summary>Is my data saved?</summary>
-                <p>No. All calculations are done in your browser. No data is sent to our servers.</p>
-            </details>
-        </section>
-
-        <section class="link-grid">
-            <div class="grid-item">
-                <h4>🧮 Quick Tools</h4>
-                <a href="https://pay.usecos.app/?mode=net-to-gross">Reverse Paycheck Calc</a>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="container footer-content">
-            <div class="footer-brand">
-                <p class="muted">© <span id="footer-year"></span> use<span style="color:#22c98a">cos</span></p>
-                <div style="margin-bottom:14px; font-size:12px; color: var(--text-muted);">
-                  🧰 More Free Tools by Usecos &nbsp;·&nbsp;
-                  <a href="https://mortgage.usecos.app" rel="noopener">🏠 Mortgage Calculator</a> &nbsp;·&nbsp;
-                  <a href="https://vin.usecos.app" rel="noopener">🚗 VIN Decoder</a> &nbsp;·&nbsp;
-                  <span style="color: var(--text-muted); cursor: default;">💳 Paycheck Calculator ← you're here</span>
-                </div>
-            </div>
-            <div class="footer-links">
-                <a href="contact.html">Contact Us</a>
-                <a href="#" id="pwa-install" class="hidden">Install App</a>
-                <a href="disclaimer.html">Disclaimer</a>
-                <a href="privacy.html">Privacy Policy</a>
-            </div>
+        <div>
+          <h2 style="font-size:13px; margin-bottom:12px; color:var(--text); text-transform:uppercase; letter-spacing:0.5px;">📍 Regional Calculators</h2>
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
+            <a href="/tools/mortgage-calculator-ontario.html">Ontario Mortgage Approvals</a>
+            <a href="/tools/vancouver-mortgage-calculator.html">British Columbia / Vancouver Hub</a>
+            <a href="/tools/toronto-mortgage-calculator.html">Greater Toronto Area Tool</a>
+          </div>
         </div>
-    </footer>
-    <button id="sticky-cta" class="primary-btn">See Your Paycheck</button>
+
+        <div>
+          <h2 style="font-size:13px; margin-bottom:12px; color:var(--text); text-transform:uppercase; letter-spacing:0.5px;">📊 Resource Center</h2>
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
+            <a href="https://usecos.app/blog/" style="font-weight:700; color: var(--blue);">View All Mortgage Guides & Articles →</a>
+            <a href="https://usecos.app/blog/cmhc-changes-2026.html">CMHC 2026 Rule Changes Guide</a>
+            <a href="https://usecos.app/blog/how-much-house-can-i-afford-canada.html">Affordability Frameworks</a>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 25px; margin-bottom: 14px;">
+        <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; 
+                    color: var(--muted); margin-bottom: 8px; font-weight: 600;">
+          🧰 More Free Tools by Usecos
+        </div>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px;">
+          <a href="https://vin.usecos.app" target="_blank" rel="noopener">
+            🚗 VIN Decoder
+          </a>
+          <a href="https://pay.usecos.app" target="_blank" rel="noopener">
+            💳 Payment Calculator
+          </a>
+          <a href="https://mortgage.usecos.app" aria-current="page" 
+             style="color: var(--muted); pointer-events: none;">
+            🏠 Mortgage Calculator ← you're here
+          </a>
+        </div>
+      </div>
+
+      <hr style="margin: 15px 0; border: 0; border-top: 1px solid var(--border);">
+      <div class="grid-4" style="font-size:12px; gap:10px; display: flex; flex-wrap: wrap; justify-content: center;">
+        <a href="/about.html">About Us</a>
+        <a href="/about.html#methodology">Methodology</a>
+        <a href="/sources.html">Sources & Data</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/disclaimer.html">Financial Disclaimer</a>
+        <a href="/accessibility.html">Accessibility</a>
+      </div>
+    </div>
+
+    <!-- Technical Details Section -->
+    <div class="grid-2">
+      <div class="card fade-up">
+        <h2 class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31"/><path d="M14 2v6.69"/><path d="M8.5 2h7"/><path d="M14 11.5a6.5 6.5 0 0 1 4.5 5.81V20a2 2 0 0 1-2 2H7.5a2 2 0 0 1-2-2v-2.69a6.5 6.5 0 0 1 4.5-5.81"/><path d="M9 11V9"/><path d="M15 11V8.5"/></svg></span> Stress Test</h2>
+        <div id="stressTestBox"></div>
+      </div>
+      <div class="card fade-up">
+        <h2 class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></span> Closing Costs</h2>
+        <div id="closingCosts"></div>
+      </div>
+    </div>
+
+  <!-- Actions -->
+  <div class="card fade-up">
+    <h2 class="card-title"><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7l9.2 9.2M17 7v10H7"/></svg></span> Quick Actions</h2>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">Save your calculation, share it with others, or export the data for your records.</p>
+    <div class="action-row">
+      <button class="action-btn" id="copyBtn"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg> Copy to Message</button>
+      <button class="action-btn" id="shareBtn"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Generate Share Link</button>
+      <button class="action-btn" id="printBtn"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Print / PDF Report</button>
+      <button class="action-btn" id="csvBtn"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Excel / CSV Data</button>
+    </div>
+    <div class="share-url-box" id="shareUrlBox">
+      <input type="text" id="shareUrlInput" readonly />
+    </div>
+  </div>
+
+</div><!-- /resultsSection -->
+
+<!-- Rating -->
+<div class="rating-box">
+  ⭐ Did this help you understand your mortgage better?
+  <div class="rating-buttons">
+    <button id="rateGood">👍 Yes</button>
+    <button id="rateBad">👎 Not really</button>
+  </div>
+  <div id="ratingResponse" class="rating-response"></div>
+</div>
+
+  <!-- Support -->
+  <div class="card" style="text-align:center; padding:12px; font-size:12px; color:var(--subtext); margin-bottom:16px;">
+    🔒 <b>100% Private:</b> Unlike most tools, your data never leaves your device. No tracking. No selling. Ever.
+  </div>
+
+  <div class="feedback-box">
+    💬 I built this to make mortgages easier to understand.
+    <br><br>
+    📧 Feedback / ideas: <b>helpinbx@gmail.com</b>
+    <br>
+    ⭐ Every message helps improve this tool for other Canadians
+  </div>
+
+  <div class="support-card">
+    <a href="https://www.buymeacoffee.com/usecos" target="_blank" class="bmc-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M7 17C7 17 6 21 12 21C18 21 17 17 17 17H7Z" fill="#000"/>
+        <path d="M5 8H19L17 17H7L5 8Z" fill="#000"/>
+        <path d="M19 8C19 8 21 8.5 21 11C21 13.5 19 14 19 14" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M9 5C9 5 9 3 11 3C13 3 13 5 13 5" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      Buy Me a Coffee
+    </a>
+    <div class="support-sub">Enjoyed it? Keep it free.</div>
+  </div>
+
+  <footer class="site-footer">
+    <!-- Affiliate CTA Section -->
+    <div class="card cta-block-premium" style="border: 3px solid var(--blue); background: var(--blue-light); text-align:center; padding: 30px;">
+      <div style="background: var(--red-bg); color: var(--red); padding: 8px; border-radius: 8px; font-size: 12px; font-weight: 700; margin-bottom: 15px; border: 1px solid var(--red);">
+        🧠 Most buyers don’t compare rates — and overpay by $20K–$80K. Don’t be one of them.
+      </div>
+      <h3 style="font-size: 18px; margin-bottom: 12px;">💡 After your results, you’ll be able to compare real rates from 30+ lenders.</h3>
+      <a href="https://www.ratehub.ca/" target="_blank" class="primary-btn" style="display:inline-block; width:auto; padding: 14px 40px; font-size: 16px; box-shadow: 0 4px 12px rgba(27, 118, 223, 0.3);">→ Check Today’s Lowest Rates</a>
+      <p style="font-size: 11px; margin-top: 12px; color: var(--subtext); font-style: italic;">Rates change daily — don’t overpay ↓</p>
+    </div>
+    <div style="margin-bottom:12px; font-weight:600;">use<span style="color:#22c98a">cos</span>.app</div>
+    <div style="font-size:11px; color:var(--muted);">
+      © use<span style="color:#22c98a">cos</span>. Private, fast, and for estimation purposes only.
+    </div>
+  </footer>
+  <div class="safe-note">All calculations are estimates only. Results do not constitute financial advice.</div>
+
+  <!-- Authority & Trust Section -->
+  <div class="card trust-layer" style="border-top: 4px solid var(--blue); margin-top: 20px;">
+    <h2 style="margin-bottom:15px;">🛡️ Built to match real lender calculations</h2>
+    <ul style="list-style: none; padding: 0; font-size: 13px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+      <li>✔ OSFI stress test compliant</li>
+      <li>✔ CMHC insurance rules built-in</li>
+      <li>✔ Canadian semi-annual compounding</li>
+      <li>✔ Updated for 2026 regulations</li>
+    </ul>
+  </div>
+
+  <!-- SEO / Content Section -->
+  <article class="card" aria-label="Expert Guide" style="margin-top:40px; font-size:14px; line-height:1.6; color:var(--subtext);">
+    <button id="guideToggle" onclick="
+      const body = document.getElementById('guideBody');
+      const icon = document.getElementById('guideIcon');
+      const open = body.style.display !== 'none';
+      body.style.display = open ? 'none' : 'block';
+      icon.textContent = open ? '▶' : '▼';
+    " style="width:100%; background:none; border:none; cursor:pointer; display:flex; justify-content:space-between; align-items:center; padding:0; text-align:left;">
+      <div>
+        <div style="font-weight:700; font-size:16px; color:var(--text);">🇨🇦 Expert Guide: Navigating Canadian Mortgages in 2026</div>
+        <div style="font-size:11px; color:var(--muted); margin-top:3px;"><time datetime="2026-05-01">Updated May 2026</time></div>
+      </div>
+      <span id="guideIcon" style="font-size:12px; color:var(--muted); margin-left:12px; flex-shrink:0;">▶</span>
+    </button>
+
+    <div id="guideBody" style="display:none; margin-top:15px;">
+        <p style="margin-bottom:12px;">Choosing the right mortgage involves more than just finding the lowest interest rate. In the 2026 Canadian housing market, borrowers must navigate complex federal regulations designed to ensure financial stability.</p>
+        
+        <h3 id="mortgage-stress-test" style="font-size:16px; margin:20px 0 10px; color:var(--blue);">The 2026 Mortgage Stress Test (B-20)</h3>
+        <p style="margin-bottom:12px;">Every regulated lender in Canada must apply the "Stress Test." You are qualified at a rate that is the higher of your <strong>contract rate + 2%</strong> or the <strong>OSFI floor rate (currently 5.25%)</strong>. This ensures you can still afford your home if interest rates rise during your term.</p>
+
+        <h3 id="cmhc-insurance-rules" style="font-size:16px; margin:20px 0 10px; color:var(--blue);">CMHC Insurance and Down Payment Rules</h3>
+        <p style="margin-bottom:12px;">If your down payment is less than 20%, you must purchase mortgage default insurance (CMHC, Sagen, or Canada Guaranty). For 2026, the insured mortgage cap has been updated to <strong>$1.5 Million</strong>. Homes above this price require a minimum 20% down payment and are not eligible for default insurance.</p>
+
+        <div style="background:var(--surface2); padding:15px; border-radius:8px; margin:15px 0; border-left: 4px solid var(--blue);">
+          <h4 style="margin-bottom:8px;">Understanding GDS and TDS Ratios</h4>
+          <p style="font-size:13px;">Lenders use two primary ratios to determine affordability:</p>
+          <ul style="margin-left:20px; font-size:13px;">
+            <li><strong>GDS (Gross Debt Service):</strong> Housing costs (PITH) should not exceed 39% of gross income.</li>
+            <li><strong>TDS (Total Debt Service):</strong> Total debt obligations (including car loans and credit cards) should not exceed 44% of gross income.</li>
+          </ul>
+        </div>
+
+        <h3 id="payment-frequency" style="font-size:16px; margin:20px 0 10px; color:var(--blue);">Bi-Weekly vs. Monthly Payments</h3>
+        <p>Switching to <strong>Accelerated Bi-Weekly</strong> payments is one of the most effective ways to pay off your mortgage faster. By making 26 half-payments a year, you effectively make one full extra monthly payment annually, which can shave years off your amortization and save thousands in interest.</p>
+    </div>
+  </article>
+</div><!-- /page-wrap -->
+</main>
 </body>
 </html>
