@@ -1435,7 +1435,7 @@ if (goodBtn && badBtn) {
     ratingResponse.innerHTML = `
       🙏 Thanks — tell me what could improve:
       <br>
-      <a href="mailto:helpinbx@gmail.com">helpinbx@gmail.com</a>
+      <a href="mailto:hello@usecos.app">hello@usecos.app</a>
     `;
     goodBtn.disabled = true;
     badBtn.disabled = true;

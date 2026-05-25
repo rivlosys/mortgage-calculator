@@ -59,7 +59,7 @@ function generateCityPage(city) {
     "@type": "FAQPage",
     "mainEntity": [{
       "@type": "Question",
-      "name": "How much is a mortgage in ${city.name} per month?",
+      "name": "How much is a mortgage in ${city.name} per month in ${year}?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "For a home in ${city.name} priced at $${city.avgPrice.toLocaleString()}, a typical monthly payment ranges from $3,800 to $4,600 depending on your down payment and current ${year} interest rates."
@@ -77,9 +77,12 @@ function generateCityPage(city) {
 </head>
 <body>
   <div class="page-wrap">
+    <div style="padding: 12px 20px; font-size: 13px; background: var(--surface); border-bottom: 1px solid var(--border);">
+      <a href="https://usecos.app" style="color: var(--muted); text-decoration: none;">← Back to tools</a>
+    </div>
     <header class="site-header">
       <div class="brand" onclick="window.location.href='/'" style="cursor:pointer">
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="usecos logo">
           <rect width="32" height="32" rx="8" fill="url(#logo_grad_city)"/>
           <path d="M22 11L13.5 20L10 16.5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
           <defs>
